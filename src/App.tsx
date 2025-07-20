@@ -12,6 +12,8 @@ import Products from "./pages/admin/Products";
 import Categories from "./pages/admin/Categories";
 import Inquiries from "./pages/admin/Inquiries";
 import Testimonials from "./pages/admin/Testimonials";
+import Media from "./pages/admin/Media";
+import Content from "./pages/admin/Content";
 import ProtectedRoute from "./components/ProtectedRoute";
 import NotFound from "./pages/NotFound";
 
@@ -35,8 +37,10 @@ const App = () => (
               <Route index element={<Dashboard />} />
               <Route path="products" element={<Products />} />
               <Route path="categories" element={<Categories />} />
+              <Route path="content" element={<Content />} />
               <Route path="inquiries" element={<Inquiries />} />
               <Route path="testimonials" element={<Testimonials />} />
+              <Route path="media" element={<Media />} />
             </Route>
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

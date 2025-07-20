@@ -1,110 +1,52 @@
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Package, Truck, Shield } from "lucide-react";
-
-const products = [
-  {
-    id: 1,
-    name: "Premium Onions",
-    category: "Fresh Produce",
-    image: "https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=800&h=600&fit=crop",
-    specs: {
-      varieties: ["Red Onions", "White Onions", "Yellow Onions"],
-      packaging: "10kg, 25kg, 50kg mesh bags",
-      shelfLife: "6-8 months",
-      origin: "Sriganganagar, Rajasthan"
-    },
-    features: ["Hand-sorted", "Premium Grade A", "Export Quality", "Minimal Processing"]
-  },
-  {
-    id: 2,
-    name: "Cumin Seeds (Jeera)",
-    category: "Spices",
-    image: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=800&h=600&fit=crop",
-    specs: {
-      varieties: ["Whole Cumin", "Cumin Powder"],
-      packaging: "25kg, 50kg PP bags",
-      shelfLife: "24 months",
-      origin: "Sriganganagar, Rajasthan"
-    },
-    features: ["99% Purity", "Steam Sterilized", "Machine Cleaned", "Premium Quality"]
-  },
-  {
-    id: 3,
-    name: "Raw Peanuts",
-    category: "Nuts & Seeds",
-    image: "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=800&h=600&fit=crop",
-    specs: {
-      varieties: ["Bold Peanuts", "Java Peanuts", "Red Skin"],
-      packaging: "25kg, 50kg jute bags",
-      shelfLife: "12 months",
-      origin: "Sriganganagar, Rajasthan"
-    },
-    features: ["Hand-picked", "Well Dried", "Uniform Size", "Export Grade"]
-  },
-  {
-    id: 4,
-    name: "Fresh Carrots",
-    category: "Fresh Produce",
-    image: "https://images.unsplash.com/photo-1445282768818-728615cc910a?w=800&h=600&fit=crop",
-    specs: {
-      varieties: ["Orange Carrots", "Baby Carrots"],
-      packaging: "10kg, 20kg cartons",
-      shelfLife: "3-4 months",
-      origin: "Sriganganagar, Rajasthan"
-    },
-    features: ["Cold Storage", "Washed & Graded", "Premium Quality", "Fresh Harvest"]
-  },
-  {
-    id: 5,
-    name: "Chickpeas (Chana)",
-    category: "Pulses",
-    image: "https://images.unsplash.com/photo-1559181567-c3190ca9959b?w=800&h=600&fit=crop",
-    specs: {
-      varieties: ["Kabuli Chana", "Desi Chana"],
-      packaging: "25kg, 50kg PP bags",
-      shelfLife: "18 months",
-      origin: "Sriganganagar, Rajasthan"
-    },
-    features: ["Machine Cleaned", "Uniform Size", "High Protein", "Premium Grade"]
-  },
-  {
-    id: 6,
-    name: "Mustard Seeds",
-    category: "Spices",
-    image: "https://images.unsplash.com/photo-1609501676725-7186f202aa35?w=800&h=600&fit=crop",
-    specs: {
-      varieties: ["Black Mustard", "Yellow Mustard"],
-      packaging: "25kg, 50kg bags",
-      shelfLife: "24 months",
-      origin: "Sriganganagar, Rajasthan"
-    },
-    features: ["99% Purity", "Oil Rich", "Machine Cleaned", "Export Quality"]
-  },
-  {
-    id: 7,
-    name: "Guar Gum",
-    category: "Industrial",
-    image: "https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?w=800&h=600&fit=crop",
-    specs: {
-      varieties: ["Food Grade", "Industrial Grade"],
-      packaging: "25kg kraft bags",
-      shelfLife: "36 months",
-      origin: "Sriganganagar, Rajasthan"
-    },
-    features: ["High Viscosity", "Food Safe", "Multi-Purpose", "International Standards"]
-  }
-];
+import { ArrowRight, Package, Truck, Shield, Loader2 } from "lucide-react";
 
 const ProductsSection = () => {
-  const [activeProduct, setActiveProduct] = useState<number | null>(null);
+  const [activeProduct, setActiveProduct] = useState<string | null>(null);
+
+  const { data: products, isLoading } = useQuery({
+    queryKey: ['products'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('products')
+        .select(`
+          *,
+          categories (
+            name,
+            slug
+          )
+        `)
+        .eq('is_active', true)
+        .eq('is_featured', true)
+        .order('sort_order', { ascending: true })
+        .limit(8);
+      
+      if (error) throw error;
+      return data;
+    }
+  });
 
   const handleQuoteRequest = (productName: string) => {
     const message = `Hello ShineVeda, I would like to get a quote for ${productName}. Please provide pricing and availability details.`;
     window.open(`https://wa.me/918955158794?text=${encodeURIComponent(message)}`, '_blank');
   };
+
+  if (isLoading) {
+    return (
+      <section className="py-20 bg-gradient-to-b from-background to-secondary/30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-center">
+            <Loader2 className="h-8 w-8 animate-spin" />
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-20 bg-gradient-to-b from-background to-secondary/30">
@@ -128,7 +70,7 @@ const ProductsSection = () => {
 
         {/* Products Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {products.map((product, index) => (
+          {products?.map((product, index) => (
             <Card 
               key={product.id}
               className={`card-premium group cursor-pointer transition-all duration-500 ${
@@ -142,7 +84,7 @@ const ProductsSection = () => {
                 {/* Product Image */}
                 <div className="relative overflow-hidden rounded-t-xl">
                   <img 
-                    src={product.image}
+                    src={product.image_url || "https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=800&h=600&fit=crop"}
                     alt={product.name}
                     className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
                   />
@@ -153,7 +95,7 @@ const ProductsSection = () => {
                     variant="secondary" 
                     className="absolute top-3 left-3 bg-white/90 text-foreground"
                   >
-                    {product.category}
+                    {product.categories?.name || 'General'}
                   </Badge>
 
                   {/* Quick Actions */}
@@ -177,7 +119,7 @@ const ProductsSection = () => {
                   
                   {/* Features */}
                   <div className="flex flex-wrap gap-1 mb-4">
-                    {product.features.slice(0, 2).map((feature, idx) => (
+                    {product.features?.slice(0, 2).map((feature, idx) => (
                       <Badge 
                         key={idx} 
                         variant="outline" 
@@ -185,7 +127,11 @@ const ProductsSection = () => {
                       >
                         {feature}
                       </Badge>
-                    ))}
+                    )) || (
+                      <Badge variant="outline" className="text-xs border-primary/20 text-primary">
+                        Premium Quality
+                      </Badge>
+                    )}
                   </div>
 
                   {/* Key Specs */}
@@ -195,18 +141,18 @@ const ProductsSection = () => {
                         <div className="grid grid-cols-2 gap-2 text-sm">
                           <div className="flex items-center text-muted-foreground">
                             <Package className="h-3 w-3 mr-1" />
-                            Packaging
+                            Price Range
                           </div>
                           <div className="text-foreground font-medium text-xs">
-                            {product.specs.packaging}
+                            {product.price_range || 'Contact for pricing'}
                           </div>
                           
                           <div className="flex items-center text-muted-foreground">
                             <Shield className="h-3 w-3 mr-1" />
-                            Shelf Life
+                            Min. Order
                           </div>
                           <div className="text-foreground font-medium text-xs">
-                            {product.specs.shelfLife}
+                            {product.minimum_order_quantity || 'Flexible'}
                           </div>
                           
                           <div className="flex items-center text-muted-foreground">
@@ -214,7 +160,7 @@ const ProductsSection = () => {
                             Origin
                           </div>
                           <div className="text-foreground font-medium text-xs">
-                            {product.specs.origin}
+                            {product.origin}
                           </div>
                         </div>
                       </div>

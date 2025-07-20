@@ -1,11 +1,46 @@
-import { ArrowRight, Play } from "lucide-react";
+import { ArrowRight, Play, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import heroBg from "@/assets/hero-bg.jpg";
 
 const HeroSection = () => {
+  const { data: heroContent } = useQuery({
+    queryKey: ['hero-content'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('content_blocks')
+        .select('*')
+        .eq('key', 'hero_main')
+        .eq('is_active', true)
+        .single();
+      
+      if (error) throw error;
+      return data;
+    }
+  });
+
   const handleQuoteRequest = () => {
     window.open('https://wa.me/918955158794?text=Hello%20ShineVeda,%20I%20would%20like%20to%20request%20a%20quote%20for%20your%20agricultural%20exports.', '_blank');
   };
+
+  // Default content if database content is not available
+  const defaultContent = {
+    title: "From Sriganganagar Farms to Your Doorstep",
+    content: "Premium agri-commodities from the heart of Rajasthan. Onions, Jeera, Peanuts, Carrots, Chickpeas, Mustard & Guar Gum - packaged and graded to the highest international standards.",
+    data: {
+      subtitle: "Premium agri-commodities from the heart of Rajasthan.",
+      stats: [
+        { number: "500+", label: "Global Shipments" },
+        { number: "25+", label: "Countries Served" },
+        { number: "99.8%", label: "Quality Score" },
+        { number: "24/7", label: "Support" }
+      ]
+    }
+  };
+
+  const content = heroContent || defaultContent;
+  const contentData = typeof content.data === 'string' ? JSON.parse(content.data) : content.data;
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -37,21 +72,17 @@ const HeroSection = () => {
 
           {/* Main Headlines */}
           <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 leading-tight">
-            From{" "}
+            {content.title?.split(' ').slice(0, 1).join(' ')}{" "}
             <span className="text-gradient bg-gradient-to-r from-brand-saffron to-primary bg-clip-text text-transparent">
-              Sriganganagar
+              {content.title?.split(' ').slice(1, 2).join(' ') || 'Sriganganagar'}
             </span>
             <br />
-            Farms to Your{" "}
-            <span className="italic">Doorstep</span>
+            {content.title?.split(' ').slice(2).join(' ') || 'Farms to Your Doorstep'}
           </h1>
 
           {/* Subtitle */}
           <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto font-light leading-relaxed">
-            Premium agri-commodities from the heart of Rajasthan. 
-            <br className="hidden md:block" />
-            <span className="font-medium">Onions, Jeera, Peanuts, Carrots, Chickpeas, Mustard & Guar Gum</span> - 
-            packaged and graded to the highest international standards.
+            {contentData?.subtitle || content.content}
           </p>
 
           {/* CTA Buttons */}
@@ -77,12 +108,7 @@ const HeroSection = () => {
 
           {/* Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16 max-w-4xl mx-auto">
-            {[
-              { number: "500+", label: "Global Shipments" },
-              { number: "25+", label: "Countries Served" },
-              { number: "99.8%", label: "Quality Score" },
-              { number: "24/7", label: "Support" }
-            ].map((stat, index) => (
+            {(contentData?.stats || defaultContent.data.stats).map((stat: any, index: number) => (
               <div key={index} className="text-center">
                 <div className="font-display text-3xl md:text-4xl font-bold text-white mb-2">
                   {stat.number}
