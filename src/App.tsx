@@ -14,6 +14,8 @@ import Inquiries from "./pages/admin/Inquiries";
 import Testimonials from "./pages/admin/Testimonials";
 import Media from "./pages/admin/Media";
 import Content from "./pages/admin/Content";
+import Settings from "./pages/admin/Settings";
+import ProductForm from "./pages/admin/ProductForm";
 import ProtectedRoute from "./components/ProtectedRoute";
 import NotFound from "./pages/NotFound";
 
@@ -41,6 +43,10 @@ const App = () => (
               <Route path="inquiries" element={<Inquiries />} />
               <Route path="testimonials" element={<Testimonials />} />
               <Route path="media" element={<Media />} />
+              <Route path="settings" element={<Settings />} />
+              <Route path="products/new" element={<ProductForm />} />
+              <Route path="products/:id" element={<ProductForm />} />
+              <Route path="products/:id/edit" element={<ProductForm />} />
             </Route>
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
