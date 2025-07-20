@@ -2,41 +2,71 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
+/* ShineVeda Design System - Premium Agricultural Export Theme 
+All colors are HSL for perfect theming control
 */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Base Colors - Warm, earthy foundation */
+    --background: 32 44% 97%;
+    --foreground: 20 14% 14%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    /* Card Colors - Soft cream with subtle warmth */
+    --card: 30 40% 98%;
+    --card-foreground: 20 14% 14%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    /* Popover Colors */
+    --popover: 30 40% 98%;
+    --popover-foreground: 20 14% 14%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Primary - Deep forest green for trust and growth */
+    --primary: 142 71% 35%;
+    --primary-foreground: 32 44% 97%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Secondary - Warm sand tones */
+    --secondary: 39 20% 92%;
+    --secondary-foreground: 20 14% 14%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Muted - Subtle earth tones */
+    --muted: 39 20% 92%;
+    --muted-foreground: 25 15% 45%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Accent - Vibrant saffron for CTAs */
+    --accent: 42 96% 48%;
+    --accent-foreground: 20 14% 14%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    /* Destructive */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 32 44% 97%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* Borders and Inputs - Subtle earth */
+    --border: 39 20% 87%;
+    --input: 39 20% 87%;
+    --ring: 142 71% 35%;
 
-    --radius: 0.5rem;
+    /* Border Radius - Modern but not too rounded */
+    --radius: 0.75rem;
+
+    /* Custom Brand Colors */
+    --brand-saffron: 42 96% 48%;
+    --brand-sage: 142 71% 35%;
+    --brand-cream: 32 44% 97%;
+    --brand-earth: 39 20% 92%;
+    
+    /* Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(142 71% 35% / 0.95), hsl(42 96% 48% / 0.85));
+    --gradient-card: linear-gradient(145deg, hsl(30 40% 98%), hsl(32 44% 96%));
+    --gradient-accent: linear-gradient(90deg, hsl(42 96% 48%), hsl(45 93% 52%));
+    
+    /* Shadows */
+    --shadow-premium: 0 4px 20px hsl(20 14% 14% / 0.08);
+    --shadow-card: 0 2px 10px hsl(20 14% 14% / 0.05);
+    --shadow-accent: 0 4px 15px hsl(42 96% 48% / 0.25);
+    
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
     --sidebar-background: 0 0% 98%;
 
@@ -100,6 +130,92 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-body;
   }
+}
+
+@layer components {
+  /* Typography Classes */
+  .font-display {
+    font-family: 'Playfair Display', serif;
+  }
+  
+  .font-body {
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* Animation Classes */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .animate-slide-up {
+    animation: slideUp 0.6s ease-out forwards;
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.8s ease-out forwards;
+  }
+  
+  .transition-premium {
+    transition: var(--transition-smooth);
+  }
+  
+  .transition-bounce {
+    transition: var(--transition-bounce);
+  }
+
+  /* Premium Card Styles */
+  .card-premium {
+    background: var(--gradient-card);
+    box-shadow: var(--shadow-card);
+    border: 1px solid hsl(var(--border));
+    transition: var(--transition-smooth);
+  }
+  
+  .card-premium:hover {
+    box-shadow: var(--shadow-premium);
+    transform: translateY(-2px);
+  }
+
+  /* Button Variants */
+  .btn-premium {
+    background: var(--gradient-accent);
+    box-shadow: var(--shadow-accent);
+    transition: var(--transition-smooth);
+  }
+  
+  .btn-premium:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-premium);
+  }
+
+  /* Gradient Text */
+  .text-gradient {
+    background: var(--gradient-accent);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0; 
+    transform: translateY(30px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
