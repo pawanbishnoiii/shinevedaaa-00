@@ -18,6 +18,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { toast } from 'sonner';
 import { ArrowLeft, Save, Upload, X, Plus } from 'lucide-react';
 import { motion } from 'framer-motion';
+import MediaUploadSection from '@/components/MediaUploadSection';
 
 const productSchema = z.object({
   name: z.string().min(1, 'Product name is required'),
@@ -546,105 +547,13 @@ const ProductForm = () => {
             </TabsContent>
 
             <TabsContent value="media" className="space-y-6">
-              <div className="grid grid-cols-2 gap-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Main Image</CardTitle>
-                    <CardDescription>Primary product image</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <Input
-                      value={imageUrl}
-                      onChange={(e) => setImageUrl(e.target.value)}
-                      placeholder="Image URL"
-                    />
-                    {imageUrl && (
-                      <div className="aspect-video rounded-lg overflow-hidden border">
-                        <img 
-                          src={imageUrl} 
-                          alt="Product preview"
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
+              <MediaUploadSection 
+                imageUrl={imageUrl}
+                setImageUrl={setImageUrl}
+                galleryImages={galleryImages}
+                setGalleryImages={setGalleryImages}
+              />
 
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Video</CardTitle>
-                    <CardDescription>Product demonstration video</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <Input
-                      value={videoUrl}
-                      onChange={(e) => setVideoUrl(e.target.value)}
-                      placeholder="Video URL"
-                    />
-                    {videoUrl && (
-                      <div className="aspect-video rounded-lg overflow-hidden border">
-                        <video 
-                          src={videoUrl} 
-                          controls
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-              </div>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Gallery Images</CardTitle>
-                  <CardDescription>Additional product images</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex gap-2">
-                    <Input
-                      placeholder="Image URL"
-                      onKeyPress={(e) => {
-                        if (e.key === 'Enter') {
-                          e.preventDefault();
-                          addGalleryImage((e.target as HTMLInputElement).value);
-                          (e.target as HTMLInputElement).value = '';
-                        }
-                      }}
-                    />
-                    <Button 
-                      type="button" 
-                      size="sm"
-                      onClick={(e) => {
-                        const input = e.currentTarget.previousElementSibling as HTMLInputElement;
-                        addGalleryImage(input.value);
-                        input.value = '';
-                      }}
-                    >
-                      <Plus className="h-4 w-4" />
-                    </Button>
-                  </div>
-                  <div className="grid grid-cols-4 gap-4">
-                    {galleryImages.map((url, index) => (
-                      <div key={index} className="relative aspect-square rounded-lg overflow-hidden border">
-                        <img 
-                          src={url} 
-                          alt={`Gallery ${index + 1}`}
-                          className="w-full h-full object-cover"
-                        />
-                        <Button
-                          type="button"
-                          variant="destructive"
-                          size="sm"
-                          className="absolute top-1 right-1 h-6 w-6 p-0"
-                          onClick={() => removeGalleryImage(index)}
-                        >
-                          <X className="h-3 w-3" />
-                        </Button>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
             </TabsContent>
 
             <TabsContent value="seo" className="space-y-6">

@@ -105,7 +105,7 @@ const ProductsSection = () => {
                       asChild
                       className="bg-primary hover:bg-primary/90 text-primary-foreground"
                     >
-                      <a href={`/product/${product.slug}`}>
+                      <a href={`/products/${product.slug}`}>
                         View Details
                         <ArrowRight className="ml-1 h-3 w-3" />
                       </a>
@@ -173,7 +173,7 @@ const ProductsSection = () => {
                         asChild
                         className="w-full transition-bounce hover:scale-105"
                       >
-                        <a href={`/product/${product.slug}`}>
+                        <a href={`/products/${product.slug}`}>
                           View Details
                           <ArrowRight className="ml-2 h-3 w-3" />
                         </a>

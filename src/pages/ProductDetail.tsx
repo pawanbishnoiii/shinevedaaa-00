@@ -25,7 +25,8 @@ import {
   Share2
 } from 'lucide-react';
 import { toast } from 'sonner';
-import InquiryForm from '@/components/InquiryForm';
+import QuickInquiryForm from '@/components/QuickInquiryForm';
+import CurrencyPrice from '@/components/CurrencyPrice';
 import { Helmet } from 'react-helmet-async';
 
 const ProductDetail = () => {
@@ -192,7 +193,7 @@ Please provide detailed quote and availability.`;
                 <div className="grid grid-cols-2 gap-4 mb-6">
                   <div>
                     <Label className="text-sm font-medium text-muted-foreground">Price Range</Label>
-                    <p className="text-xl font-bold text-primary">{product.price_range}</p>
+                    <CurrencyPrice priceRange={product.price_range} />
                   </div>
                   <div>
                     <Label className="text-sm font-medium text-muted-foreground">MOQ</Label>
@@ -211,58 +212,16 @@ Please provide detailed quote and availability.`;
                 </div>
               </div>
 
-              {/* Quick Order */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Quick Inquiry</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="quantity">Quantity</Label>
-                      <Input
-                        id="quantity"
-                        value={quantity}
-                        onChange={(e) => setQuantity(e.target.value)}
-                        placeholder="Enter quantity"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="unit">Unit</Label>
-                      <Select value={unit} onValueChange={setUnit}>
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="kg">KG</SelectItem>
-                          <SelectItem value="ton">Ton</SelectItem>
-                          <SelectItem value="pieces">Pieces</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <Button onClick={handleWhatsAppInquiry} className="w-full">
-                      <MessageSquare className="w-4 h-4 mr-2" />
-                      WhatsApp Inquiry
-                    </Button>
-                    <Button
-                      variant="outline"
-                      onClick={() => setInquiryOpen(true)}
-                      className="w-full"
-                    >
-                      <Mail className="w-4 h-4 mr-2" />
-                      Email Inquiry
-                    </Button>
-                  </div>
-
-                  <Button variant="outline" className="w-full">
-                    <Download className="w-4 h-4 mr-2" />
-                    Download Specification Sheet
-                  </Button>
-                </CardContent>
-              </Card>
+              {/* Quick Inquiry Form */}
+              <QuickInquiryForm 
+                product={{
+                  id: product.id,
+                  name: product.name,
+                  price_range: product.price_range,
+                  minimum_order_quantity: product.minimum_order_quantity
+                }}
+                onSuccess={() => toast.success('Thank you! We will contact you soon.')}
+              />
 
               {/* Features */}
               {product.features && product.features.length > 0 && (
@@ -385,20 +344,6 @@ Please provide detailed quote and availability.`;
           </div>
         </div>
 
-        {/* Inquiry Form Modal */}
-        {inquiryOpen && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-            <div className="bg-background rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-              <div className="p-4 border-b flex justify-between items-center">
-                <h3 className="text-lg font-semibold">Product Inquiry: {product.name}</h3>
-                <Button variant="ghost" onClick={() => setInquiryOpen(false)}>×</Button>
-              </div>
-              <div className="p-4">
-                <InquiryForm />
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </>
   );

@@ -102,29 +102,34 @@ const Media = () => {
         const fileExt = file.name.split('.').pop();
         const fileName = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}.${fileExt}`;
         
-        // Determine bucket based on file type
-        let bucket = 'documents';
+        // Determine bucket and path based on file type
+        let bucket = 'media-library';
         let category = 'general';
+        let folderPath = 'data/';
         
         if (file.type.startsWith('image/')) {
-          bucket = 'product-images';
           category = 'image';
+          folderPath = 'data/img/';
         } else if (file.type.startsWith('video/')) {
-          bucket = 'hero-media';
           category = 'video';
+          folderPath = 'data/vid/';
+        } else {
+          folderPath = 'data/docs/';
         }
+        
+        const filePath = folderPath + fileName;
 
         // Upload to storage
         const { error: uploadError } = await supabase.storage
           .from(bucket)
-          .upload(fileName, file);
+          .upload(filePath, file);
 
         if (uploadError) throw uploadError;
 
         // Get public URL
         const { data: { publicUrl } } = supabase.storage
           .from(bucket)
-          .getPublicUrl(fileName);
+          .getPublicUrl(filePath);
 
         // Save to database
         const { error: dbError } = await supabase
