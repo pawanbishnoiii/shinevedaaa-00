@@ -15,6 +15,7 @@ import Profile from "./pages/Profile";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import FAQ from "./pages/FAQ";
+import RajasthanPortfolio from "./pages/RajasthanPortfolio";
 import AdminLayout from "./layouts/AdminLayout";
 import Dashboard from "./pages/admin/Dashboard";
 import AdminProducts from "./pages/admin/Products";
@@ -26,6 +27,7 @@ import Content from "./pages/admin/Content";
 import Settings from "./pages/admin/Settings";
 import ProductForm from "./pages/admin/ProductForm";
 import SEOManager from "./pages/admin/SEO";
+import Analytics from "./pages/admin/Analytics";
 import ProtectedRoute from "./components/ProtectedRoute";
 import NotFound from "./pages/NotFound";
 
@@ -48,6 +50,7 @@ const App = () => (
                 <Route path="/about" element={<><Navbar /><About /></>} />
                 <Route path="/contact" element={<><Navbar /><Contact /></>} />
                 <Route path="/faq" element={<><Navbar /><FAQ /></>} />
+                <Route path="/rajasthan-portfolio" element={<><Navbar /><RajasthanPortfolio /></>} />
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/admin" element={
                   <ProtectedRoute adminOnly>
@@ -61,8 +64,9 @@ const App = () => (
                   <Route path="inquiries" element={<Inquiries />} />
                   <Route path="testimonials" element={<Testimonials />} />
                   <Route path="media" element={<Media />} />
-                  <Route path="seo" element={<SEOManager />} />
-                  <Route path="settings" element={<Settings />} />
+                <Route path="seo" element={<SEOManager />} />
+                <Route path="analytics" element={<Analytics />} />
+                <Route path="settings" element={<Settings />} />
                   <Route path="products/new" element={<ProductForm />} />
                   <Route path="products/:id" element={<ProductForm />} />
                   <Route path="products/:id/edit" element={<ProductForm />} />

@@ -118,16 +118,21 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold text-foreground mb-4">Company</h4>
             <ul className="space-y-2">
-              {footerLinks.company.map((link, index) => (
-                <li key={index}>
-                  <a 
-                    href={link.href}
-                    className="text-muted-foreground hover:text-primary transition-colors text-sm"
-                  >
-                    {link.name}
-                  </a>
-                </li>
-              ))}
+              <li>
+                <a href="/about" className="text-muted-foreground hover:text-primary transition-colors text-sm">About ShineVeda</a>
+              </li>
+              <li>
+                <a href="/rajasthan-portfolio" className="text-muted-foreground hover:text-primary transition-colors text-sm">Rajasthan Portfolio</a>
+              </li>
+              <li>
+                <a href="/about#quality" className="text-muted-foreground hover:text-primary transition-colors text-sm">Quality Assurance</a>
+              </li>
+              <li>
+                <a href="/about#process" className="text-muted-foreground hover:text-primary transition-colors text-sm">Our Process</a>
+              </li>
+              <li>
+                <a href="/about#certifications" className="text-muted-foreground hover:text-primary transition-colors text-sm">Certifications</a>
+              </li>
             </ul>
           </div>
 
@@ -152,18 +157,21 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold text-foreground mb-4">Support</h4>
             <ul className="space-y-2">
-              {footerLinks.support.map((link, index) => (
-                <li key={index}>
-                  <a 
-                    href={link.href}
-                    className="text-muted-foreground hover:text-primary transition-colors text-sm"
-                    target={link.href.startsWith('http') ? '_blank' : undefined}
-                    rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                  >
-                    {link.name}
-                  </a>
-                </li>
-              ))}
+              <li>
+                <a href="/contact" className="text-muted-foreground hover:text-primary transition-colors text-sm">Contact Us</a>
+              </li>
+              <li>
+                <a href="/faq" className="text-muted-foreground hover:text-primary transition-colors text-sm">FAQ</a>
+              </li>
+              <li>
+                <a href="https://wa.me/918955158794" className="text-muted-foreground hover:text-primary transition-colors text-sm" target="_blank" rel="noopener noreferrer">WhatsApp Support</a>
+              </li>
+              <li>
+                <a href="/contact#quote" className="text-muted-foreground hover:text-primary transition-colors text-sm">Request Quote</a>
+              </li>
+              <li>
+                <a href="/contact#docs" className="text-muted-foreground hover:text-primary transition-colors text-sm">Export Documentation</a>
+              </li>
             </ul>
           </div>
         </div>
