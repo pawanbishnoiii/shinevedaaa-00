@@ -901,6 +901,7 @@ export type Database = {
       }
     }
     Enums: {
+      interaction_type: "view" | "favorite" | "inquiry" | "share"
       product_interaction_type: "view" | "favorite" | "inquiry"
     }
     CompositeTypes: {
@@ -1029,6 +1030,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      interaction_type: ["view", "favorite", "inquiry", "share"],
       product_interaction_type: ["view", "favorite", "inquiry"],
     },
   },

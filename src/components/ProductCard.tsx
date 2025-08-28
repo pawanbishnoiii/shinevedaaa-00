@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
+import React, { useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Package, Truck, Shield, Share2 } from 'lucide-react';
-import FavoriteButton from './FavoriteButton';
+import { ArrowRight, Package, Share2, Heart } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
-import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/contexts/AuthContext';
+import FavoriteButton from './FavoriteButton';
+import { trackProductInteraction } from '@/utils/analytics';
 
 interface Product {
   id: string;
@@ -26,203 +27,156 @@ interface Product {
 interface ProductCardProps {
   product: Product;
   index?: number;
-  onView?: (productId: string) => void;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product, index = 0, onView }) => {
-  const [activeProduct, setActiveProduct] = useState<string | null>(null);
-  const { user } = useAuth();
+const ProductCard = ({ product, index }: ProductCardProps) => {
+  // Track product view when component mounts
+  useEffect(() => {
+    trackProductInteraction(product.id, 'view');
+  }, [product.id]);
 
-  const handleShare = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    const url = `${window.location.origin}/products/${product.slug}`;
-    const text = `Check out ${product.name} from ShineVeda Exports - Premium agricultural commodities from Rajasthan`;
-    
+  const handleQuoteRequest = (productName: string) => {
+    trackProductInteraction(product.id, 'inquiry', 3);
+    const message = `Hello ShineVeda, I would like to get a quote for ${productName}. Please provide pricing and availability details.`;
+    window.open(`https://wa.me/918955158794?text=${encodeURIComponent(message)}`, '_blank');
+  };
+
+  const handleShare = async () => {
+    trackProductInteraction(product.id, 'share', 2);
+    const shareData = {
+      title: `${product.name} - ShineVeda Exports`,
+      text: `Check out this premium agricultural product: ${product.name}`,
+      url: `${window.location.origin}/products/${product.slug}`
+    };
+
     if (navigator.share) {
       try {
-        await navigator.share({
-          title: product.name,
-          text: text,
-          url: url,
-        });
+        await navigator.share(shareData);
       } catch (error) {
-        console.error('Error sharing:', error);
+        // Fallback to clipboard
+        await navigator.clipboard.writeText(shareData.url);
+        toast.success('Product link copied to clipboard!');
       }
     } else {
       // Fallback to clipboard
-      try {
-        await navigator.clipboard.writeText(`${text}\n${url}`);
-        toast.success('Link copied to clipboard!');
-      } catch (error) {
-        toast.error('Failed to copy link');
-      }
-    }
-  };
-
-  const handleView = async () => {
-    // Track product view interaction
-    try {
-      await supabase
-        .from('product_interactions')
-        .insert({
-          user_id: user?.id || null,
-          product_id: product.id,
-          interaction_type: 'view',
-          weight: 1
-        });
-
-      // Also track in analytics
-      await supabase
-        .from('user_analytics')
-        .insert({
-          user_id: user?.id || null,
-          event_type: 'product_view',
-          page_url: `/products/${product.slug}`,
-          page_title: product.name,
-          product_id: product.id
-        });
-    } catch (error) {
-      console.error('Error tracking view:', error);
-    }
-
-    if (onView) {
-      onView(product.id);
+      await navigator.clipboard.writeText(shareData.url);
+      toast.success('Product link copied to clipboard!');
     }
   };
 
   return (
-    <Card 
-      className={`card-premium group cursor-pointer transition-all duration-500 ${
-        activeProduct === product.id ? 'ring-2 ring-primary scale-105' : ''
-      }`}
-      onMouseEnter={() => setActiveProduct(product.id)}
-      onMouseLeave={() => setActiveProduct(null)}
-      style={{ animationDelay: `${index * 100}ms` }}
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index ? index * 0.1 : 0 }}
+      className="h-full"
     >
-      <CardContent className="p-0">
+      <Card className="group relative overflow-hidden transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 bg-gradient-to-br from-card to-card/80 border-2 border-border/50 hover:border-primary/20">
         {/* Product Image */}
-        <div className="relative overflow-hidden rounded-t-xl">
-          <img 
-            src={product.image_url || "https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=800&h=600&fit=crop"}
+        <div className="relative h-64 overflow-hidden">
+          <img
+            src={product.image_url || 'https://zlylzlmavxhgbjxuuseo.supabase.co/storage/v1/object/public/media-library/data/img/placeholder-product.jpg'}
             alt={product.name}
-            className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
+            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           
           {/* Category Badge */}
-          <Badge 
-            variant="secondary" 
-            className="absolute top-3 left-3 bg-white/90 text-foreground"
-          >
-            {product.categories?.name || 'General'}
-          </Badge>
+          {product.categories?.name && (
+            <Badge 
+              variant="secondary" 
+              className="absolute top-4 left-4 bg-white/90 text-foreground shadow-lg"
+            >
+              {product.categories.name}
+            </Badge>
+          )}
 
           {/* Action Buttons */}
-          <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300">
-            <FavoriteButton 
-              productId={product.id} 
-              productName={product.name}
-              size="sm"
-              variant="outline"
-            />
+          <div className="absolute top-4 right-4 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+            <FavoriteButton productId={product.id} />
             <Button
-              variant="outline"
-              size="icon"
-              className="h-8 w-8 bg-white/90 hover:bg-white"
-              onClick={handleShare}
-            >
-              <Share2 className="h-3 w-3" />
-            </Button>
-          </div>
-
-          {/* Quick Actions */}
-          <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
-            <Button 
+              variant="ghost"
               size="sm"
-              asChild
-              className="bg-primary hover:bg-primary/90 text-primary-foreground"
-              onClick={handleView}
+              onClick={handleShare}
+              className="h-10 w-10 rounded-full hover:bg-secondary/80"
             >
-              <a href={`/products/${product.slug}`}>
-                View Details
-                <ArrowRight className="ml-1 h-3 w-3" />
-              </a>
+              <Share2 className="h-4 w-4" />
             </Button>
           </div>
         </div>
 
-        {/* Product Info */}
-        <div className="p-6">
-          <h3 className="font-display text-xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
+        {/* Product Content */}
+        <CardContent className="p-6">
+          <CardTitle className="text-xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors">
             {product.name}
-          </h3>
-          
+          </CardTitle>
+
           {/* Features */}
-          <div className="flex flex-wrap gap-1 mb-4">
+          <div className="flex flex-wrap gap-2 mb-4">
             {product.features?.slice(0, 2).map((feature, idx) => (
               <Badge 
                 key={idx} 
                 variant="outline" 
-                className="text-xs border-primary/20 text-primary"
+                className="text-xs border-primary/30 text-primary/80"
               >
                 {feature}
               </Badge>
-            )) || (
-              <Badge variant="outline" className="text-xs border-primary/20 text-primary">
+            ))}
+            {(!product.features || product.features.length === 0) && (
+              <Badge variant="outline" className="text-xs border-primary/30 text-primary/80">
                 Premium Quality
               </Badge>
             )}
           </div>
 
-          {/* Key Specs */}
-          {activeProduct === product.id && (
-            <div className="space-y-3 animate-slide-up">
-              <div className="border-t border-border pt-4">
-                <div className="grid grid-cols-2 gap-2 text-sm">
-                  <div className="flex items-center text-muted-foreground">
-                    <Package className="h-3 w-3 mr-1" />
-                    Price Range
-                  </div>
-                  <div className="text-foreground font-medium text-xs">
-                    {product.price_range || 'Contact for pricing'}
-                  </div>
-                  
-                  <div className="flex items-center text-muted-foreground">
-                    <Shield className="h-3 w-3 mr-1" />
-                    Min. Order
-                  </div>
-                  <div className="text-foreground font-medium text-xs">
-                    {product.minimum_order_quantity || 'Flexible'}
-                  </div>
-                  
-                  <div className="flex items-center text-muted-foreground">
-                    <Truck className="h-3 w-3 mr-1" />
-                    Origin
-                  </div>
-                  <div className="text-foreground font-medium text-xs">
-                    {product.origin}
-                  </div>
-                </div>
-              </div>
-
-              <Button 
-                variant="outline" 
-                size="sm" 
-                asChild
-                className="w-full transition-bounce hover:scale-105"
-              >
-                <a href={`/products/${product.slug}`}>
-                  View Details
-                  <ArrowRight className="ml-2 h-3 w-3" />
-                </a>
-              </Button>
+          {/* Product Info */}
+          <div className="space-y-3 text-sm">
+            <div className="flex items-center justify-between">
+              <span className="text-muted-foreground">Price Range:</span>
+              <span className="font-medium text-primary">
+                {product.price_range || 'Contact for pricing'}
+              </span>
             </div>
-          )}
-        </div>
-      </CardContent>
-    </Card>
+            
+            <div className="flex items-center justify-between">
+              <span className="text-muted-foreground">Min. Order:</span>
+              <span className="font-medium">
+                {product.minimum_order_quantity || 'Flexible'}
+              </span>
+            </div>
+
+            {product.origin && (
+              <div className="flex items-center justify-between">
+                <span className="text-muted-foreground">Origin:</span>
+                <span className="font-medium">{product.origin}</span>
+              </div>
+            )}
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex gap-2 mt-6">
+            <Button 
+              asChild
+              className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-300 hover:scale-105"
+            >
+              <Link to={`/products/${product.slug}`}>
+                View Details
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+            
+            <Button
+              variant="outline"
+              onClick={() => handleQuoteRequest(product.name)}
+              className="flex-1 border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 hover:scale-105"
+            >
+              <Package className="mr-2 h-4 w-4" />
+              Quote
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    </motion.div>
   );
 };
 

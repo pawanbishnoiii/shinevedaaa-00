@@ -1,132 +1,113 @@
-import React, { useState } from 'react';
-import { Heart } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
-import { useAuth } from '@/contexts/AuthContext';
+import { Heart } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
+import { trackProductInteraction } from '@/utils/analytics';
 
 interface FavoriteButtonProps {
   productId: string;
-  productName: string;
-  size?: 'sm' | 'md' | 'lg';
-  variant?: 'default' | 'ghost' | 'outline';
 }
 
-const FavoriteButton: React.FC<FavoriteButtonProps> = ({ 
-  productId, 
-  productName, 
-  size = 'md',
-  variant = 'ghost'
-}) => {
+const FavoriteButton = ({ productId }: FavoriteButtonProps) => {
   const { user } = useAuth();
   const queryClient = useQueryClient();
+  const [isHovered, setIsHovered] = useState(false);
 
   // Check if product is favorited
-  const { data: isFavorited } = useQuery({
+  const { data: isFavorited, isLoading } = useQuery({
     queryKey: ['favorite', productId, user?.id],
     queryFn: async () => {
-      if (!user) return false;
+      if (!user?.id) return false;
       
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from('product_favorites')
         .select('id')
         .eq('user_id', user.id)
         .eq('product_id', productId)
         .single();
       
+      if (error && error.code !== 'PGRST116') throw error;
       return !!data;
     },
-    enabled: !!user
+    enabled: !!user?.id
   });
 
   // Toggle favorite mutation
-  const toggleFavorite = useMutation({
+  const toggleFavoriteMutation = useMutation({
     mutationFn: async () => {
-      if (!user) throw new Error('Please login to add favorites');
+      if (!user?.id) {
+        toast.error('Please sign in to save favorites');
+        return;
+      }
 
       if (isFavorited) {
         // Remove favorite
-        await supabase
+        const { error } = await supabase
           .from('product_favorites')
           .delete()
           .eq('user_id', user.id)
           .eq('product_id', productId);
+        
+        if (error) throw error;
+        return false;
       } else {
         // Add favorite
-        await supabase
+        const { error } = await supabase
           .from('product_favorites')
           .insert({
             user_id: user.id,
             product_id: productId
           });
-
-        // Track interaction
-        await supabase
-          .from('product_interactions')
-          .insert({
-            user_id: user.id,
-            product_id: productId,
-            interaction_type: 'favorite',
-            weight: 3
-          });
+        
+        if (error) throw error;
+        return true;
       }
     },
-    onSuccess: () => {
+    onSuccess: (newFavoriteStatus) => {
       queryClient.invalidateQueries({ queryKey: ['favorite', productId, user?.id] });
-      toast.success(
-        isFavorited 
-          ? `Removed ${productName} from favorites` 
-          : `Added ${productName} to favorites`
-      );
+      
+      if (newFavoriteStatus) {
+        toast.success('Added to favorites!');
+        trackProductInteraction(productId, 'favorite', 2);
+      } else {
+        toast.success('Removed from favorites');
+      }
     },
-    onError: (error: Error) => {
-      toast.error(error.message || 'Please login to add favorites');
+    onError: (error) => {
+      console.error('Error toggling favorite:', error);
+      toast.error('Failed to update favorites');
     }
   });
 
-  const handleClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    
+  const handleToggleFavorite = () => {
     if (!user) {
-      toast.error('Please login to add favorites');
+      toast.error('Please sign in to save favorites');
       return;
     }
-    
-    toggleFavorite.mutate();
-  };
-
-  const getSize = () => {
-    switch (size) {
-      case 'sm': return 'h-3 w-3';
-      case 'lg': return 'h-6 w-6';
-      default: return 'h-4 w-4';
-    }
-  };
-
-  const getButtonSize = () => {
-    switch (size) {
-      case 'sm': return 'h-8 w-8';
-      case 'lg': return 'h-12 w-12';
-      default: return 'h-10 w-10';
-    }
+    toggleFavoriteMutation.mutate();
   };
 
   return (
     <Button
-      variant={variant}
-      size="icon"
-      className={`${getButtonSize()} transition-all duration-200 hover:scale-110 ${
-        isFavorited ? 'text-red-500 hover:text-red-600' : 'text-muted-foreground hover:text-red-500'
-      }`}
-      onClick={handleClick}
-      disabled={toggleFavorite.isPending}
+      variant="ghost"
+      size="sm"
+      onClick={handleToggleFavorite}
+      disabled={isLoading || toggleFavoriteMutation.isPending}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="h-10 w-10 rounded-full hover:bg-red-50 group transition-all duration-200"
     >
       <Heart 
-        className={`${getSize()} transition-all duration-200 ${
-          isFavorited ? 'fill-current' : ''
-        } ${toggleFavorite.isPending ? 'animate-pulse' : ''}`} 
+        className={`h-4 w-4 transition-all duration-200 ${
+          isFavorited 
+            ? 'fill-red-500 text-red-500' 
+            : isHovered 
+              ? 'fill-red-200 text-red-500' 
+              : 'text-gray-500 group-hover:text-red-500'
+        }`} 
       />
     </Button>
   );

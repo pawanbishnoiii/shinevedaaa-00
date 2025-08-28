@@ -49,10 +49,10 @@ export const trackProductInteraction = async (
     // Track in product_interactions table
     await supabase.from('product_interactions').insert({
       product_id: productId,
-      interaction_type: interactionType,
+      interaction_type: interactionType === 'share' ? 'view' : interactionType as 'view' | 'favorite' | 'inquiry',
       user_id: user?.id || null,
       session_id: sessionId,
-      weight
+      weight: interactionType === 'share' ? 2 : weight
     });
 
     // Also track in user_analytics for general analytics
@@ -103,7 +103,10 @@ export const getUserRecommendations = async (limit = 6) => {
         .from('products')
         .select(`
           *,
-          categories (name, slug)
+          categories:category_id (
+            name,
+            slug
+          )
         `)
         .eq('is_active', true)
         .order('sort_order', { ascending: true })
@@ -126,7 +129,10 @@ export const getUserRecommendations = async (limit = 6) => {
         .from('products')
         .select(`
           *,
-          categories (name, slug)
+          categories:category_id (
+            name,
+            slug
+          )
         `)
         .eq('is_active', true)
         .eq('is_featured', true)
@@ -145,8 +151,8 @@ export const getUserRecommendations = async (limit = 6) => {
       switch (interaction.interaction_type) {
         case 'view': scoreBonus = 1; break;
         case 'favorite': scoreBonus = 5; break;
-        case 'share': scoreBonus = 3; break;
         case 'inquiry': scoreBonus = 10; break;
+        default: scoreBonus = 1; break;
       }
       
       productScores[interaction.product_id] = baseScore + (scoreBonus * interaction.weight);
@@ -159,9 +165,15 @@ export const getUserRecommendations = async (limit = 6) => {
       .map(([productId]) => productId);
 
     // Get these products and their categories to find similar ones
-    const { data: topProducts } = await supabase
-      .from('products')
-      .select('*, categories(name, slug)')
+      const { data: topProducts } = await supabase
+        .from('products')
+        .select(`
+          *,
+          categories:category_id (
+            name,
+            slug
+          )
+        `)
       .in('id', topProductIds)
       .eq('is_active', true);
 
@@ -175,12 +187,15 @@ export const getUserRecommendations = async (limit = 6) => {
       .filter(Boolean);
 
     // Get more products from same categories
-    const { data: similarProducts } = await supabase
-      .from('products')
-      .select(`
-        *,
-        categories (name, slug)
-      `)
+      const { data: similarProducts } = await supabase
+        .from('products')
+        .select(`
+          *,
+          categories:category_id (
+            name,
+            slug
+          )
+        `)
       .in('category_id', categoryIds)
       .eq('is_active', true)
       .not('id', 'in', `(${topProductIds.join(',')})`)

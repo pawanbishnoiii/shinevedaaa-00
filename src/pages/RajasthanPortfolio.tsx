@@ -187,7 +187,7 @@ const RajasthanPortfolio = () => {
                   <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-3">
                     <Package className="h-8 w-8 text-orange-600" />
                   </div>
-                  <div className="text-2xl font-bold text-foreground">{crops?.length || 7}+</div>
+                  <div className="text-2xl font-bold text-foreground">{crops?.length || 0}+</div>
                   <div className="text-sm text-muted-foreground">Major Crops</div>
                 </motion.div>
 
@@ -213,7 +213,7 @@ const RajasthanPortfolio = () => {
                   <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
                     <MapPin className="h-8 w-8 text-blue-600" />
                   </div>
-                  <div className="text-2xl font-bold text-foreground">{regions?.length || 3}+</div>
+                  <div className="text-2xl font-bold text-foreground">{portfolioSections?.length || 0}+</div>
                   <div className="text-sm text-muted-foreground">Growing Regions</div>
                 </motion.div>
 
@@ -462,89 +462,73 @@ const RajasthanPortfolio = () => {
               )}
             </Tabs>
 
-            {/* Regions Section */}
+            {/* Regions Section - Now using Portfolio Sections */}
             <section className="mt-20 pt-16 border-t">
-              <div className="text-center mb-16">
-                <Badge variant="secondary" className="mb-4 px-4 py-2 text-sm font-medium">
-                  Growing Regions
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+                className="text-center mb-16"
+              >
+                <Badge variant="secondary" className="mb-4 px-6 py-2 text-lg font-medium bg-amber-100 text-amber-800">
+                  <MapPin className="h-4 w-4 mr-2" />
+                  Agricultural Regions
                 </Badge>
-                <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-6">
-                  Agricultural{" "}
-                  <span className="text-gradient">Heartlands</span>
+                
+                <h2 className="font-display text-4xl md:text-6xl font-bold text-foreground mb-6">
+                  Growing{" "}
+                  <span className="text-gradient bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
+                    Regions
+                  </span>
                 </h2>
-                <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                  Explore the diverse agricultural regions of Rajasthan, each with unique 
-                  climatic conditions and specialties.
+                
+                <p className="text-xl md:text-2xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
+                  Exploring the diverse agricultural landscapes that make Rajasthan a leading producer of quality crops.
                 </p>
-              </div>
+              </motion.div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {regions?.map((region, index) => (
-                  <motion.div
-                    key={region.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                  >
-                    <Card className="h-full">
-                      <CardHeader>
-                        <div className="flex items-center gap-3">
-                          <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-                            <MapPin className="h-6 w-6 text-primary" />
-                          </div>
-                          <div>
-                            <CardTitle>{region.name}</CardTitle>
-                            <CardDescription>{region.district_name} District</CardDescription>
-                          </div>
-                        </div>
-                      </CardHeader>
-                      
-                      <CardContent className="space-y-4">
-                        <div className="grid grid-cols-2 gap-4 text-sm">
-                          <div>
-                            <span className="font-medium">Climate:</span>
-                            <div className="text-muted-foreground">{region.climate_zone}</div>
-                          </div>
-                          <div>
-                            <span className="font-medium">Soil Type:</span>
-                            <div className="text-muted-foreground">{region.soil_type}</div>
-                          </div>
-                          <div>
-                            <span className="font-medium">Rainfall:</span>
-                            <div className="text-muted-foreground">{region.annual_rainfall}</div>
-                          </div>
-                          <div>
-                            <span className="font-medium">Temperature:</span>
-                            <div className="text-muted-foreground">{region.temperature_range}</div>
-                          </div>
-                        </div>
-
-                        {region.major_crops && region.major_crops.length > 0 && (
-                          <div>
-                            <div className="text-sm font-medium mb-2">Major Crops:</div>
-                            <div className="flex flex-wrap gap-1">
-                              {region.major_crops.map((crop, idx) => (
-                                <Badge key={idx} variant="outline" className="text-xs">
-                                  {crop}
-                                </Badge>
-                              ))}
-                            </div>
+              {portfolioSections && portfolioSections.length > 0 && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                  {portfolioSections.map((section, index) => (
+                    <motion.div
+                      key={section.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                    >
+                      <Card className="h-full hover:shadow-lg transition-all duration-300 group">
+                        {section.image_url && (
+                          <div className="h-64 overflow-hidden rounded-t-lg">
+                            <img 
+                              src={section.image_url} 
+                              alt={section.title}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            />
                           </div>
                         )}
-
-                        {region.specialties && region.specialties.length > 0 && (
-                          <div>
-                            <div className="text-sm font-medium mb-2">Specialties:</div>
-                            <div className="text-sm text-muted-foreground">
-                              {region.specialties.join(', ')}
-                            </div>
+                        
+                        <CardHeader>
+                          <div className="flex items-center gap-2 mb-2">
+                            <Tractor className="h-4 w-4 text-primary" />
+                            <Badge variant="outline" className="capitalize">
+                              {section.section_type}
+                            </Badge>
                           </div>
-                        )}
-                      </CardContent>
-                    </Card>
-                  </motion.div>
-                ))}
-              </div>
+                          <CardTitle className="text-2xl group-hover:text-primary transition-colors">
+                            {section.title}
+                          </CardTitle>
+                        </CardHeader>
+
+                        <CardContent>
+                          <p className="text-muted-foreground leading-relaxed">
+                            {section.content}
+                          </p>
+                        </CardContent>
+                      </Card>
+                    </motion.div>
+                  ))}
+                </div>
+              )}
             </section>
           </div>
         </section>
