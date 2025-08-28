@@ -1,8 +1,10 @@
 User-agent: Googlebot
 Allow: /
+Crawl-delay: 1
 
 User-agent: Bingbot
 Allow: /
+Crawl-delay: 1
 
 User-agent: Twitterbot
 Allow: /
@@ -12,3 +14,20 @@ Allow: /
 
 User-agent: *
 Allow: /
+Crawl-delay: 2
+
+# Sitemap
+Sitemap: https://yourdomain.com/sitemap.xml
+
+# Important pages for crawlers
+Allow: /products
+Allow: /products/*
+Allow: /about
+Allow: /contact
+Allow: /faq
+
+# Block admin and unnecessary paths
+Disallow: /admin
+Disallow: /auth
+Disallow: /*.json$
+Disallow: /api/

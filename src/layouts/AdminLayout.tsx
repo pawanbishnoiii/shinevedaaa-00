@@ -23,7 +23,8 @@ import {
   Images, 
   Settings,
   Users,
-  Tags
+  Tags,
+  Search
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -65,6 +66,11 @@ const AdminSidebar = () => {
       title: 'Media',
       url: '/admin/media',
       icon: Images,
+    },
+    {
+      title: 'SEO Manager',
+      url: '/admin/seo',
+      icon: Search,
     },
     {
       title: 'Settings',

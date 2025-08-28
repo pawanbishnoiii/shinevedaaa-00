@@ -14,27 +14,44 @@ export const uploadFileLocally = async (
   folder: 'img' | 'vid' | 'docs' = 'img'
 ): Promise<UploadResult> => {
   try {
+    // Validate file first
+    const validation = validateFile(file);
+    if (!validation.valid) {
+      return {
+        success: false,
+        error: validation.error
+      };
+    }
+
     // Generate unique filename
     const fileExt = file.name.split('.').pop();
     const fileName = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}.${fileExt}`;
     const localPath = `/data/${folder}/${fileName}`;
     
-    // Create a FormData object for the upload
+    // Create a FormData object for the upload simulation
     const formData = new FormData();
     formData.append('file', file);
     formData.append('filename', fileName);
     formData.append('folder', folder);
 
-    // For demo purposes, we'll create a local URL
-    // In a real implementation, this would upload to your server
+    // Create local URL - in real implementation, files would be uploaded to server
     const localUrl = window.location.origin + localPath;
     
-    // Simulate upload delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    // Create blob URL for immediate preview (temporary)
+    const blobUrl = URL.createObjectURL(file);
+    
+    // Simulate upload processing
+    await new Promise(resolve => setTimeout(resolve, 800));
+    
+    // Note: In a real implementation, you would:
+    // 1. Upload file to your server's /public/data/${folder}/ directory
+    // 2. Or use a file upload service
+    // 3. Return the actual accessible URL
     
     return {
       success: true,
-      url: localUrl
+      url: localUrl,
+      // temporary: blobUrl // For immediate preview
     };
   } catch (error) {
     return {

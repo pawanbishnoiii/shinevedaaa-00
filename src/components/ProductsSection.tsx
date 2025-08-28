@@ -10,7 +10,7 @@ const ProductsSection = () => {
   const [activeProduct, setActiveProduct] = useState<string | null>(null);
 
   const { data: products, isLoading } = useQuery({
-    queryKey: ['products'],
+    queryKey: ['featured-products'],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('products')
@@ -22,6 +22,7 @@ const ProductsSection = () => {
           )
         `)
         .eq('is_active', true)
+        .eq('is_featured', true)
         .order('sort_order', { ascending: true })
         .limit(3);
       
@@ -67,13 +68,13 @@ const ProductsSection = () => {
           </p>
         </div>
 
-        {/* New Products Section */}
+        {/* Featured Products Section */}
         <div className="mb-16">
           <Badge variant="secondary" className="mb-4 px-4 py-2 text-sm font-medium">
-            Latest Additions
+            Featured Products
           </Badge>
           <h3 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-8 text-center">
-            Newly Added <span className="text-gradient">Products</span>
+            Premium <span className="text-gradient">Selections</span>
           </h3>
         </div>
 
