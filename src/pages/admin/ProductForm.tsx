@@ -131,15 +131,35 @@ const ProductForm = () => {
     }
   }, [product, isEditing, form]);
 
-  // Auto-generate slug from name
+  // Auto-generate unique slug from name
   const watchName = form.watch('name');
   useEffect(() => {
     if (watchName && !isEditing) {
-      const slug = watchName
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/(^-|-$)/g, '');
-      form.setValue('slug', slug);
+      const generateUniqueSlug = async (baseName: string) => {
+        const baseSlug = baseName
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/(^-|-$)/g, '');
+        
+        // Check if slug exists
+        const { data: existing } = await supabase
+          .from('products')
+          .select('slug')
+          .eq('slug', baseSlug)
+          .single();
+        
+        if (!existing) {
+          return baseSlug;
+        }
+        
+        // Generate unique slug with timestamp
+        const timestamp = Date.now().toString().slice(-4);
+        return `${baseSlug}-${timestamp}`;
+      };
+      
+      generateUniqueSlug(watchName).then(uniqueSlug => {
+        form.setValue('slug', uniqueSlug);
+      });
     }
   }, [watchName, isEditing, form]);
 

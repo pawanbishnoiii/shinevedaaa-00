@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import heroBg from "@/assets/hero-bg.jpg";
+import farmingHero from "@/assets/indian-farming-hero.jpg";
+import rajasthanFarmers from "@/assets/rajasthan-farmers.jpg";
 
 const HeroSection = () => {
   const { data: heroContent } = useQuery({
@@ -46,14 +48,25 @@ const HeroSection = () => {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Image with Overlay */}
+      {/* Background Images with Parallax */}
       <div className="absolute inset-0">
+        {/* Primary farming background */}
         <img 
-          src={heroBg}
-          alt="Agricultural fields in Rajasthan" 
+          src={farmingHero}
+          alt="Indian farmers working in agricultural fields" 
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent" />
+        {/* Secondary overlay image */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent" />
+        
+        {/* Rajasthan farmers overlay */}
+        <div className="absolute inset-0 opacity-30">
+          <img 
+            src={rajasthanFarmers}
+            alt="Rajasthan agricultural landscape" 
+            className="w-full h-full object-cover mix-blend-overlay"
+          />
+        </div>
       </div>
       
       {/* Floating Animation Elements */}

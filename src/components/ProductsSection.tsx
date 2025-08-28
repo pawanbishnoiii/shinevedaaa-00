@@ -17,7 +17,7 @@ const ProductsSection = () => {
           .from('products')
           .select(`
             *,
-            categories!category_id (
+            categories!products_category_id_fkey (
               name,
               slug
             )
