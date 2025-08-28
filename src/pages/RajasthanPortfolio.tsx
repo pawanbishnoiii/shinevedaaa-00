@@ -18,72 +18,59 @@ import {
   Leaf,
   Sun,
   Cloud,
-  Mountain
+  Mountain,
+  Heart,
+  Users,
+  Tractor,
+  Award
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const RajasthanPortfolio = () => {
   const [activeCategory, setActiveCategory] = useState('all');
 
-  // Mock data until migration is applied
-  const mockCrops = [
-    {
-      id: '1',
-      name: 'Onions',
-      hindi_name: 'प्याज',
-      scientific_name: 'Allium cepa',
-      category: 'Rabi',
-      sowing_season: 'October-December',
-      harvesting_season: 'March-May',
-      growing_months: 5,
-      water_requirement: 'Medium (400-600mm)',
-      soil_type: 'Well-drained loamy soil',
-      yield_per_hectare: '200-300 quintals/hectare',
-      market_price_range: '₹800-2000/quintal',
-      description: 'High-quality export onions with excellent storage life and pungency levels ideal for international markets.',
-      export_markets: ['Dubai', 'Singapore', 'Malaysia', 'Bangladesh'],
-      is_major_crop: true,
-      is_active: true,
-      image_url: '/data/img/placeholder-product.jpg'
-    },
-    {
-      id: '2',
-      name: 'Jeera (Cumin)',
-      hindi_name: 'जीरा',
-      scientific_name: 'Cuminum cyminum',
-      category: 'Rabi',
-      sowing_season: 'November-December',
-      harvesting_season: 'April-May',
-      growing_months: 5,
-      water_requirement: 'Low (200-400mm)',
-      soil_type: 'Sandy loam',
-      yield_per_hectare: '4-6 quintals/hectare',
-      market_price_range: '₹15000-25000/quintal',
-      description: 'Premium quality cumin seeds with high oil content and strong aroma, highly demanded in international spice markets.',
-      export_markets: ['USA', 'Europe', 'Middle East', 'Japan'],
-      is_major_crop: true,
-      is_active: true,
-      image_url: '/data/img/placeholder-product.jpg'
+  // Fetch dynamic data from Supabase
+  const { data: crops, isLoading: cropsLoading } = useQuery({
+    queryKey: ['rajasthan-crops'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('rajasthan_crops')
+        .select('*')
+        .eq('is_active', true)
+        .order('sort_order', { ascending: true });
+      
+      if (error) throw error;
+      return data || [];
     }
-  ];
+  });
 
-  const mockRegions = [
-    {
-      id: '1',
-      name: 'Sri Ganganagar',
-      district_name: 'Sri Ganganagar',
-      climate_zone: 'Arid',
-      soil_type: 'Alluvial',
-      major_crops: ['Wheat', 'Rice', 'Cotton', 'Onions', 'Carrots'],
-      annual_rainfall: '200-400mm',
-      temperature_range: '5°C to 48°C',
-      specialties: ['Canal irrigation', 'Export hub', 'Food processing'],
-      is_active: true
+  const { data: stories, isLoading: storiesLoading } = useQuery({
+    queryKey: ['rajasthan-stories'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('rajasthan_stories')
+        .select('*')
+        .eq('is_active', true)
+        .order('sort_order', { ascending: true });
+      
+      if (error) throw error;
+      return data || [];
     }
-  ];
+  });
 
-  const crops = mockCrops;
-  const regions = mockRegions;
+  const { data: portfolioSections, isLoading: sectionsLoading } = useQuery({
+    queryKey: ['rajasthan-portfolio-sections'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('rajasthan_portfolio_sections')
+        .select('*')
+        .eq('is_active', true)
+        .order('sort_order', { ascending: true });
+      
+      if (error) throw error;
+      return data || [];
+    }
+  });
 
   const categories = [
     { value: 'all', label: 'All Crops', icon: Package },
@@ -93,13 +80,13 @@ const RajasthanPortfolio = () => {
   ];
 
   const filteredCrops = crops?.filter(crop => 
-    activeCategory === 'all' || crop.category === activeCategory
+    activeCategory === 'all' || crop.season === activeCategory
   );
 
-  const majorCrops = crops?.filter(crop => crop.is_major_crop);
+  const isLoading = cropsLoading || storiesLoading || sectionsLoading;
 
-  const getCategoryIcon = (category: string) => {
-    switch (category) {
+  const getCategoryIcon = (season: string) => {
+    switch (season) {
       case 'Rabi': return Sun;
       case 'Kharif': return Cloud;
       case 'Zaid': return Thermometer;
@@ -107,14 +94,22 @@ const RajasthanPortfolio = () => {
     }
   };
 
-  const getCategoryColor = (category: string) => {
-    switch (category) {
+  const getCategoryColor = (season: string) => {
+    switch (season) {
       case 'Rabi': return 'bg-orange-100 text-orange-800 border-orange-200';
       case 'Kharif': return 'bg-blue-100 text-blue-800 border-blue-200';
       case 'Zaid': return 'bg-green-100 text-green-800 border-green-200';
       default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -140,13 +135,13 @@ const RajasthanPortfolio = () => {
             "mainEntity": {
               "@type": "ItemList",
               "name": "Rajasthan Crops",
-              "numberOfItems": crops?.length || 7,
-              "itemListElement": majorCrops?.map((crop, index) => ({
+              "numberOfItems": crops?.length || 0,
+              "itemListElement": crops?.map((crop, index) => ({
                 "@type": "Product",
                 "position": index + 1,
                 "name": crop.name,
                 "description": crop.description,
-                "category": crop.category
+                "category": crop.season
               })) || []
             }
           })}
@@ -265,7 +260,7 @@ const RajasthanPortfolio = () => {
               {/* Crops Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {filteredCrops?.map((crop, index) => {
-                  const CategoryIcon = getCategoryIcon(crop.category);
+                  const CategoryIcon = getCategoryIcon(crop.season || '');
                   return (
                     <motion.div
                       key={crop.id}
@@ -281,29 +276,17 @@ const RajasthanPortfolio = () => {
                                 <CategoryIcon className="h-5 w-5 text-primary" />
                                 <Badge 
                                   variant="outline" 
-                                  className={getCategoryColor(crop.category)}
+                                  className={getCategoryColor(crop.season || '')}
                                 >
-                                  {crop.category}
+                                  {crop.season}
                                 </Badge>
-                                {crop.is_major_crop && (
-                                  <Badge variant="default" className="bg-gold text-gold-foreground">
-                                    Major Export
-                                  </Badge>
-                                )}
+                                <Badge variant="default" className="bg-primary">
+                                  {crop.region}
+                                </Badge>
                               </div>
                               <CardTitle className="text-xl group-hover:text-primary transition-colors">
                                 {crop.name}
-                                {crop.hindi_name && (
-                                  <span className="text-sm text-muted-foreground font-normal ml-2">
-                                    ({crop.hindi_name})
-                                  </span>
-                                )}
                               </CardTitle>
-                              {crop.scientific_name && (
-                                <CardDescription className="italic">
-                                  {crop.scientific_name}
-                                </CardDescription>
-                              )}
                             </div>
                             {crop.image_url && (
                               <img 
@@ -316,7 +299,7 @@ const RajasthanPortfolio = () => {
                         </CardHeader>
 
                         <CardContent className="space-y-4">
-                          <p className="text-sm text-muted-foreground line-clamp-2">
+                          <p className="text-sm text-muted-foreground line-clamp-3">
                             {crop.description}
                           </p>
 
@@ -324,64 +307,17 @@ const RajasthanPortfolio = () => {
                             <div className="flex items-center gap-2">
                               <Calendar className="h-4 w-4 text-green-600" />
                               <div>
-                                <div className="font-medium">Growing Period</div>
-                                <div className="text-muted-foreground">{crop.growing_months} months</div>
+                                <div className="font-medium">Duration</div>
+                                <div className="text-muted-foreground">{crop.duration_days} days</div>
                               </div>
                             </div>
 
                             <div className="flex items-center gap-2">
-                              <Clock className="h-4 w-4 text-blue-600" />
+                              <MapPin className="h-4 w-4 text-blue-600" />
                               <div>
-                                <div className="font-medium">Season</div>
-                                <div className="text-muted-foreground">{crop.sowing_season}</div>
+                                <div className="font-medium">Region</div>
+                                <div className="text-muted-foreground">{crop.region}</div>
                               </div>
-                            </div>
-
-                            <div className="flex items-center gap-2">
-                              <Droplets className="h-4 w-4 text-cyan-600" />
-                              <div>
-                                <div className="font-medium">Water Need</div>
-                                <div className="text-muted-foreground">{crop.water_requirement}</div>
-                              </div>
-                            </div>
-
-                            <div className="flex items-center gap-2">
-                              <TrendingUp className="h-4 w-4 text-orange-600" />
-                              <div>
-                                <div className="font-medium">Yield</div>
-                                <div className="text-muted-foreground">{crop.yield_per_hectare}</div>
-                              </div>
-                            </div>
-                          </div>
-
-                          {crop.export_markets && crop.export_markets.length > 0 && (
-                            <div>
-                              <div className="text-sm font-medium mb-2 flex items-center gap-2">
-                                <Globe className="h-4 w-4" />
-                                Export Markets
-                              </div>
-                              <div className="flex flex-wrap gap-1">
-                                {crop.export_markets.slice(0, 4).map((market, idx) => (
-                                  <Badge 
-                                    key={idx} 
-                                    variant="secondary" 
-                                    className="text-xs bg-blue-50 text-blue-700"
-                                  >
-                                    {market}
-                                  </Badge>
-                                ))}
-                                {crop.export_markets.length > 4 && (
-                                  <Badge variant="secondary" className="text-xs">
-                                    +{crop.export_markets.length - 4} more
-                                  </Badge>
-                                )}
-                              </div>
-                            </div>
-                          )}
-
-                          <div className="pt-2 border-t">
-                            <div className="text-sm font-medium text-primary">
-                              Price Range: {crop.market_price_range}
                             </div>
                           </div>
                         </CardContent>
@@ -390,6 +326,140 @@ const RajasthanPortfolio = () => {
                   );
                 })}
               </div>
+
+              {/* Farmer Stories Section */}
+              {stories && stories.length > 0 && (
+                <section className="mt-20 pt-16 border-t">
+                  <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8 }}
+                    className="text-center mb-16"
+                  >
+                    <Badge variant="secondary" className="mb-4 px-6 py-2 text-lg font-medium bg-green-100 text-green-800">
+                      <Heart className="h-4 w-4 mr-2" />
+                      Farmer Stories
+                    </Badge>
+                    
+                    <h2 className="font-display text-4xl md:text-6xl font-bold text-foreground mb-6">
+                      Stories from the{" "}
+                      <span className="text-gradient bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
+                        Fields
+                      </span>
+                    </h2>
+                    
+                    <p className="text-xl md:text-2xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
+                      Meet the farmers whose dedication and hard work make our agricultural success possible.
+                    </p>
+                  </motion.div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    {stories.map((story, index) => (
+                      <motion.div
+                        key={story.id}
+                        initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.2 }}
+                      >
+                        <Card className="h-full hover:shadow-xl transition-all duration-500 group overflow-hidden">
+                          {story.hero_image_url && (
+                            <div className="h-64 overflow-hidden">
+                              <img 
+                                src={story.hero_image_url} 
+                                alt={story.title}
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                              />
+                            </div>
+                          )}
+                          
+                          <CardHeader>
+                            <div className="flex items-center gap-2 mb-2">
+                              <Users className="h-4 w-4 text-primary" />
+                              <Badge variant="outline" className="bg-blue-50 text-blue-700">
+                                {story.village} • {story.district}
+                              </Badge>
+                            </div>
+                            <CardTitle className="text-2xl group-hover:text-primary transition-colors">
+                              {story.title}
+                            </CardTitle>
+                          </CardHeader>
+
+                          <CardContent>
+                            <p className="text-muted-foreground leading-relaxed">
+                              {story.content}
+                            </p>
+                          </CardContent>
+                        </Card>
+                      </motion.div>
+                    ))}
+                  </div>
+                </section>
+              )}
+
+              {/* Portfolio Sections */}
+              {portfolioSections && portfolioSections.length > 0 && (
+                <section className="mt-20 pt-16 border-t">
+                  <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8 }}
+                    className="text-center mb-16"
+                  >
+                    <Badge variant="secondary" className="mb-4 px-6 py-2 text-lg font-medium bg-purple-100 text-purple-800">
+                      <Award className="h-4 w-4 mr-2" />
+                      Our Impact
+                    </Badge>
+                    
+                    <h2 className="font-display text-4xl md:text-6xl font-bold text-foreground mb-6">
+                      Transforming{" "}
+                      <span className="text-gradient bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                        Agriculture
+                      </span>
+                    </h2>
+                  </motion.div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    {portfolioSections.map((section, index) => (
+                      <motion.div
+                        key={section.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                      >
+                        <Card className="h-full hover:shadow-lg transition-all duration-300 group">
+                          {section.image_url && (
+                            <div className="h-48 overflow-hidden rounded-t-lg">
+                              <img 
+                                src={section.image_url} 
+                                alt={section.title}
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                              />
+                            </div>
+                          )}
+                          
+                          <CardHeader>
+                            <div className="flex items-center gap-2 mb-2">
+                              <Tractor className="h-4 w-4 text-primary" />
+                              <Badge variant="outline" className="capitalize">
+                                {section.section_type}
+                              </Badge>
+                            </div>
+                            <CardTitle className="text-xl group-hover:text-primary transition-colors">
+                              {section.title}
+                            </CardTitle>
+                          </CardHeader>
+
+                          <CardContent>
+                            <p className="text-muted-foreground">
+                              {section.content}
+                            </p>
+                          </CardContent>
+                        </Card>
+                      </motion.div>
+                    ))}
+                  </div>
+                </section>
+              )}
             </Tabs>
 
             {/* Regions Section */}
