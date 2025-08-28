@@ -62,7 +62,7 @@ const Inquiries = () => {
         .order('created_at', { ascending: false });
 
       if (searchTerm) {
-        query = query.or(`name.ilike.%${searchTerm}%,email.ilike.%${searchTerm}%,company.ilike.%${searchTerm}%`);
+        query = query.or(`name.ilike.%${searchTerm}%,email.ilike.%${searchTerm}%,company_name.ilike.%${searchTerm}%`);
       }
 
       if (statusFilter !== 'all') {
@@ -198,12 +198,12 @@ const Inquiries = () => {
                   {inquiry.phone}
                 </div>
               )}
-              {inquiry.company && (
-                <div className="flex items-center gap-2">
-                  <Building className="h-4 w-4" />
-                  {inquiry.company}
-                </div>
-              )}
+               {inquiry.company_name && (
+                 <div className="flex items-center gap-2">
+                   <Building className="h-4 w-4" />
+                   {inquiry.company_name}
+                 </div>
+               )}
               {inquiry.country && (
                 <div className="flex items-center gap-2">
                   <Globe className="h-4 w-4" />
@@ -367,12 +367,12 @@ const Inquiries = () => {
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell>
-                      <div>
-                        {inquiry.company && <div className="font-medium">{inquiry.company}</div>}
-                        {inquiry.country && <div className="text-sm text-muted-foreground">{inquiry.country}</div>}
-                      </div>
-                    </TableCell>
+                     <TableCell>
+                       <div>
+                         {inquiry.company_name && <div className="font-medium">{inquiry.company_name}</div>}
+                         {inquiry.country && <div className="text-sm text-muted-foreground">{inquiry.country}</div>}
+                       </div>
+                     </TableCell>
                     <TableCell>
                       <Badge variant="outline">
                         {inquiry.inquiry_type.replace('_', ' ')}

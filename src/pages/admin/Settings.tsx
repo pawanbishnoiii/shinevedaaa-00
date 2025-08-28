@@ -24,7 +24,7 @@ const Settings = () => {
     queryKey: ['admin-settings'],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('admin_settings')
+        .from('company_settings')
         .select('*');
       
       if (error) throw error;
@@ -42,7 +42,7 @@ const Settings = () => {
   const updateSettingMutation = useMutation({
     mutationFn: async ({ key, value, description }: { key: string; value: any; description?: string }) => {
       const { error } = await supabase
-        .from('admin_settings')
+        .from('company_settings')
         .upsert({ 
           key, 
           value, 

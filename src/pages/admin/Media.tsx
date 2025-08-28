@@ -57,7 +57,7 @@ const Media = () => {
     queryKey: ['admin-media', searchTerm, categoryFilter],
     queryFn: async () => {
       let query = supabase
-        .from('media_files')
+        .from('media')
         .select('*')
         .order('created_at', { ascending: false });
 
@@ -66,7 +66,7 @@ const Media = () => {
       }
 
       if (categoryFilter !== 'all') {
-        query = query.eq('category', categoryFilter);
+        query = query.eq('folder', categoryFilter);
       }
 
       const { data, error } = await query;
@@ -77,7 +77,7 @@ const Media = () => {
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('media_files').delete().eq('id', id);
+      const { error } = await supabase.from('media').delete().eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -128,14 +128,15 @@ const Media = () => {
 
         // Save to database
         const { error: dbError } = await supabase
-          .from('media_files')
+          .from('media')
           .insert({
             filename: fileName,
             original_filename: file.name,
-            file_path: publicUrl,
+            file_url: publicUrl,
             file_size: file.size,
             mime_type: file.type,
-            category: category,
+            file_type: file.type.split('/')[0], // 'image', 'video', 'application', etc.
+            folder: category,
             uploaded_by: (await supabase.auth.getUser()).data.user?.id
           });
 
@@ -195,14 +196,14 @@ const Media = () => {
   const GridView = () => (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
       {mediaFiles?.map((file) => {
-        const FileIcon = getFileIcon(file.mime_type);
+        const FileIcon = getFileIcon(file.mime_type || 'application/octet-stream');
         return (
           <Card key={file.id} className="hover:shadow-md transition-shadow">
             <CardContent className="p-3">
               <div className="aspect-square mb-2 bg-muted rounded-md flex items-center justify-center overflow-hidden">
-                {file.mime_type.startsWith('image/') ? (
+                {file.mime_type?.startsWith('image/') ? (
                   <img
-                    src={file.file_path}
+                    src={file.file_url || ''}
                     alt={file.alt_text || file.original_filename}
                     className="w-full h-full object-cover"
                   />
@@ -218,7 +219,7 @@ const Media = () => {
                   {formatFileSize(file.file_size || 0)}
                 </p>
                 <div className="flex items-center justify-between">
-                  {getCategoryBadge(file.category)}
+                  {getCategoryBadge(file.folder || 'general')}
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" size="sm">
@@ -228,13 +229,13 @@ const Media = () => {
                     <DropdownMenuContent align="end">
                       <DropdownMenuItem>
                         <Eye className="h-4 w-4 mr-2" />
-                        <a href={file.file_path} target="_blank" rel="noopener noreferrer">
+                        <a href={file.file_url} target="_blank" rel="noopener noreferrer">
                           View
                         </a>
                       </DropdownMenuItem>
                       <DropdownMenuItem>
                         <Download className="h-4 w-4 mr-2" />
-                        <a href={file.file_path} download={file.original_filename}>
+                        <a href={file.file_url} download={file.original_filename}>
                           Download
                         </a>
                       </DropdownMenuItem>
@@ -270,15 +271,15 @@ const Media = () => {
       </TableHeader>
       <TableBody>
         {mediaFiles?.map((file) => {
-          const FileIcon = getFileIcon(file.mime_type);
+          const FileIcon = getFileIcon(file.mime_type || 'application/octet-stream');
           return (
             <TableRow key={file.id}>
               <TableCell>
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-muted rounded flex items-center justify-center">
-                    {file.mime_type.startsWith('image/') ? (
+                    {file.mime_type?.startsWith('image/') ? (
                       <img
-                        src={file.file_path}
+                        src={file.file_url || ''}
                         alt={file.alt_text || file.original_filename}
                         className="w-full h-full object-cover rounded"
                       />
@@ -293,7 +294,7 @@ const Media = () => {
                 </div>
               </TableCell>
               <TableCell>{file.mime_type}</TableCell>
-              <TableCell>{getCategoryBadge(file.category)}</TableCell>
+              <TableCell>{getCategoryBadge(file.folder || 'general')}</TableCell>
               <TableCell>{formatFileSize(file.file_size || 0)}</TableCell>
               <TableCell>{new Date(file.created_at).toLocaleDateString()}</TableCell>
               <TableCell className="text-right">
@@ -306,13 +307,13 @@ const Media = () => {
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem>
                       <Eye className="h-4 w-4 mr-2" />
-                      <a href={file.file_path} target="_blank" rel="noopener noreferrer">
+                      <a href={file.file_url} target="_blank" rel="noopener noreferrer">
                         View
                       </a>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
                       <Download className="h-4 w-4 mr-2" />
-                      <a href={file.file_path} download={file.original_filename}>
+                      <a href={file.file_url} download={file.original_filename}>
                         Download
                       </a>
                     </DropdownMenuItem>

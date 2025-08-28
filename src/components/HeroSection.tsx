@@ -40,7 +40,9 @@ const HeroSection = () => {
   };
 
   const content = heroContent || defaultContent;
-  const contentData = typeof content.data === 'string' ? JSON.parse(content.data) : content.data;
+  const contentData = heroContent 
+    ? (typeof heroContent.metadata === 'string' ? JSON.parse(heroContent.metadata) : heroContent.metadata)
+    : defaultContent.data;
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">

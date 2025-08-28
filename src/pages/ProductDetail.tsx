@@ -204,7 +204,7 @@ Please provide detailed quote and availability.`;
                   </div>
                   <div>
                     <Label className="text-sm font-medium text-muted-foreground">Stock Status</Label>
-                    <Badge variant={product.stock_status === 'in_stock' ? 'success' : 'destructive'}>
+                    <Badge variant={product.stock_status === 'in_stock' ? 'default' : 'destructive'}>
                       {product.stock_status.replace('_', ' ').toUpperCase()}
                     </Badge>
                   </div>
@@ -386,12 +386,19 @@ Please provide detailed quote and availability.`;
         </div>
 
         {/* Inquiry Form Modal */}
-        <InquiryForm 
-          isOpen={inquiryOpen}
-          onClose={() => setInquiryOpen(false)}
-          productName={product.name}
-          productId={product.id}
-        />
+        {inquiryOpen && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="bg-background rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+              <div className="p-4 border-b flex justify-between items-center">
+                <h3 className="text-lg font-semibold">Product Inquiry: {product.name}</h3>
+                <Button variant="ghost" onClick={() => setInquiryOpen(false)}>×</Button>
+              </div>
+              <div className="p-4">
+                <InquiryForm />
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );

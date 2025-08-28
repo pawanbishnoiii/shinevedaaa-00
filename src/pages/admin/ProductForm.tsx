@@ -122,10 +122,8 @@ const ProductForm = () => {
       });
       
       setFeatures(product.features || []);
-      setPackagingOptions(product.packaging_options || []);
       setGalleryImages(product.gallery_images || []);
       setImageUrl(product.image_url || '');
-      setVideoUrl(product.video_url || '');
     }
   }, [product, isEditing, form]);
 
@@ -170,10 +168,8 @@ const ProductForm = () => {
     saveProductMutation.mutate({
       ...data,
       features,
-      packaging_options: packagingOptions,
       gallery_images: galleryImages,
       image_url: imageUrl,
-      video_url: videoUrl,
     });
   };
 

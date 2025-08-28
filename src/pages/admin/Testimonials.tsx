@@ -56,9 +56,9 @@ const Testimonials = () => {
     client_name: '',
     client_company: '',
     client_position: '',
-    content: '',
+    testimonial_text: '',
     rating: 5,
-    country: '',
+    client_country: '',
     is_featured: false,
     is_active: true
   });
@@ -131,9 +131,9 @@ const Testimonials = () => {
       client_name: '',
       client_company: '',
       client_position: '',
-      content: '',
+      testimonial_text: '',
       rating: 5,
-      country: '',
+      client_country: '',
       is_featured: false,
       is_active: true
     });
@@ -156,9 +156,9 @@ const Testimonials = () => {
       client_name: testimonial.client_name,
       client_company: testimonial.client_company || '',
       client_position: testimonial.client_position || '',
-      content: testimonial.content,
+      testimonial_text: testimonial.testimonial_text,
       rating: testimonial.rating || 5,
-      country: testimonial.country || '',
+      client_country: testimonial.client_country || '',
       is_featured: testimonial.is_featured,
       is_active: testimonial.is_active
     });
@@ -267,21 +267,21 @@ const Testimonials = () => {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="country">Country</Label>
+                    <Label htmlFor="client_country">Country</Label>
                     <Input
-                      id="country"
-                      value={formData.country}
-                      onChange={(e) => setFormData({ ...formData, country: e.target.value })}
+                      id="client_country"
+                      value={formData.client_country}
+                      onChange={(e) => setFormData({ ...formData, client_country: e.target.value })}
                     />
                   </div>
                 </div>
 
                 <div>
-                  <Label htmlFor="content">Testimonial Content *</Label>
+                  <Label htmlFor="testimonial_text">Testimonial Content *</Label>
                   <Textarea
-                    id="content"
-                    value={formData.content}
-                    onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                    id="testimonial_text"
+                    value={formData.testimonial_text}
+                    onChange={(e) => setFormData({ ...formData, testimonial_text: e.target.value })}
                     placeholder="Enter the testimonial content..."
                     rows={4}
                     required
@@ -378,10 +378,10 @@ const Testimonials = () => {
                         {testimonial.client_position && (
                           <div className="text-sm text-muted-foreground">{testimonial.client_position}</div>
                         )}
-                        {testimonial.country && (
+                        {testimonial.client_country && (
                           <div className="text-xs text-muted-foreground flex items-center gap-1">
                             <Globe className="h-3 w-3" />
-                            {testimonial.country}
+                            {testimonial.client_country}
                           </div>
                         )}
                       </div>
@@ -395,7 +395,7 @@ const Testimonials = () => {
                       )}
                     </TableCell>
                     <TableCell className="max-w-xs">
-                      <div className="line-clamp-2">{testimonial.content}</div>
+                      <div className="line-clamp-2">{testimonial.testimonial_text}</div>
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center">
