@@ -69,7 +69,7 @@ MOQ: ${product.minimum_order_quantity}
 
 Please provide detailed quote and availability.`;
 
-    const whatsappUrl = `https://wa.me/919876543210?text=${encodeURIComponent(message)}`;
+    const whatsappUrl = `https://wa.me/918955158794?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
 
@@ -115,14 +115,81 @@ Please provide detailed quote and availability.`;
   return (
     <>
       <Helmet>
-        <title>{product.seo_title || `${product.name} - ShineVeda`}</title>
-        <meta name="description" content={product.seo_description || product.short_description} />
-        <meta name="keywords" content={product.seo_keywords || `${product.name}, export, B2B, agriculture`} />
-        <meta property="og:title" content={product.name} />
-        <meta property="og:description" content={product.short_description} />
+        <title>{product.seo_title || `${product.name} - Premium Agricultural Export | ShineVeda`}</title>
+        <meta name="description" content={product.seo_description || `${product.short_description || product.name} - Direct from Sri Ganganagar, Rajasthan. Export quality agricultural products to India, Singapore, UK, USA, Dubai, Australia, Qatar, Japan, China and worldwide.`} />
+        <meta name="keywords" content={product.seo_keywords || `${product.name}, agricultural export, B2B, ${product.categories?.name || 'agriculture'}, Sri Ganganagar, Rajasthan, India export, Singapore import, UK import, USA import, Dubai import, Australia import, Qatar import, Japan import, China import, wholesale, bulk order, premium quality, agricultural commodities, international trade, export business`} />
+        
+        {/* Open Graph Meta Tags */}
+        <meta property="og:title" content={`${product.name} - Premium Agricultural Export`} />
+        <meta property="og:description" content={product.short_description || `Premium ${product.name} exported from Sri Ganganagar, Rajasthan`} />
         <meta property="og:image" content={product.image_url} />
         <meta property="og:type" content="product" />
+        <meta property="og:url" content={window.location.href} />
+        <meta property="og:site_name" content="ShineVeda" />
+        <meta property="og:locale" content="en_US" />
+        
+        {/* Twitter Card Meta Tags */}
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`${product.name} - ShineVeda`} />
+        <meta name="twitter:description" content={product.short_description} />
+        <meta name="twitter:image" content={product.image_url} />
+        
+        {/* Additional SEO Meta Tags */}
+        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+        <meta name="author" content="ShineVeda" />
+        <meta name="geo.region" content="IN-RJ" />
+        <meta name="geo.placename" content="Sri Ganganagar, Rajasthan" />
+        <meta name="geo.position" content="29.9157;73.8772" />
+        <meta name="ICBM" content="29.9157, 73.8772" />
+        
+        {/* Business Schema */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org/",
+            "@type": "Product",
+            "name": product.name,
+            "description": product.description || product.short_description,
+            "image": product.image_url,
+            "brand": {
+              "@type": "Brand",
+              "name": "ShineVeda"
+            },
+            "manufacturer": {
+              "@type": "Organization",
+              "name": "ShineVeda",
+              "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "Sri Ganganagar",
+                "addressRegion": "Rajasthan",
+                "addressCountry": "IN"
+              }
+            },
+            "offers": {
+              "@type": "Offer",
+              "price": product.price_range,
+              "priceCurrency": "USD",
+              "availability": "https://schema.org/InStock",
+              "seller": {
+                "@type": "Organization",
+                "name": "ShineVeda"
+              }
+            },
+            "category": product.categories?.name,
+            "mpn": product.id,
+            "additionalProperty": [
+              {
+                "@type": "PropertyValue",
+                "name": "Origin",
+                "value": product.origin || "Sri Ganganagar, Rajasthan"
+              },
+              {
+                "@type": "PropertyValue", 
+                "name": "Minimum Order Quantity",
+                "value": product.minimum_order_quantity
+              }
+            ]
+          })}
+        </script>
       </Helmet>
 
       <div className="min-h-screen bg-background">

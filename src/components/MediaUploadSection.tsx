@@ -181,10 +181,11 @@ const MediaUploadSection: React.FC<MediaUploadSectionProps> = ({
 
         {/* Upload Instructions */}
         <div className="text-sm text-muted-foreground bg-muted p-3 rounded-lg">
-          <p className="font-medium mb-1">📁 Image Storage:</p>
-          <p>• Images uploaded via Media Library are stored in <code>data/img/</code></p>
-          <p>• Videos are stored in <code>data/vid/</code></p>
-          <p>• Documents are stored in <code>data/docs/</code></p>
+          <p className="font-medium mb-1">📁 Local File Storage:</p>
+          <p>• Images are stored locally in <code>/data/img/</code> folder</p>
+          <p>• Videos are stored in <code>/data/vid/</code> folder</p>
+          <p>• Documents are stored in <code>/data/docs/</code> folder</p>
+          <p>• Files are accessible via direct URL paths for fast loading</p>
         </div>
       </CardContent>
     </Card>

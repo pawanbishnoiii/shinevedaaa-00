@@ -102,45 +102,34 @@ const Media = () => {
         const fileExt = file.name.split('.').pop();
         const fileName = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}.${fileExt}`;
         
-        // Determine bucket and path based on file type
-        let bucket = 'media-library';
+        // Determine local path based on file type
         let category = 'general';
-        let folderPath = 'data/';
+        let localPath = '/data/';
         
         if (file.type.startsWith('image/')) {
           category = 'image';
-          folderPath = 'data/img/';
+          localPath = '/data/img/';
         } else if (file.type.startsWith('video/')) {
           category = 'video';
-          folderPath = 'data/vid/';
+          localPath = '/data/vid/';
         } else {
-          folderPath = 'data/docs/';
+          category = 'document';
+          localPath = '/data/docs/';
         }
         
-        const filePath = folderPath + fileName;
+        const fullPath = localPath + fileName;
+        const localUrl = window.location.origin + fullPath;
 
-        // Upload to storage
-        const { error: uploadError } = await supabase.storage
-          .from(bucket)
-          .upload(filePath, file);
-
-        if (uploadError) throw uploadError;
-
-        // Get public URL
-        const { data: { publicUrl } } = supabase.storage
-          .from(bucket)
-          .getPublicUrl(filePath);
-
-        // Save to database
+        // Save to database with local path
         const { error: dbError } = await supabase
           .from('media')
           .insert({
             filename: fileName,
             original_filename: file.name,
-            file_url: publicUrl,
+            file_url: localUrl,
             file_size: file.size,
             mime_type: file.type,
-            file_type: file.type.split('/')[0], // 'image', 'video', 'application', etc.
+            file_type: file.type.split('/')[0],
             folder: category,
             uploaded_by: (await supabase.auth.getUser()).data.user?.id
           });
@@ -152,7 +141,7 @@ const Media = () => {
       }
 
       queryClient.invalidateQueries({ queryKey: ['admin-media'] });
-      toast.success(`${files.length} file(s) uploaded successfully`);
+      toast.success(`${files.length} file(s) uploaded to local storage successfully`);
     } catch (error: any) {
       toast.error(`Upload failed: ${error.message}`);
     } finally {

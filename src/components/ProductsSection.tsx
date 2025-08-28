@@ -22,9 +22,8 @@ const ProductsSection = () => {
           )
         `)
         .eq('is_active', true)
-        .eq('is_featured', true)
         .order('sort_order', { ascending: true })
-        .limit(8);
+        .limit(3);
       
       if (error) throw error;
       return data;
@@ -63,13 +62,23 @@ const ProductsSection = () => {
             Commodities
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            From farm to international markets, our seven premium product lines represent 
-            the finest quality agricultural exports from Rajasthan's fertile lands.
+            From farm to international markets, discover our premium agricultural 
+            commodities directly sourced from Sri Ganganagar, Rajasthan's fertile lands.
           </p>
         </div>
 
+        {/* New Products Section */}
+        <div className="mb-16">
+          <Badge variant="secondary" className="mb-4 px-4 py-2 text-sm font-medium">
+            Latest Additions
+          </Badge>
+          <h3 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-8 text-center">
+            Newly Added <span className="text-gradient">Products</span>
+          </h3>
+        </div>
+
         {/* Products Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {products?.map((product, index) => (
             <Card 
               key={product.id}
