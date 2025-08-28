@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Package, Truck, Shield, Loader2 } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
+import ProductCard from "./ProductCard";
 
 const ProductsSection = () => {
-  const [activeProduct, setActiveProduct] = useState<string | null>(null);
 
   const { data: products, isLoading } = useQuery({
     queryKey: ['featured-products'],
@@ -81,118 +80,11 @@ const ProductsSection = () => {
         {/* Products Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {products?.map((product, index) => (
-            <Card 
+            <ProductCard 
               key={product.id}
-              className={`card-premium group cursor-pointer transition-all duration-500 ${
-                activeProduct === product.id ? 'ring-2 ring-primary scale-105' : ''
-              }`}
-              onMouseEnter={() => setActiveProduct(product.id)}
-              onMouseLeave={() => setActiveProduct(null)}
-              style={{ animationDelay: `${index * 100}ms` }}
-            >
-              <CardContent className="p-0">
-                {/* Product Image */}
-                <div className="relative overflow-hidden rounded-t-xl">
-                  <img 
-                    src={product.image_url || "https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=800&h=600&fit=crop"}
-                    alt={product.name}
-                    className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  
-                  {/* Category Badge */}
-                  <Badge 
-                    variant="secondary" 
-                    className="absolute top-3 left-3 bg-white/90 text-foreground"
-                  >
-                    {product.categories?.name || 'General'}
-                  </Badge>
-
-                  {/* Quick Actions */}
-                  <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
-                    <Button 
-                      size="sm"
-                      asChild
-                      className="bg-primary hover:bg-primary/90 text-primary-foreground"
-                    >
-                      <a href={`/products/${product.slug}`}>
-                        View Details
-                        <ArrowRight className="ml-1 h-3 w-3" />
-                      </a>
-                    </Button>
-                  </div>
-                </div>
-
-                {/* Product Info */}
-                <div className="p-6">
-                  <h3 className="font-display text-xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
-                    {product.name}
-                  </h3>
-                  
-                  {/* Features */}
-                  <div className="flex flex-wrap gap-1 mb-4">
-                    {product.features?.slice(0, 2).map((feature, idx) => (
-                      <Badge 
-                        key={idx} 
-                        variant="outline" 
-                        className="text-xs border-primary/20 text-primary"
-                      >
-                        {feature}
-                      </Badge>
-                    )) || (
-                      <Badge variant="outline" className="text-xs border-primary/20 text-primary">
-                        Premium Quality
-                      </Badge>
-                    )}
-                  </div>
-
-                  {/* Key Specs */}
-                  {activeProduct === product.id && (
-                    <div className="space-y-3 animate-slide-up">
-                      <div className="border-t border-border pt-4">
-                        <div className="grid grid-cols-2 gap-2 text-sm">
-                          <div className="flex items-center text-muted-foreground">
-                            <Package className="h-3 w-3 mr-1" />
-                            Price Range
-                          </div>
-                          <div className="text-foreground font-medium text-xs">
-                            {product.price_range || 'Contact for pricing'}
-                          </div>
-                          
-                          <div className="flex items-center text-muted-foreground">
-                            <Shield className="h-3 w-3 mr-1" />
-                            Min. Order
-                          </div>
-                          <div className="text-foreground font-medium text-xs">
-                            {product.minimum_order_quantity || 'Flexible'}
-                          </div>
-                          
-                          <div className="flex items-center text-muted-foreground">
-                            <Truck className="h-3 w-3 mr-1" />
-                            Origin
-                          </div>
-                          <div className="text-foreground font-medium text-xs">
-                            {product.origin}
-                          </div>
-                        </div>
-                      </div>
-
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        asChild
-                        className="w-full transition-bounce hover:scale-105"
-                      >
-                        <a href={`/products/${product.slug}`}>
-                          View Details
-                          <ArrowRight className="ml-2 h-3 w-3" />
-                        </a>
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
+              product={product}
+              index={index}
+            />
           ))}
         </div>
 

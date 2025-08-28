@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      activity_logs: {
+        Row: {
+          activity_type: string
+          created_at: string
+          description: string | null
+          id: string
+          metadata: Json | null
+        }
+        Insert: {
+          activity_type: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+        }
+        Update: {
+          activity_type?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+        }
+        Relationships: []
+      }
       categories: {
         Row: {
           created_at: string | null
@@ -131,6 +155,45 @@ export type Database = {
           subtitle?: string | null
           title?: string | null
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      footer_pages: {
+        Row: {
+          content: string | null
+          created_at: string
+          id: string
+          is_active: boolean
+          seo_description: string | null
+          seo_title: string | null
+          slug: string
+          sort_order: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          seo_description?: string | null
+          seo_title?: string | null
+          slug: string
+          sort_order?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          content?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          seo_description?: string | null
+          seo_title?: string | null
+          slug?: string
+          sort_order?: number
+          title?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -304,6 +367,73 @@ export type Database = {
           },
         ]
       }
+      product_favorites: {
+        Row: {
+          created_at: string
+          id: string
+          product_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          product_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          product_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_favorites_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      product_interactions: {
+        Row: {
+          created_at: string
+          id: string
+          interaction_type: Database["public"]["Enums"]["product_interaction_type"]
+          product_id: string
+          session_id: string | null
+          user_id: string | null
+          weight: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          interaction_type: Database["public"]["Enums"]["product_interaction_type"]
+          product_id: string
+          session_id?: string | null
+          user_id?: string | null
+          weight?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          interaction_type?: Database["public"]["Enums"]["product_interaction_type"]
+          product_id?: string
+          session_id?: string | null
+          user_id?: string | null
+          weight?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_interactions_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       products: {
         Row: {
           category_id: string | null
@@ -459,6 +589,174 @@ export type Database = {
         }
         Relationships: []
       }
+      rajasthan_crops: {
+        Row: {
+          created_at: string
+          description: string | null
+          duration_days: number | null
+          id: string
+          image_url: string | null
+          is_active: boolean
+          name: string
+          region: string | null
+          season: string | null
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          duration_days?: number | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          name: string
+          region?: string | null
+          season?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          duration_days?: number | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          name?: string
+          region?: string | null
+          season?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      rajasthan_portfolio_sections: {
+        Row: {
+          content: string | null
+          created_at: string
+          gallery: Json | null
+          id: string
+          image_url: string | null
+          is_active: boolean
+          metadata: Json | null
+          section_type: string
+          sort_order: number
+          title: string | null
+          updated_at: string
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string
+          gallery?: Json | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          metadata?: Json | null
+          section_type: string
+          sort_order?: number
+          title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          content?: string | null
+          created_at?: string
+          gallery?: Json | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          metadata?: Json | null
+          section_type?: string
+          sort_order?: number
+          title?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      rajasthan_stories: {
+        Row: {
+          content: string | null
+          created_at: string
+          district: string | null
+          gallery: Json | null
+          hero_image_url: string | null
+          id: string
+          is_active: boolean
+          sort_order: number
+          title: string
+          updated_at: string
+          video_url: string | null
+          village: string | null
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string
+          district?: string | null
+          gallery?: Json | null
+          hero_image_url?: string | null
+          id?: string
+          is_active?: boolean
+          sort_order?: number
+          title: string
+          updated_at?: string
+          video_url?: string | null
+          village?: string | null
+        }
+        Update: {
+          content?: string | null
+          created_at?: string
+          district?: string | null
+          gallery?: Json | null
+          hero_image_url?: string | null
+          id?: string
+          is_active?: boolean
+          sort_order?: number
+          title?: string
+          updated_at?: string
+          video_url?: string | null
+          village?: string | null
+        }
+        Relationships: []
+      }
+      seo_metrics: {
+        Row: {
+          id: string
+          metric_name: string
+          metric_value: string | null
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          metric_name: string
+          metric_value?: string | null
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          metric_name?: string
+          metric_value?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      site_settings: {
+        Row: {
+          setting_key: string
+          setting_value: string | null
+          updated_at: string
+        }
+        Insert: {
+          setting_key: string
+          setting_value?: string | null
+          updated_at?: string
+        }
+        Update: {
+          setting_key?: string
+          setting_value?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       testimonials: {
         Row: {
           client_company: string | null
@@ -507,6 +805,62 @@ export type Database = {
         }
         Relationships: []
       }
+      user_analytics: {
+        Row: {
+          city: string | null
+          country: string | null
+          created_at: string
+          device: string | null
+          event_type: string | null
+          id: string
+          page_title: string | null
+          page_url: string | null
+          product_id: string | null
+          referrer: string | null
+          session_id: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          device?: string | null
+          event_type?: string | null
+          id?: string
+          page_title?: string | null
+          page_url?: string | null
+          product_id?: string | null
+          referrer?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          device?: string | null
+          event_type?: string | null
+          id?: string
+          page_title?: string | null
+          page_url?: string | null
+          product_id?: string | null
+          referrer?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_analytics_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -526,7 +880,7 @@ export type Database = {
       }
     }
     Enums: {
-      [_ in never]: never
+      product_interaction_type: "view" | "favorite" | "inquiry"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -653,6 +1007,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      product_interaction_type: ["view", "favorite", "inquiry"],
+    },
   },
 } as const

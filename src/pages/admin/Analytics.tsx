@@ -56,15 +56,15 @@ const Analytics = () => {
   const { data: analyticsData } = useQuery({
     queryKey: ['analytics', timeRange],
     queryFn: async () => {
-      // Simulated data - replace with actual analytics API calls
-      const { data: userAnalytics } = await supabase
-        .from('user_analytics')
-        .select('*')
-        .gte('created_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
-        .order('created_at', { ascending: false });
+      // TODO: Once user_analytics table types are available, uncomment this:
+      // const { data: userAnalytics } = await supabase
+      //   .from('user_analytics')
+      //   .select('*')
+      //   .gte('created_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
+      //   .order('created_at', { ascending: false });
 
       return {
-        userAnalytics: userAnalytics || [],
+        userAnalytics: [], // userAnalytics || [],
         overview: {
           totalVisitors: 2847,
           pageViews: 8934,
