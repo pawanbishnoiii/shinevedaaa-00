@@ -3,12 +3,16 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider } from "@/contexts/AuthContext";
+import Navbar from "@/components/Navbar";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
+import Products from "./pages/Products";
+import ProductDetail from "./pages/ProductDetail";
 import AdminLayout from "./layouts/AdminLayout";
 import Dashboard from "./pages/admin/Dashboard";
-import Products from "./pages/admin/Products";
+import AdminProducts from "./pages/admin/Products";
 import Categories from "./pages/admin/Categories";
 import Inquiries from "./pages/admin/Inquiries";
 import Testimonials from "./pages/admin/Testimonials";
@@ -24,35 +28,38 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <AuthProvider>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/admin" element={
-              <ProtectedRoute adminOnly>
-                <AdminLayout />
-              </ProtectedRoute>
-            }>
-              <Route index element={<Dashboard />} />
-              <Route path="products" element={<Products />} />
-              <Route path="categories" element={<Categories />} />
-              <Route path="content" element={<Content />} />
-              <Route path="inquiries" element={<Inquiries />} />
-              <Route path="testimonials" element={<Testimonials />} />
-              <Route path="media" element={<Media />} />
-              <Route path="settings" element={<Settings />} />
-              <Route path="products/new" element={<ProductForm />} />
-              <Route path="products/:id" element={<ProductForm />} />
-              <Route path="products/:id/edit" element={<ProductForm />} />
-            </Route>
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </AuthProvider>
-      </BrowserRouter>
+      <HelmetProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <AuthProvider>
+            <Routes>
+              <Route path="/" element={<><Navbar /><Index /></>} />
+              <Route path="/products" element={<><Navbar /><Products /></>} />
+              <Route path="/product/:slug" element={<><Navbar /><ProductDetail /></>} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/admin" element={
+                <ProtectedRoute adminOnly>
+                  <AdminLayout />
+                </ProtectedRoute>
+              }>
+                <Route index element={<Dashboard />} />
+                <Route path="products" element={<AdminProducts />} />
+                <Route path="categories" element={<Categories />} />
+                <Route path="content" element={<Content />} />
+                <Route path="inquiries" element={<Inquiries />} />
+                <Route path="testimonials" element={<Testimonials />} />
+                <Route path="media" element={<Media />} />
+                <Route path="settings" element={<Settings />} />
+                <Route path="products/new" element={<ProductForm />} />
+                <Route path="products/:id" element={<ProductForm />} />
+                <Route path="products/:id/edit" element={<ProductForm />} />
+              </Route>
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </AuthProvider>
+        </BrowserRouter>
+      </HelmetProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );
