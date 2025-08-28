@@ -457,6 +457,7 @@ export type Database = {
           description: string | null
           export_grade: string | null
           export_markets: string[] | null
+          featured_rank: number | null
           features: string[] | null
           gallery_images: string[] | null
           hsn_code: string | null
@@ -491,6 +492,7 @@ export type Database = {
           description?: string | null
           export_grade?: string | null
           export_markets?: string[] | null
+          featured_rank?: number | null
           features?: string[] | null
           gallery_images?: string[] | null
           hsn_code?: string | null
@@ -525,6 +527,7 @@ export type Database = {
           description?: string | null
           export_grade?: string | null
           export_markets?: string[] | null
+          featured_rank?: number | null
           features?: string[] | null
           gallery_images?: string[] | null
           hsn_code?: string | null

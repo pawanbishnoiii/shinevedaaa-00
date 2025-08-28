@@ -28,6 +28,8 @@ import { toast } from 'sonner';
 import QuickInquiryForm from '@/components/QuickInquiryForm';
 import CurrencyPrice from '@/components/CurrencyPrice';
 import { Helmet } from 'react-helmet-async';
+import FavoriteButton from '@/components/FavoriteButton';
+import ShareButton from '@/components/ShareButton';
 
 const ProductDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -244,12 +246,12 @@ Please provide detailed quote and availability.`;
                 <div className="flex items-center justify-between mb-4">
                   <Badge variant="secondary">{product.categories?.name}</Badge>
                   <div className="flex items-center space-x-2">
-                    <Button variant="ghost" size="sm" onClick={handleShare}>
-                      <Share2 className="w-4 h-4" />
-                    </Button>
-                    <Button variant="ghost" size="sm">
-                      <Heart className="w-4 h-4" />
-                    </Button>
+                    <ShareButton 
+                      productId={product.id}
+                      productName={product.name}
+                      productSlug={product.slug}
+                    />
+                    <FavoriteButton productId={product.id} />
                   </div>
                 </div>
                 

@@ -22,6 +22,7 @@ import AdminProducts from "./pages/admin/Products";
 import Categories from "./pages/admin/Categories";
 import Inquiries from "./pages/admin/Inquiries";
 import Testimonials from "./pages/admin/Testimonials";
+import Favorites from "./pages/admin/Favorites";
 import Media from "./pages/admin/Media";
 import Content from "./pages/admin/Content";
 import Settings from "./pages/admin/Settings";
@@ -62,6 +63,7 @@ const App = () => (
                   <Route path="categories" element={<Categories />} />
                   <Route path="content" element={<Content />} />
                   <Route path="inquiries" element={<Inquiries />} />
+                  <Route path="favorites" element={<Favorites />} />
                   <Route path="testimonials" element={<Testimonials />} />
                   <Route path="media" element={<Media />} />
                 <Route path="seo" element={<SEOManager />} />

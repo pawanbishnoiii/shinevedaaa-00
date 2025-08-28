@@ -28,6 +28,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { Helmet } from 'react-helmet-async';
+import FavoritesSection from '@/components/FavoritesSection';
 
 const Profile = () => {
   const { user, isAdmin, signOut } = useAuth();
@@ -379,6 +380,16 @@ const Profile = () => {
                   )}
                 </CardContent>
               </Card>
+            </motion.div>
+
+            {/* Favorites Section */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="lg:col-span-3"
+            >
+              <FavoritesSection />
             </motion.div>
           </div>
         </div>

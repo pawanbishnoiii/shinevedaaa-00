@@ -33,6 +33,7 @@ const productSchema = z.object({
   is_active: z.boolean().default(true),
   is_featured: z.boolean().default(false),
   sort_order: z.number().default(0),
+  featured_rank: z.number().default(0),
   seo_title: z.string().optional(),
   seo_description: z.string().optional(),
 });
@@ -67,6 +68,7 @@ const ProductForm = () => {
       is_active: true,
       is_featured: false,
       sort_order: 0,
+      featured_rank: 0,
       seo_title: '',
       seo_description: '',
     }
@@ -118,6 +120,7 @@ const ProductForm = () => {
         is_active: product.is_active,
         is_featured: product.is_featured,
         sort_order: product.sort_order || 0,
+        featured_rank: product.featured_rank || 0,
         seo_title: product.seo_title || '',
         seo_description: product.seo_description || '',
       });
@@ -542,6 +545,31 @@ const ProductForm = () => {
                       )}
                     />
                   </div>
+
+                  {/* Featured Rank Field - only show when featured is enabled */}
+                  {form.watch('is_featured') && (
+                    <FormField
+                      control={form.control}
+                      name="featured_rank"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Featured Rank</FormLabel>
+                          <FormControl>
+                            <Input 
+                              type="number" 
+                              placeholder="1, 2, 3... (lower numbers show first)"
+                              {...field} 
+                              onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                          <div className="text-sm text-muted-foreground">
+                            Products with lower numbers appear first in featured section (1 = highest priority)
+                          </div>
+                        </FormItem>
+                      )}
+                    />
+                  )}
                 </CardContent>
               </Card>
             </TabsContent>

@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import FavoriteButton from './FavoriteButton';
 import { trackProductInteraction } from '@/utils/analytics';
+import ShareButton from './ShareButton';
 
 interface Product {
   id: string;
@@ -75,7 +76,7 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
         {/* Product Image */}
         <div className="relative h-64 overflow-hidden">
           <img
-            src={product.image_url || 'https://zlylzlmavxhgbjxuuseo.supabase.co/storage/v1/object/public/media-library/data/img/placeholder-product.jpg'}
+            src={product.image_url || 'https://zlylzlmavxhgbjxuuseo.supabase.co/storage/v1/object/public/product-images/placeholder-product.jpg'}
             alt={product.name}
             className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
           />
@@ -94,14 +95,12 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
           {/* Action Buttons */}
           <div className="absolute top-4 right-4 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
             <FavoriteButton productId={product.id} />
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleShare}
+            <ShareButton
+              productId={product.id}
+              productName={product.name}
+              productSlug={product.slug}
               className="h-10 w-10 rounded-full hover:bg-secondary/80"
-            >
-              <Share2 className="h-4 w-4" />
-            </Button>
+            />
           </div>
         </div>
 

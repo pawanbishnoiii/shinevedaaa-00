@@ -9,27 +9,37 @@ import ProductCard from "./ProductCard";
 
 const ProductsSection = () => {
 
-  const { data: products, isLoading } = useQuery({
+  const { data: products, isLoading, error } = useQuery({
     queryKey: ['featured-products'],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('products')
-        .select(`
-          *,
-          categories!category_id (
-            name,
-            slug
-          )
-        `)
-        .eq('is_active', true)
-        .eq('is_featured', true)
-        .order('featured_rank', { ascending: true })
-        .order('sort_order', { ascending: true })
-        .limit(3);
-      
-      if (error) throw error;
-      return data || [];
-    }
+      try {
+        const { data, error } = await supabase
+          .from('products')
+          .select(`
+            *,
+            categories!category_id (
+              name,
+              slug
+            )
+          `)
+          .eq('is_active', true)
+          .eq('is_featured', true)
+          .order('featured_rank', { ascending: true })
+          .order('sort_order', { ascending: true })
+          .limit(3);
+        
+        if (error) {
+          console.error('Featured products query error:', error);
+          throw error;
+        }
+        return data || [];
+      } catch (err) {
+        console.error('Failed to fetch featured products:', err);
+        throw err;
+      }
+    },
+    retry: 3,
+    retryDelay: 1000
   });
 
   const handleQuoteRequest = (productName: string) => {
@@ -82,34 +92,57 @@ const ProductsSection = () => {
         {/* Products Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {products && products.length > 0 ? (
-            products.map((product, index) => (
-              <ProductCard 
-                key={product.id}
-                product={product}
-                index={index}
-              />
-            ))
+            <>
+              {products.map((product, index) => (
+                <ProductCard 
+                  key={product.id}
+                  product={product}
+                  index={index}
+                />
+              ))}
+              {/* Fill remaining slots with skeletons if fewer than 3 */}
+              {products.length < 3 && Array.from({ length: 3 - products.length }).map((_, index) => (
+                <div
+                  key={`skeleton-${products.length + index}`}
+                  className="bg-card rounded-xl p-6 border animate-pulse"
+                >
+                  <div className="aspect-square bg-muted rounded-lg mb-4"></div>
+                  <div className="h-4 bg-muted rounded mb-2"></div>
+                  <div className="h-3 bg-muted rounded w-3/4 mb-4"></div>
+                  <div className="text-center p-4 border-2 border-dashed rounded-lg">
+                    <p className="text-sm text-muted-foreground">Available Slot</p>
+                  </div>
+                </div>
+              ))}
+            </>
           ) : (
-            // Show skeletons or admin CTA if no featured products
-            Array.from({ length: 3 }).map((_, index) => (
-              <div
-                key={`skeleton-${index}`}
-                className="bg-card rounded-xl p-6 border animate-pulse"
-              >
-                <div className="aspect-square bg-muted rounded-lg mb-4"></div>
-                <div className="h-4 bg-muted rounded mb-2"></div>
-                <div className="h-3 bg-muted rounded w-3/4"></div>
-              </div>
-            ))
+            // Show skeletons and admin CTA if no featured products
+            <>
+              {Array.from({ length: 3 }).map((_, index) => (
+                <div
+                  key={`empty-${index}`}
+                  className="bg-card rounded-xl p-6 border border-dashed"
+                >
+                  <div className="aspect-square bg-muted/50 rounded-lg mb-4 flex items-center justify-center">
+                    <div className="text-center">
+                      <div className="w-16 h-16 bg-muted rounded-full mx-auto mb-2"></div>
+                      <p className="text-sm text-muted-foreground">Featured Product Slot</p>
+                    </div>
+                  </div>
+                  <div className="h-4 bg-muted/50 rounded mb-2"></div>
+                  <div className="h-3 bg-muted/50 rounded w-3/4"></div>
+                </div>
+              ))}
+            </>
           )}
         </div>
 
         {/* Admin CTA if no featured products */}
         {(!products || products.length === 0) && (
-          <div className="text-center mt-8 p-8 border-2 border-dashed rounded-xl">
-            <h3 className="text-lg font-semibold mb-2">No Featured Products</h3>
+          <div className="text-center mt-8 p-8 border-2 border-dashed rounded-xl bg-muted/20">
+            <h3 className="text-lg font-semibold mb-2">No Featured Products Yet</h3>
             <p className="text-muted-foreground mb-4">
-              Add products and mark them as featured to display them here.
+              Add products and mark them as featured to showcase your best offerings here.
             </p>
             <Button asChild>
               <Link to="/admin/products">
