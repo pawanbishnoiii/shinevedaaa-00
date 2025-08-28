@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 import { Sparkles } from 'lucide-react';
 import ProductCard from './ProductCard';
-import { getUserRecommendations } from '@/utils/analytics';
+import { supabase } from '@/integrations/supabase/client';
 
 interface ProductRecommendationsProps {
   title?: string;
@@ -20,12 +20,27 @@ const ProductRecommendations = ({
   const { data: recommendations, isLoading } = useQuery({
     queryKey: ['product-recommendations', limit, excludeProductId],
     queryFn: async () => {
-      const products = await getUserRecommendations(limit + (excludeProductId ? 1 : 0));
+      const { data, error } = await supabase
+        .from('products')
+        .select(`
+          *,
+          categories!category_id (
+            name,
+            slug
+          )
+        `)
+        .eq('is_active', true)
+        .order('created_at', { ascending: false })
+        .limit(limit + (excludeProductId ? 1 : 0));
       
-      // Filter out the current product if specified
-      return excludeProductId 
-        ? products.filter(p => p.id !== excludeProductId).slice(0, limit)
-        : products.slice(0, limit);
+      if (error) throw error;
+      
+      // Filter out current product and return limited results
+      const filtered = excludeProductId 
+        ? (data || []).filter(p => p.id !== excludeProductId)
+        : (data || []);
+        
+      return filtered.slice(0, limit);
     }
   });
 

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -15,18 +16,19 @@ const ProductsSection = () => {
         .from('products')
         .select(`
           *,
-          categories:category_id (
+          categories!category_id (
             name,
             slug
           )
         `)
         .eq('is_active', true)
         .eq('is_featured', true)
+        .order('featured_rank', { ascending: true })
         .order('sort_order', { ascending: true })
         .limit(3);
       
       if (error) throw error;
-      return data;
+      return data || [];
     }
   });
 
@@ -79,14 +81,43 @@ const ProductsSection = () => {
 
         {/* Products Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {products?.map((product, index) => (
-            <ProductCard 
-              key={product.id}
-              product={product}
-              index={index}
-            />
-          ))}
+          {products && products.length > 0 ? (
+            products.map((product, index) => (
+              <ProductCard 
+                key={product.id}
+                product={product}
+                index={index}
+              />
+            ))
+          ) : (
+            // Show skeletons or admin CTA if no featured products
+            Array.from({ length: 3 }).map((_, index) => (
+              <div
+                key={`skeleton-${index}`}
+                className="bg-card rounded-xl p-6 border animate-pulse"
+              >
+                <div className="aspect-square bg-muted rounded-lg mb-4"></div>
+                <div className="h-4 bg-muted rounded mb-2"></div>
+                <div className="h-3 bg-muted rounded w-3/4"></div>
+              </div>
+            ))
+          )}
         </div>
+
+        {/* Admin CTA if no featured products */}
+        {(!products || products.length === 0) && (
+          <div className="text-center mt-8 p-8 border-2 border-dashed rounded-xl">
+            <h3 className="text-lg font-semibold mb-2">No Featured Products</h3>
+            <p className="text-muted-foreground mb-4">
+              Add products and mark them as featured to display them here.
+            </p>
+            <Button asChild>
+              <Link to="/admin/products">
+                Manage Products
+              </Link>
+            </Button>
+          </div>
+        )}
 
         {/* Bottom CTA */}
         <div className="text-center mt-16">

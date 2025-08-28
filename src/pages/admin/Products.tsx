@@ -43,7 +43,7 @@ const Products = () => {
         .from('products')
         .select(`
           *,
-          categories:category_id (
+          categories!category_id (
             name,
             slug
           )
