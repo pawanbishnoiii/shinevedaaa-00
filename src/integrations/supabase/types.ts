@@ -388,6 +388,13 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "fk_product_favorites_product"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "product_favorites_product_id_fkey"
             columns: ["product_id"]
             isOneToOne: false
@@ -425,6 +432,13 @@ export type Database = {
           weight?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "fk_product_interactions_product"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "product_interactions_product_id_fkey"
             columns: ["product_id"]
@@ -538,6 +552,13 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "fk_products_category"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "products_category_id_fkey"
             columns: ["category_id"]
