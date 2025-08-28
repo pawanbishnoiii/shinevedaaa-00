@@ -102,11 +102,13 @@ const ProductsSection = () => {
                   <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
                     <Button 
                       size="sm"
-                      onClick={() => handleQuoteRequest(product.name)}
+                      asChild
                       className="bg-primary hover:bg-primary/90 text-primary-foreground"
                     >
-                      Quote
-                      <ArrowRight className="ml-1 h-3 w-3" />
+                      <a href={`/product/${product.slug}`}>
+                        View Details
+                        <ArrowRight className="ml-1 h-3 w-3" />
+                      </a>
                     </Button>
                   </div>
                 </div>
@@ -168,11 +170,13 @@ const ProductsSection = () => {
                       <Button 
                         variant="outline" 
                         size="sm" 
-                        onClick={() => handleQuoteRequest(product.name)}
+                        asChild
                         className="w-full transition-bounce hover:scale-105"
                       >
-                        Get Detailed Quote
-                        <ArrowRight className="ml-2 h-3 w-3" />
+                        <a href={`/product/${product.slug}`}>
+                          View Details
+                          <ArrowRight className="ml-2 h-3 w-3" />
+                        </a>
                       </Button>
                     </div>
                   )}

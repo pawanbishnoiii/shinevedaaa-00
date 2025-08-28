@@ -15,11 +15,11 @@ const Footer = () => {
       { name: "Guar Gum", href: "#products" }
     ],
     company: [
-      { name: "About ShineVeda", href: "#about" },
-      { name: "Quality Assurance", href: "#quality" },
-      { name: "Our Process", href: "#process" },
-      { name: "Certifications", href: "#certifications" },
-      { name: "Export License", href: "#license" }
+      { name: "About ShineVeda", href: "/about" },
+      { name: "Quality Assurance", href: "/about#quality" },
+      { name: "Our Process", href: "/about#process" },
+      { name: "Certifications", href: "/about#certifications" },
+      { name: "Export License", href: "/about#license" }
     ],
     services: [
       { name: "Bulk Orders", href: "#bulk" },
@@ -29,11 +29,11 @@ const Footer = () => {
       { name: "Sample Orders", href: "#samples" }
     ],
     support: [
-      { name: "Contact Us", href: "#contact" },
-      { name: "Request Quote", href: "#quote" },
+      { name: "Contact Us", href: "/contact" },
+      { name: "Request Quote", href: "/contact#quote" },
       { name: "WhatsApp Support", href: "https://wa.me/918955158794" },
-      { name: "Track Shipment", href: "#track" },
-      { name: "Export Documentation", href: "#docs" }
+      { name: "Track Shipment", href: "/contact#track" },
+      { name: "Export Documentation", href: "/contact#docs" }
     ]
   };
 

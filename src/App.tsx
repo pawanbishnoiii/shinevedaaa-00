@@ -6,10 +6,14 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider } from "@/contexts/AuthContext";
 import Navbar from "@/components/Navbar";
+import SmoothScroll from "@/components/ui/smooth-scroll";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Products from "./pages/Products";
 import ProductDetail from "./pages/ProductDetail";
+import Profile from "./pages/Profile";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
 import AdminLayout from "./layouts/AdminLayout";
 import Dashboard from "./pages/admin/Dashboard";
 import AdminProducts from "./pages/admin/Products";
@@ -33,30 +37,35 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <AuthProvider>
-            <Routes>
-              <Route path="/" element={<><Navbar /><Index /></>} />
-              <Route path="/products" element={<><Navbar /><Products /></>} />
-              <Route path="/product/:slug" element={<><Navbar /><ProductDetail /></>} />
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/admin" element={
-                <ProtectedRoute adminOnly>
-                  <AdminLayout />
-                </ProtectedRoute>
-              }>
-                <Route index element={<Dashboard />} />
-                <Route path="products" element={<AdminProducts />} />
-                <Route path="categories" element={<Categories />} />
-                <Route path="content" element={<Content />} />
-                <Route path="inquiries" element={<Inquiries />} />
-                <Route path="testimonials" element={<Testimonials />} />
-                <Route path="media" element={<Media />} />
-                <Route path="settings" element={<Settings />} />
-                <Route path="products/new" element={<ProductForm />} />
-                <Route path="products/:id" element={<ProductForm />} />
-                <Route path="products/:id/edit" element={<ProductForm />} />
-              </Route>
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+            <SmoothScroll>
+              <Routes>
+                <Route path="/" element={<><Navbar /><Index /></>} />
+                <Route path="/products" element={<><Navbar /><Products /></>} />
+                <Route path="/product/:slug" element={<><Navbar /><ProductDetail /></>} />
+                <Route path="/profile" element={<><Navbar /><Profile /></>} />
+                <Route path="/about" element={<><Navbar /><About /></>} />
+                <Route path="/contact" element={<><Navbar /><Contact /></>} />
+                <Route path="/auth" element={<Auth />} />
+                <Route path="/admin" element={
+                  <ProtectedRoute adminOnly>
+                    <AdminLayout />
+                  </ProtectedRoute>
+                }>
+                  <Route index element={<Dashboard />} />
+                  <Route path="products" element={<AdminProducts />} />
+                  <Route path="categories" element={<Categories />} />
+                  <Route path="content" element={<Content />} />
+                  <Route path="inquiries" element={<Inquiries />} />
+                  <Route path="testimonials" element={<Testimonials />} />
+                  <Route path="media" element={<Media />} />
+                  <Route path="settings" element={<Settings />} />
+                  <Route path="products/new" element={<ProductForm />} />
+                  <Route path="products/:id" element={<ProductForm />} />
+                  <Route path="products/:id/edit" element={<ProductForm />} />
+                </Route>
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </SmoothScroll>
           </AuthProvider>
         </BrowserRouter>
       </HelmetProvider>
