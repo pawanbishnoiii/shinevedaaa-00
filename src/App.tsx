@@ -64,6 +64,9 @@ const AppContent = () => {
                 }>
                   <Route index element={<Dashboard />} />
                   <Route path="products" element={<AdminProducts />} />
+                  <Route path="products/new" element={<ProductForm />} />
+                  <Route path="products/:id" element={<ProductForm />} />
+                  <Route path="products/:id/edit" element={<ProductForm />} />
                   <Route path="categories" element={<Categories />} />
                   <Route path="content" element={<Content />} />
                   <Route path="inquiries" element={<Inquiries />} />
@@ -73,12 +76,9 @@ const AppContent = () => {
                   <Route path="footer-pages" element={<FooterPages />} />
                   <Route path="rajasthan-crops" element={<RajasthanCrops />} />
                   <Route path="rajasthan-stories" element={<RajasthanStories />} />
-                <Route path="seo" element={<SEOManager />} />
-                <Route path="analytics" element={<Analytics />} />
-                <Route path="settings" element={<Settings />} />
-                  <Route path="products/new" element={<ProductForm />} />
-                  <Route path="products/:id" element={<ProductForm />} />
-                  <Route path="products/:id/edit" element={<ProductForm />} />
+                  <Route path="seo" element={<SEOManager />} />
+                  <Route path="analytics" element={<Analytics />} />
+                  <Route path="settings" element={<Settings />} />
                 </Route>
                 <Route path="*" element={<EnhancedNotFound />} />
               </Routes>
