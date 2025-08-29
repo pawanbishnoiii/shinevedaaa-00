@@ -902,6 +902,10 @@ export type Database = {
         Args: { user_email?: string }
         Returns: boolean
       }
+      keep_database_warm: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
     }
     Enums: {
       interaction_type: "view" | "favorite" | "inquiry" | "share"
