@@ -98,13 +98,12 @@ const navigation = [
         badge: "New",
       },
       {
-        title: "Rajasthan Portfolio",
+        title: "Indian Farmers Portfolio",
         icon: Globe,
-        url: "/admin/rajasthan",
+        url: "/admin/indian",
         subItems: [
-          { title: "Stories", url: "/admin/rajasthan/stories" },
-          { title: "Crops", url: "/admin/rajasthan/crops" },
-          { title: "Sections", url: "/admin/rajasthan/sections" },
+          { title: "Farmer Stories", url: "/admin/indian-farmers" },
+          { title: "Regional Crops", url: "/admin/rajasthan-crops" },
         ],
       },
       {

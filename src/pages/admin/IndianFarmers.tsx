@@ -60,7 +60,13 @@ interface RajasthanStory {
   updated_at: string;
 }
 
-const DISTRICTS = [
+const STATES_DISTRICTS = [
+  'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Goa', 
+  'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka', 'Kerala', 
+  'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland', 
+  'Odisha', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura', 
+  'Uttar Pradesh', 'Uttarakhand', 'West Bengal',
+  // Major districts
   'Ajmer', 'Alwar', 'Banswara', 'Baran', 'Barmer', 'Bharatpur', 'Bhilwara',
   'Bikaner', 'Bundi', 'Chittorgarh', 'Churu', 'Dausa', 'Dholpur', 'Dungarpur',
   'Hanumangarh', 'Jaipur', 'Jaisalmer', 'Jalore', 'Jhalawar', 'Jhunjhunu',
@@ -185,9 +191,9 @@ const RajasthanStories = () => {
     <div className="flex-1 space-y-6 p-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Rajasthan Stories</h2>
+          <h2 className="text-3xl font-bold tracking-tight">Indian Farmers Portfolio</h2>
           <p className="text-muted-foreground">
-            Farmer stories and agricultural success stories from Rajasthan
+            Success stories and experiences from farmers across India
           </p>
         </div>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -200,38 +206,38 @@ const RajasthanStories = () => {
           <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
-                {editingStory ? 'Edit Story' : 'Add New Story'}
+                {editingStory ? 'Edit Farmer Story' : 'Add New Farmer Story'}
               </DialogTitle>
               <DialogDescription>
-                Share inspiring stories from farmers and villages across Rajasthan
+                Share inspiring stories from farmers and agricultural communities across India
               </DialogDescription>
             </DialogHeader>
             
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="title">Story Title</Label>
+                  <Label htmlFor="title">Farmer Story Title</Label>
                   <Input
                     id="title"
                     value={formData.title}
                     onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-                    placeholder="e.g., From Traditional to Organic: A Farmer's Journey"
+                    placeholder="e.g., From Traditional to Organic: A Success Journey"
                     required
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="district">District</Label>
+                  <Label htmlFor="district">State/District</Label>
                   <Select 
                     value={formData.district} 
                     onValueChange={(value) => setFormData(prev => ({ ...prev, district: value }))}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Select district" />
+                      <SelectValue placeholder="Select state/district" />
                     </SelectTrigger>
                     <SelectContent>
-                      {DISTRICTS.map((district) => (
-                        <SelectItem key={district} value={district}>
-                          {district}
+                      {STATES_DISTRICTS.map((location) => (
+                        <SelectItem key={location} value={location}>
+                          {location}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -240,17 +246,17 @@ const RajasthanStories = () => {
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="village">Village</Label>
+                <Label htmlFor="village">Village/Area</Label>
                 <Input
                   id="village"
                   value={formData.village}
                   onChange={(e) => setFormData(prev => ({ ...prev, village: e.target.value }))}
-                  placeholder="Village name"
+                  placeholder="Village/area name"
                 />
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="content">Story Content</Label>
+                <Label htmlFor="content">Farmer Story Content</Label>
                 <Textarea
                   id="content"
                   value={formData.content}

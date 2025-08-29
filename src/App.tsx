@@ -37,7 +37,7 @@ import DynamicPage from "./pages/DynamicPage";
 import EnhancedMedia from "./pages/admin/EnhancedMedia";
 import FooterPages from "./pages/admin/FooterPages";
 import RajasthanCrops from "./pages/admin/RajasthanCrops";
-import RajasthanStories from "./pages/admin/RajasthanStories";
+import RajasthanStories from "./pages/admin/IndianFarmers";
 
 const queryClient = new QueryClient();
 
@@ -75,7 +75,7 @@ const AppContent = () => {
                   <Route path="media" element={<EnhancedMedia />} />
                   <Route path="footer-pages" element={<FooterPages />} />
                   <Route path="rajasthan-crops" element={<RajasthanCrops />} />
-                  <Route path="rajasthan-stories" element={<RajasthanStories />} />
+                  <Route path="indian-farmers" element={<RajasthanStories />} />
                   <Route path="seo" element={<SEOManager />} />
                   <Route path="analytics" element={<Analytics />} />
                   <Route path="settings" element={<Settings />} />

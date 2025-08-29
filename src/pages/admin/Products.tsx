@@ -39,24 +39,43 @@ const Products = () => {
   const { data: products, isLoading, refetch } = useQuery({
     queryKey: ['admin-products', searchTerm],
     queryFn: async () => {
-      let query = supabase
-        .from('products')
-        .select(`
-          *,
-          categories!category_id (
-            name,
-            slug
-          )
-        `)
-        .order('created_at', { ascending: false });
+      // Fetch products and categories separately to avoid foreign key conflicts
+      const [productsResponse, categoriesResponse] = await Promise.all([
+        supabase.from('products').select('*').order('created_at', { ascending: false }),
+        supabase.from('categories').select('*')
+      ]);
 
-      if (searchTerm) {
-        query = query.or(`name.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%`);
+      if (productsResponse.error) {
+        console.error('Products query error:', productsResponse.error);
+        throw productsResponse.error;
       }
 
-      const { data, error } = await query;
-      if (error) throw error;
-      return data;
+      if (categoriesResponse.error) {
+        console.error('Categories query error:', categoriesResponse.error);
+        throw categoriesResponse.error;
+      }
+
+      const products = productsResponse.data || [];
+      const categories = categoriesResponse.data || [];
+
+      // Create a map of categories for quick lookup
+      const categoryMap = new Map(categories.map(cat => [cat.id, cat]));
+
+      // Join products with their categories
+      const productsWithCategories = products.map(product => ({
+        ...product,
+        categories: product.category_id ? categoryMap.get(product.category_id) : null
+      }));
+
+      // Apply search filter if needed
+      if (searchTerm) {
+        return productsWithCategories.filter(product => 
+          product.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          product.description?.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+      }
+
+      return productsWithCategories;
     }
   });
 
