@@ -42,6 +42,16 @@ import FooterPages from "./pages/admin/FooterPages";
 import PortfolioVideosAdmin from "./pages/admin/PortfolioVideos";
 import RajasthanCrops from "./pages/admin/RajasthanCrops";
 import RajasthanStories from "./pages/admin/IndianFarmers";
+import AgriBlog from "./pages/admin/AgriBlog";
+import Quality from "./pages/page/Quality";
+import Bulk from "./pages/page/Bulk";
+import Packaging from "./pages/page/Packaging";
+import Shipping from "./pages/page/Shipping";
+import Testing from "./pages/page/Testing";
+import Samples from "./pages/page/Samples";
+import Privacy from "./pages/page/Privacy";
+import Terms from "./pages/page/Terms";
+import ExportPolicy from "./pages/page/ExportPolicy";
 
 const queryClient = new QueryClient();
 
@@ -61,7 +71,17 @@ const AppContent = () => {
                 <Route path="/faq" element={<><Navbar /><FAQ /></>} />
                 <Route path="/portfolio" element={<><Navbar /><EnhancedPortfolio /></>} />
                 <Route path="/agri" element={<><Navbar /><Agri /></>} />
+                
                 <Route path="/enhanced-portfolio" element={<><Navbar /><EnhancedPortfolio /></>} />
+                <Route path="/page/quality" element={<><Navbar /><Quality /></>} />
+                <Route path="/page/bulk" element={<><Navbar /><Bulk /></>} />
+                <Route path="/page/packaging" element={<><Navbar /><Packaging /></>} />
+                <Route path="/page/shipping" element={<><Navbar /><Shipping /></>} />
+                <Route path="/page/testing" element={<><Navbar /><Testing /></>} />
+                <Route path="/page/samples" element={<><Navbar /><Samples /></>} />
+                <Route path="/page/privacy" element={<><Navbar /><Privacy /></>} />
+                <Route path="/page/terms" element={<><Navbar /><Terms /></>} />
+                <Route path="/page/export-policy" element={<><Navbar /><ExportPolicy /></>} />
                 <Route path="/page/:slug" element={<><Navbar /><DynamicPage /></>} />
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/admin" element={
@@ -86,6 +106,7 @@ const AppContent = () => {
                   <Route path="rajasthan-crops" element={<RajasthanCrops />} />
                   <Route path="indian-farmers" element={<RajasthanStories />} />
                   <Route path="portfolio-videos" element={<PortfolioVideosAdmin />} />
+                  <Route path="agri-blog" element={<AgriBlog />} />
                   <Route path="seo" element={<SEOManager />} />
                   <Route path="analytics" element={<Analytics />} />
                   <Route path="settings" element={<Settings />} />

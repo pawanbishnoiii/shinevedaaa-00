@@ -5,6 +5,7 @@ import WhyShineVedaSection from "@/components/WhyShineVedaSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import StickyContact from "@/components/StickyContact";
+import SocialMediaButtons from "@/components/SocialMediaButtons";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -30,6 +31,9 @@ const Index = () => {
       
       {/* Contact & Inquiry */}
       <ContactSection />
+      
+      {/* Social Media */}
+      <SocialMediaButtons />
       
       {/* Footer */}
       <Footer />
