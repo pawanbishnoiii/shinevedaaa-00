@@ -2,14 +2,15 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import AgriHero from '@/components/AgriHero';
-import FarmerStories from '@/components/FarmerStories';
-import CropExcellence from '@/components/CropExcellence';
+import DynamicFarmerStories from '@/components/DynamicFarmerStories';
+import DynamicCropExcellence from '@/components/DynamicCropExcellence';
 import FarmerSupport from '@/components/FarmerSupport';
 import ImpactCounters from '@/components/ImpactCounters';
-import AgriImageGallery from '@/components/AgriImageGallery';
+import DynamicAgriImageGallery from '@/components/DynamicAgriImageGallery';
 import AgriBlog from '@/components/AgriBlog';
 import AgriFAQ from '@/components/AgriFAQ';
 import AgriCTA from '@/components/AgriCTA';
+import SubmitStoryForm from '@/components/SubmitStoryForm';
 
 const Agri: React.FC = () => {
   const structuredData = {
@@ -70,7 +71,7 @@ const Agri: React.FC = () => {
         {/* Farmer Stories */}
         <section className="py-16">
           <div className="container mx-auto px-4">
-            <FarmerStories />
+            <DynamicFarmerStories />
           </div>
         </section>
 
@@ -84,7 +85,7 @@ const Agri: React.FC = () => {
         {/* Crop Excellence */}
         <section className="py-16">
           <div className="container mx-auto px-4">
-            <CropExcellence />
+            <DynamicCropExcellence />
           </div>
         </section>
 
@@ -98,7 +99,7 @@ const Agri: React.FC = () => {
         {/* Image Gallery */}
         <section className="py-16">
           <div className="container mx-auto px-4">
-            <AgriImageGallery />
+            <DynamicAgriImageGallery />
           </div>
         </section>
 
@@ -113,6 +114,13 @@ const Agri: React.FC = () => {
         <section className="py-16">
           <div className="container mx-auto px-4">
             <AgriFAQ />
+          </div>
+        </section>
+
+        {/* Submit Story Section */}
+        <section className="py-16 bg-muted/30">
+          <div className="container mx-auto px-4">
+            <SubmitStoryForm />
           </div>
         </section>
 

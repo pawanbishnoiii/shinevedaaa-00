@@ -113,10 +113,14 @@ const navigation = [
         ],
       },
       {
-        title: "Media Library",
-        icon: Image,
-        url: "/admin/media",
-        badge: "Upgraded",
+        title: "Agri Content",
+        icon: Globe,
+        url: "/admin/agri",
+        subItems: [
+          { title: "Crop Portfolio", url: "/admin/crop-portfolio" },
+          { title: "Farmer Stories", url: "/admin/farmer-stories" },
+          { title: "Gallery Management", url: "/admin/gallery-management" },
+        ],
       },
     ],
   },
