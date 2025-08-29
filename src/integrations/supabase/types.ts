@@ -158,6 +158,54 @@ export type Database = {
         }
         Relationships: []
       }
+      downloadable_resources: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          description: string | null
+          download_count: number | null
+          file_size: number | null
+          file_type: string
+          file_url: string
+          id: string
+          is_active: boolean | null
+          is_public: boolean | null
+          metadata: Json | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          download_count?: number | null
+          file_size?: number | null
+          file_type: string
+          file_url: string
+          id?: string
+          is_active?: boolean | null
+          is_public?: boolean | null
+          metadata?: Json | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          download_count?: number | null
+          file_size?: number | null
+          file_type?: string
+          file_url?: string
+          id?: string
+          is_active?: boolean | null
+          is_public?: boolean | null
+          metadata?: Json | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       email_templates: {
         Row: {
           body_html: string
@@ -358,10 +406,13 @@ export type Database = {
           filename: string
           folder: string | null
           id: string
+          is_video: boolean | null
           mime_type: string | null
           original_filename: string
           tags: string[] | null
           uploaded_by: string | null
+          video_duration: number | null
+          video_thumbnail_url: string | null
         }
         Insert: {
           alt_text?: string | null
@@ -373,10 +424,13 @@ export type Database = {
           filename: string
           folder?: string | null
           id?: string
+          is_video?: boolean | null
           mime_type?: string | null
           original_filename: string
           tags?: string[] | null
           uploaded_by?: string | null
+          video_duration?: number | null
+          video_thumbnail_url?: string | null
         }
         Update: {
           alt_text?: string | null
@@ -388,10 +442,13 @@ export type Database = {
           filename?: string
           folder?: string | null
           id?: string
+          is_video?: boolean | null
           mime_type?: string | null
           original_filename?: string
           tags?: string[] | null
           uploaded_by?: string | null
+          video_duration?: number | null
+          video_thumbnail_url?: string | null
         }
         Relationships: [
           {
@@ -483,6 +540,90 @@ export type Database = {
           time_on_page?: number | null
           user_agent?: string | null
           visitor_id?: string | null
+        }
+        Relationships: []
+      }
+      portfolio_analytics: {
+        Row: {
+          action_type: string
+          content_id: string | null
+          content_type: string
+          created_at: string | null
+          id: string
+          metadata: Json | null
+          session_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action_type: string
+          content_id?: string | null
+          content_type: string
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          session_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action_type?: string
+          content_id?: string | null
+          content_type?: string
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          session_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      portfolio_videos: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          description: string | null
+          duration: number | null
+          id: string
+          is_active: boolean | null
+          is_featured: boolean | null
+          metadata: Json | null
+          sort_order: number | null
+          thumbnail_url: string | null
+          title: string
+          updated_at: string | null
+          video_type: string | null
+          video_url: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          duration?: number | null
+          id?: string
+          is_active?: boolean | null
+          is_featured?: boolean | null
+          metadata?: Json | null
+          sort_order?: number | null
+          thumbnail_url?: string | null
+          title: string
+          updated_at?: string | null
+          video_type?: string | null
+          video_url: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          duration?: number | null
+          id?: string
+          is_active?: boolean | null
+          is_featured?: boolean | null
+          metadata?: Json | null
+          sort_order?: number | null
+          thumbnail_url?: string | null
+          title?: string
+          updated_at?: string | null
+          video_type?: string | null
+          video_url?: string
         }
         Relationships: []
       }
