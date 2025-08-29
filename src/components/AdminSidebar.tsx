@@ -54,6 +54,11 @@ const navigation = [
       {
         title: "Overview",
         icon: Home,
+        url: "/admin",
+      },
+      {
+        title: "Dashboard",
+        icon: BarChart3,
         url: "/admin/dashboard",
       },
       {
@@ -73,6 +78,7 @@ const navigation = [
         url: "/admin/products",
         subItems: [
           { title: "All Products", url: "/admin/products" },
+          { title: "Featured Products", url: "/admin/featured-products" },
           { title: "Add Product", url: "/admin/products/new" },
         ],
       },
@@ -167,8 +173,9 @@ export function AdminSidebar() {
   }
 
   const isActive = (url: string) => {
-    if (url === "/admin/dashboard" && location.pathname === "/admin") return true
-    return location.pathname.startsWith(url)
+    if (url === "/admin" && location.pathname === "/admin") return true
+    if (url === "/admin/dashboard" && location.pathname === "/admin/dashboard") return true
+    return location.pathname.startsWith(url) && url !== "/admin"
   }
 
   return (

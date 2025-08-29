@@ -2,6 +2,7 @@ import { ArrowRight, Play, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { Link } from "react-router-dom";
 import heroBg from "@/assets/hero-bg.jpg";
 import farmingHero from "@/assets/indian-farming-hero.jpg";
 import rajasthanFarmers from "@/assets/rajasthan-farmers.jpg";
@@ -114,10 +115,13 @@ const HeroSection = () => {
             <Button 
               variant="outline" 
               size="lg"
+              asChild
               className="bg-white/10 backdrop-blur-sm border-white/30 text-white hover:bg-white/20 px-8 py-6 text-lg rounded-xl transition-premium"
             >
-              <Play className="mr-2 h-5 w-5" />
-              Watch Our Story
+              <Link to="/portfolio">
+                <Play className="mr-2 h-5 w-5" />
+                Watch Our Story
+              </Link>
             </Button>
           </div>
 

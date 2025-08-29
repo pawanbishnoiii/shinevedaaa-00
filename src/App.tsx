@@ -16,9 +16,11 @@ import Profile from "./pages/Profile";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import FAQ from "./pages/FAQ";
-import RajasthanPortfolio from "./pages/RajasthanPortfolio";
+import Portfolio from "./pages/Portfolio";
 import AdminLayout from "./layouts/AdminLayout";
 import Dashboard from "./pages/admin/Dashboard";
+import Overview from "./pages/admin/Overview";
+import FeaturedProducts from "./pages/admin/FeaturedProducts";
 import AdminProducts from "./pages/admin/Products";
 import Categories from "./pages/admin/Categories";
 import Inquiries from "./pages/admin/Inquiries";
@@ -54,7 +56,7 @@ const AppContent = () => {
                 <Route path="/about" element={<><Navbar /><About /></>} />
                 <Route path="/contact" element={<><Navbar /><Contact /></>} />
                 <Route path="/faq" element={<><Navbar /><FAQ /></>} />
-                <Route path="/rajasthan-portfolio" element={<><Navbar /><RajasthanPortfolio /></>} />
+                <Route path="/portfolio" element={<><Navbar /><Portfolio /></>} />
                 <Route path="/page/:slug" element={<><Navbar /><DynamicPage /></>} />
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/admin" element={
@@ -62,11 +64,13 @@ const AppContent = () => {
                     <AdminLayout />
                   </ProtectedRoute>
                 }>
-                  <Route index element={<Dashboard />} />
+                  <Route index element={<Overview />} />
+                  <Route path="dashboard" element={<Dashboard />} />
                   <Route path="products" element={<AdminProducts />} />
                   <Route path="products/new" element={<ProductForm />} />
                   <Route path="products/:id" element={<ProductForm />} />
                   <Route path="products/:id/edit" element={<ProductForm />} />
+                  <Route path="featured-products" element={<FeaturedProducts />} />
                   <Route path="categories" element={<Categories />} />
                   <Route path="content" element={<Content />} />
                   <Route path="inquiries" element={<Inquiries />} />

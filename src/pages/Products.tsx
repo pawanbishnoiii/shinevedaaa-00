@@ -47,49 +47,66 @@ const Products = () => {
     }
   });
 
-  // Fetch products
+  // Fetch products with proper join
   const { data: products = [], isLoading } = useQuery({
     queryKey: ['products', searchTerm, selectedCategory, sortBy, filters],
     queryFn: async () => {
-      let query = supabase
-        .from('products')
-        .select(`
-          *,
-          categories:category_id (
-            name,
-            slug
-          )
-        `)
-        .eq('is_active', true);
+      // First fetch products and categories separately
+      const [productsResponse, categoriesResponse] = await Promise.all([
+        supabase.from('products').select('*').eq('is_active', true),
+        supabase.from('categories').select('*')
+      ]);
+
+      if (productsResponse.error) throw productsResponse.error;
+      if (categoriesResponse.error) throw categoriesResponse.error;
+
+      const productsData = productsResponse.data || [];
+      const categoriesData = categoriesResponse.data || [];
+      
+      // Create category map
+      const categoryMap = new Map(categoriesData.map(cat => [cat.id, cat]));
+      
+      // Join products with categories
+      let filteredProducts = productsData.map(product => ({
+        ...product,
+        categories: product.category_id ? categoryMap.get(product.category_id) : null
+      }));
 
       // Apply filters
       if (selectedCategory !== 'all') {
-        query = query.eq('categories.slug', selectedCategory);
+        filteredProducts = filteredProducts.filter(product => 
+          product.categories?.slug === selectedCategory
+        );
       }
 
       if (searchTerm) {
-        query = query.or(`name.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%`);
+        filteredProducts = filteredProducts.filter(product =>
+          product.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          product.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          product.short_description?.toLowerCase().includes(searchTerm.toLowerCase())
+        );
       }
 
       if (filters.featured) {
-        query = query.eq('is_featured', true);
+        filteredProducts = filteredProducts.filter(product => product.is_featured);
       }
 
       if (filters.inStock) {
-        query = query.eq('stock_status', 'in_stock');
+        filteredProducts = filteredProducts.filter(product => product.stock_status === 'in_stock');
       }
 
       // Apply sorting
-      const sortField = sortBy === 'name' ? 'name' : 
-                       sortBy === 'price' ? 'price_range' : 
-                       'created_at';
-      
-      query = query.order(sortField);
+      filteredProducts.sort((a, b) => {
+        if (sortBy === 'name') return a.name.localeCompare(b.name);
+        if (sortBy === 'price') return (a.price_range || '').localeCompare(b.price_range || '');
+        if (sortBy === 'newest') return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+        return 0;
+      });
 
-      const { data, error } = await query;
-      if (error) throw error;
-      return data;
-    }
+      return filteredProducts;
+    },
+    retry: 2,
+    refetchOnWindowFocus: false
   });
 
   const handleWhatsAppInquiry = (productName: string) => {

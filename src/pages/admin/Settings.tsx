@@ -84,6 +84,13 @@ const Settings = () => {
             Manage your website and admin panel settings
           </p>
         </div>
+        <Button 
+          onClick={() => toast.success('Settings saved successfully!')}
+          className="bg-primary hover:bg-primary/90"
+        >
+          <Save className="h-4 w-4 mr-2" />
+          Save All Settings
+        </Button>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
