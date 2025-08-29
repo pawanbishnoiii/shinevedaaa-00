@@ -7,6 +7,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider } from "@/contexts/AuthContext";
 import Navbar from "@/components/Navbar";
 import SmoothScroll from "@/components/ui/smooth-scroll";
+import { usePageTracking } from "@/hooks/useAnalytics";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Products from "./pages/Products";
@@ -40,15 +41,11 @@ import RajasthanStories from "./pages/admin/RajasthanStories";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <HelmetProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <AuthProvider>
-            <SmoothScroll>
+const AppContent = () => {
+  usePageTracking(); // Auto-track page views
+  
+  return (
+    <SmoothScroll>
               <Routes>
                 <Route path="/" element={<><Navbar /><Index /></>} />
                 <Route path="/products" element={<><Navbar /><Products /></>} />
@@ -86,6 +83,18 @@ const App = () => (
                 <Route path="*" element={<EnhancedNotFound />} />
               </Routes>
             </SmoothScroll>
+  );
+};
+
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <TooltipProvider>
+      <HelmetProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <AuthProvider>
+            <AppContent />
           </AuthProvider>
         </BrowserRouter>
       </HelmetProvider>

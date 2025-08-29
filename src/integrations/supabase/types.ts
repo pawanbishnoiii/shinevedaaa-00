@@ -158,6 +158,42 @@ export type Database = {
         }
         Relationships: []
       }
+      email_templates: {
+        Row: {
+          body_html: string
+          body_text: string
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          subject: string
+          template_key: string
+          updated_at: string | null
+          variables: Json | null
+        }
+        Insert: {
+          body_html: string
+          body_text: string
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          subject: string
+          template_key: string
+          updated_at?: string | null
+          variables?: Json | null
+        }
+        Update: {
+          body_html?: string
+          body_text?: string
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          subject?: string
+          template_key?: string
+          updated_at?: string | null
+          variables?: Json | null
+        }
+        Relationships: []
+      }
       footer_pages: {
         Row: {
           content: string | null
@@ -367,6 +403,89 @@ export type Database = {
           },
         ]
       }
+      media_usage: {
+        Row: {
+          created_at: string | null
+          id: string
+          media_id: string | null
+          used_in_field: string
+          used_in_id: string
+          used_in_table: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          media_id?: string | null
+          used_in_field: string
+          used_in_id: string
+          used_in_table: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          media_id?: string | null
+          used_in_field?: string
+          used_in_id?: string
+          used_in_table?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "media_usage_media_id_fkey"
+            columns: ["media_id"]
+            isOneToOne: false
+            referencedRelation: "media"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      page_analytics: {
+        Row: {
+          bounce_rate: number | null
+          city: string | null
+          country: string | null
+          created_at: string | null
+          device_type: string | null
+          id: string
+          page_path: string
+          page_title: string | null
+          referrer: string | null
+          session_id: string | null
+          time_on_page: number | null
+          user_agent: string | null
+          visitor_id: string | null
+        }
+        Insert: {
+          bounce_rate?: number | null
+          city?: string | null
+          country?: string | null
+          created_at?: string | null
+          device_type?: string | null
+          id?: string
+          page_path: string
+          page_title?: string | null
+          referrer?: string | null
+          session_id?: string | null
+          time_on_page?: number | null
+          user_agent?: string | null
+          visitor_id?: string | null
+        }
+        Update: {
+          bounce_rate?: number | null
+          city?: string | null
+          country?: string | null
+          created_at?: string | null
+          device_type?: string | null
+          id?: string
+          page_path?: string
+          page_title?: string | null
+          referrer?: string | null
+          session_id?: string | null
+          time_on_page?: number | null
+          user_agent?: string | null
+          visitor_id?: string | null
+        }
+        Relationships: []
+      }
       product_favorites: {
         Row: {
           created_at: string
@@ -442,6 +561,48 @@ export type Database = {
           {
             foreignKeyName: "product_interactions_product_id_fkey"
             columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      product_recommendations: {
+        Row: {
+          confidence_score: number | null
+          created_at: string | null
+          id: string
+          product_id: string | null
+          recommendation_type: string | null
+          recommended_product_id: string | null
+        }
+        Insert: {
+          confidence_score?: number | null
+          created_at?: string | null
+          id?: string
+          product_id?: string | null
+          recommendation_type?: string | null
+          recommended_product_id?: string | null
+        }
+        Update: {
+          confidence_score?: number | null
+          created_at?: string | null
+          id?: string
+          product_id?: string | null
+          recommendation_type?: string | null
+          recommended_product_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_recommendations_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_recommendations_recommended_product_id_fkey"
+            columns: ["recommended_product_id"]
             isOneToOne: false
             referencedRelation: "products"
             referencedColumns: ["id"]
