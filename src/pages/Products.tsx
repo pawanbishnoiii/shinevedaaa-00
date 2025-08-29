@@ -229,7 +229,7 @@ const Products = () => {
                   Quick Inquiry
                 </Button>
                 <Button variant="outline" size="sm" asChild>
-                  <Link to={`/product/${product.slug}`}>
+                  <Link to={`/products/${product.slug}`}>
                     View Details
                   </Link>
                 </Button>

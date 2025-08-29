@@ -181,7 +181,7 @@ const EnhancedNotFound = () => {
                       <div className="flex items-center justify-between">
                         <span className="text-lg font-bold text-primary">{product.price_range}</span>
                         <Button asChild size="sm">
-                          <Link to={`/product/${product.slug}`}>
+                          <Link to={`/products/${product.slug}`}>
                             View Details
                             <ArrowRight className="w-4 h-4 ml-2" />
                           </Link>

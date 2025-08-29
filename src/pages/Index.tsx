@@ -1,6 +1,6 @@
 import HeroSection from "@/components/HeroSection";
 import ProductsSection from "@/components/ProductsSection";
-import QualitySection from "@/components/QualitySection";
+import EnhancedQualitySection from "@/components/EnhancedQualitySection";
 import WhyShineVedaSection from "@/components/WhyShineVedaSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
@@ -23,7 +23,7 @@ const Index = () => {
       <ProductsSection />
       
       {/* Quality Assurance Process */}
-      <QualitySection />
+      <EnhancedQualitySection />
       
       {/* Why Choose ShineVeda */}
       <WhyShineVedaSection />
