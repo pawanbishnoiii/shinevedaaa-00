@@ -37,9 +37,10 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState('1000');
   const [unit, setUnit] = useState('kg');
 
-  const { data: product, isLoading } = useQuery({
+  const { data: product, isLoading, error: queryError } = useQuery({
     queryKey: ['product', slug],
     queryFn: async () => {
+      console.log('Fetching product with slug:', slug);
       const { data, error } = await supabase
         .from('products')
         .select(`
@@ -53,11 +54,18 @@ const ProductDetail = () => {
         .eq('is_active', true)
         .maybeSingle();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Product query error:', error);
+        throw error;
+      }
+      console.log('Product data received:', data);
       return data;
     },
     enabled: !!slug
   });
+
+  // Log query state for debugging
+  console.log('Product Detail - Slug:', slug, 'Loading:', isLoading, 'Product:', product, 'Error:', queryError);
 
   const handleWhatsAppInquiry = () => {
     if (!product) return;
