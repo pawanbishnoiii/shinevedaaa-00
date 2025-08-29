@@ -31,6 +31,12 @@ import SEOManager from "./pages/admin/SEO";
 import Analytics from "./pages/admin/Analytics";
 import ProtectedRoute from "./components/ProtectedRoute";
 import NotFound from "./pages/NotFound";
+import EnhancedNotFound from "./pages/EnhancedNotFound";
+import DynamicPage from "./pages/DynamicPage";
+import EnhancedMedia from "./pages/admin/EnhancedMedia";
+import FooterPages from "./pages/admin/FooterPages";
+import RajasthanCrops from "./pages/admin/RajasthanCrops";
+import RajasthanStories from "./pages/admin/RajasthanStories";
 
 const queryClient = new QueryClient();
 
@@ -52,6 +58,7 @@ const App = () => (
                 <Route path="/contact" element={<><Navbar /><Contact /></>} />
                 <Route path="/faq" element={<><Navbar /><FAQ /></>} />
                 <Route path="/rajasthan-portfolio" element={<><Navbar /><RajasthanPortfolio /></>} />
+                <Route path="/page/:slug" element={<><Navbar /><DynamicPage /></>} />
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/admin" element={
                   <ProtectedRoute adminOnly>
@@ -65,7 +72,10 @@ const App = () => (
                   <Route path="inquiries" element={<Inquiries />} />
                   <Route path="favorites" element={<Favorites />} />
                   <Route path="testimonials" element={<Testimonials />} />
-                  <Route path="media" element={<Media />} />
+                  <Route path="media" element={<EnhancedMedia />} />
+                  <Route path="footer-pages" element={<FooterPages />} />
+                  <Route path="rajasthan-crops" element={<RajasthanCrops />} />
+                  <Route path="rajasthan-stories" element={<RajasthanStories />} />
                 <Route path="seo" element={<SEOManager />} />
                 <Route path="analytics" element={<Analytics />} />
                 <Route path="settings" element={<Settings />} />
@@ -73,7 +83,7 @@ const App = () => (
                   <Route path="products/:id" element={<ProductForm />} />
                   <Route path="products/:id/edit" element={<ProductForm />} />
                 </Route>
-                <Route path="*" element={<NotFound />} />
+                <Route path="*" element={<EnhancedNotFound />} />
               </Routes>
             </SmoothScroll>
           </AuthProvider>
