@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Loader2 } from "lucide-react";
+import { ArrowRight, Loader2, Star } from "lucide-react";
 import ProductCard from "./ProductCard";
 
 const ProductsSection = () => {
@@ -13,33 +13,53 @@ const ProductsSection = () => {
     queryKey: ['featured-products'],
     queryFn: async () => {
       try {
-        const { data, error } = await supabase
-          .from('products')
-          .select(`
-            *,
-            categories!products_category_id_fkey (
-              name,
-              slug
-            )
-          `)
-          .eq('is_active', true)
-          .eq('is_featured', true)
-          .order('featured_rank', { ascending: true })
-          .order('sort_order', { ascending: true })
-          .limit(3);
+        // Fetch products and categories separately for better performance
+        const [productsResponse, categoriesResponse] = await Promise.all([
+          supabase
+            .from('products')
+            .select('*')
+            .eq('is_active', true)
+            .eq('is_featured', true)
+            .order('featured_rank', { ascending: true })
+            .limit(3),
+          supabase
+            .from('categories')
+            .select('*')
+        ]);
         
-        if (error) {
-          console.error('Featured products query error:', error);
-          throw error;
+        if (productsResponse.error) {
+          console.error('Featured products query error:', productsResponse.error);
+          throw productsResponse.error;
         }
-        return data || [];
+        
+        if (categoriesResponse.error) {
+          console.error('Categories query error:', categoriesResponse.error);
+          throw categoriesResponse.error;
+        }
+
+        const productsData = productsResponse.data || [];
+        const categoriesData = categoriesResponse.data || [];
+        
+        // Create category map for joining
+        const categoryMap = new Map(categoriesData.map(cat => [cat.id, cat]));
+        
+        // Join products with categories
+        const productsWithCategories = productsData.map(product => ({
+          ...product,
+          categories: product.category_id ? categoryMap.get(product.category_id) : null
+        }));
+        
+        console.log('Featured products loaded:', productsWithCategories.length);
+        return productsWithCategories;
       } catch (err) {
         console.error('Failed to fetch featured products:', err);
         throw err;
       }
     },
     retry: 3,
-    retryDelay: 1000
+    retryDelay: 1000,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    refetchOnWindowFocus: false
   });
 
   const handleQuoteRequest = (productName: string) => {
@@ -93,6 +113,7 @@ const ProductsSection = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {products && products.length > 0 ? (
             <>
+              {/* Show featured products */}
               {products.map((product, index) => (
                 <ProductCard 
                   key={product.id}
@@ -100,37 +121,62 @@ const ProductsSection = () => {
                   index={index}
                 />
               ))}
-              {/* Fill remaining slots with skeletons if fewer than 3 */}
+              
+              {/* Fill remaining slots with placeholders if fewer than 3 featured products */}
               {products.length < 3 && Array.from({ length: 3 - products.length }).map((_, index) => (
                 <div
-                  key={`skeleton-${products.length + index}`}
-                  className="bg-card rounded-xl p-6 border animate-pulse"
+                  key={`placeholder-${products.length + index}`}
+                  className="bg-card rounded-xl p-6 border-2 border-dashed border-muted-foreground/30 hover:border-primary/50 transition-colors"
                 >
-                  <div className="aspect-square bg-muted rounded-lg mb-4"></div>
-                  <div className="h-4 bg-muted rounded mb-2"></div>
-                  <div className="h-3 bg-muted rounded w-3/4 mb-4"></div>
-                  <div className="text-center p-4 border-2 border-dashed rounded-lg">
+                  <div className="aspect-square bg-muted/50 rounded-lg mb-4 flex items-center justify-center">
+                    <div className="text-center">
+                      <div className="w-16 h-16 bg-muted rounded-full mx-auto mb-2 flex items-center justify-center">
+                        <span className="text-2xl font-bold text-muted-foreground">
+                          {products.length + index + 1}
+                        </span>
+                      </div>
+                      <p className="text-sm text-muted-foreground font-medium">
+                        {index === 0 ? 'Second' : 'Third'} Featured Product
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Set in admin panel
+                      </p>
+                    </div>
+                  </div>
+                  <div className="text-center p-4 bg-muted/20 rounded-lg">
                     <p className="text-sm text-muted-foreground">Available Slot</p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Manage in Featured Products
+                    </p>
                   </div>
                 </div>
               ))}
             </>
           ) : (
-            // Show skeletons and admin CTA if no featured products
+            // Show placeholders when no featured products are set
             <>
               {Array.from({ length: 3 }).map((_, index) => (
                 <div
                   key={`empty-${index}`}
-                  className="bg-card rounded-xl p-6 border border-dashed"
+                  className="bg-card rounded-xl p-6 border-2 border-dashed border-muted-foreground/30"
                 >
-                  <div className="aspect-square bg-muted/50 rounded-lg mb-4 flex items-center justify-center">
+                  <div className="aspect-square bg-muted/20 rounded-lg mb-4 flex items-center justify-center">
                     <div className="text-center">
-                      <div className="w-16 h-16 bg-muted rounded-full mx-auto mb-2"></div>
-                      <p className="text-sm text-muted-foreground">Featured Product Slot</p>
+                      <div className="w-16 h-16 bg-muted rounded-full mx-auto mb-2 flex items-center justify-center">
+                        <span className="text-2xl font-bold text-muted-foreground">
+                          {index + 1}
+                        </span>
+                      </div>
+                      <p className="text-sm text-muted-foreground font-medium">
+                        {index === 0 ? 'First' : index === 1 ? 'Second' : 'Third'} Position
+                      </p>
                     </div>
                   </div>
-                  <div className="h-4 bg-muted/50 rounded mb-2"></div>
-                  <div className="h-3 bg-muted/50 rounded w-3/4"></div>
+                  <div className="h-4 bg-muted/30 rounded mb-2"></div>
+                  <div className="h-3 bg-muted/30 rounded w-3/4 mb-4"></div>
+                  <div className="text-center p-3 bg-primary/10 rounded-lg">
+                    <p className="text-xs text-primary font-medium">Featured Product Slot</p>
+                  </div>
                 </div>
               ))}
             </>
@@ -139,16 +185,36 @@ const ProductsSection = () => {
 
         {/* Admin CTA if no featured products */}
         {(!products || products.length === 0) && (
-          <div className="text-center mt-8 p-8 border-2 border-dashed rounded-xl bg-muted/20">
-            <h3 className="text-lg font-semibold mb-2">No Featured Products Yet</h3>
+          <div className="text-center mt-8 p-8 border-2 border-dashed rounded-xl bg-primary/5">
+            <h3 className="text-lg font-semibold mb-2">No Featured Products Set</h3>
             <p className="text-muted-foreground mb-4">
-              Add products and mark them as featured to showcase your best offerings here.
+              Use the Featured Products manager to select and arrange your top 3 products for the homepage.
             </p>
-            <Button asChild>
-              <Link to="/admin/products">
-                Manage Products
+            <div className="flex gap-3 justify-center">
+              <Button asChild>
+                <Link to="/admin/featured-products">
+                  <Star className="h-4 w-4 mr-2" />
+                  Manage Featured Products
+                </Link>
+              </Button>
+              <Button variant="outline" asChild>
+                <Link to="/admin/products">
+                  View All Products
+                </Link>
+              </Button>
+            </div>
+          </div>
+        )}
+        
+        {/* Quick link for admin if products exist but fewer than 3 */}
+        {products && products.length > 0 && products.length < 3 && (
+          <div className="text-center mt-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+            <p className="text-sm text-amber-800">
+              You have {products.length} featured product{products.length === 1 ? '' : 's'}. 
+              <Link to="/admin/featured-products" className="font-medium text-amber-900 hover:underline ml-1">
+                Add more to fill all 3 slots
               </Link>
-            </Button>
+            </p>
           </div>
         )}
 

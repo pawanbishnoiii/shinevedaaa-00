@@ -162,7 +162,7 @@ const navigation = [
 export function AdminSidebar() {
   const location = useLocation()
   const { state } = useSidebar()
-  const [openGroups, setOpenGroups] = useState<string[]>(["Dashboard", "Products & Catalog"])
+  const [openGroups, setOpenGroups] = useState<string[]>(["Dashboard", "Products & Catalog", "Content Management"])
 
   const toggleGroup = (groupTitle: string) => {
     setOpenGroups(prev => 
