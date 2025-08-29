@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { AdminSidebar } from '@/components/AdminSidebar';
 import { AdminTopbar } from '@/components/AdminTopbar';
-import { SidebarProvider } from '@/components/ui/sidebar';
+import { SidebarProvider } from '@/components/ui/sidebar-new';
 
 
 const AdminLayout = () => {
