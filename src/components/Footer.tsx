@@ -6,27 +6,27 @@ const Footer = () => {
 
   const footerLinks = {
     products: [
-      { name: "Premium Onions", href: "#products" },
-      { name: "Cumin Seeds (Jeera)", href: "#products" },
-      { name: "Raw Peanuts", href: "#products" },
-      { name: "Fresh Carrots", href: "#products" },
-      { name: "Chickpeas (Chana)", href: "#products" },
-      { name: "Mustard Seeds", href: "#products" },
-      { name: "Guar Gum", href: "#products" }
+      { name: "Premium Onions", href: "/products" },
+      { name: "Cumin Seeds (Jeera)", href: "/products" },
+      { name: "Raw Peanuts", href: "/products" },
+      { name: "Fresh Carrots", href: "/products" },
+      { name: "Chickpeas (Chana)", href: "/products" },
+      { name: "Mustard Seeds", href: "/products" },
+      { name: "Guar Gum", href: "/products" }
     ],
     company: [
       { name: "About ShineVeda", href: "/about" },
-      { name: "Quality Assurance", href: "/about#quality" },
+      { name: "Quality Assurance", href: "/page/quality" },
       { name: "Our Process", href: "/about#process" },
       { name: "Certifications", href: "/about#certifications" },
       { name: "Export License", href: "/about#license" }
     ],
     services: [
-      { name: "Bulk Orders", href: "#bulk" },
-      { name: "Custom Packaging", href: "#packaging" },
-      { name: "Global Shipping", href: "#shipping" },
-      { name: "Quality Testing", href: "#testing" },
-      { name: "Sample Orders", href: "#samples" }
+      { name: "Bulk Orders", href: "/page/bulk" },
+      { name: "Custom Packaging", href: "/page/packaging" },
+      { name: "Global Shipping", href: "/page/shipping" },
+      { name: "Quality Testing", href: "/page/testing" },
+      { name: "Sample Orders", href: "/page/samples" }
     ],
     support: [
       { name: "Contact Us", href: "/contact" },
@@ -125,7 +125,7 @@ const Footer = () => {
                 <a href="/rajasthan-portfolio" className="text-muted-foreground hover:text-primary transition-colors text-sm">Rajasthan Portfolio</a>
               </li>
               <li>
-                <a href="/about#quality" className="text-muted-foreground hover:text-primary transition-colors text-sm">Quality Assurance</a>
+                <a href="/page/quality" className="text-muted-foreground hover:text-primary transition-colors text-sm">Quality Assurance</a>
               </li>
               <li>
                 <a href="/about#process" className="text-muted-foreground hover:text-primary transition-colors text-sm">Our Process</a>
@@ -140,16 +140,21 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold text-foreground mb-4">Services</h4>
             <ul className="space-y-2">
-              {footerLinks.services.map((link, index) => (
-                <li key={index}>
-                  <a 
-                    href={link.href}
-                    className="text-muted-foreground hover:text-primary transition-colors text-sm"
-                  >
-                    {link.name}
-                  </a>
-                </li>
-              ))}
+              <li>
+                <a href="/page/bulk" className="text-muted-foreground hover:text-primary transition-colors text-sm">Bulk Orders</a>
+              </li>
+              <li>
+                <a href="/page/packaging" className="text-muted-foreground hover:text-primary transition-colors text-sm">Custom Packaging</a>
+              </li>
+              <li>
+                <a href="/page/shipping" className="text-muted-foreground hover:text-primary transition-colors text-sm">Global Shipping</a>
+              </li>
+              <li>
+                <a href="/page/testing" className="text-muted-foreground hover:text-primary transition-colors text-sm">Quality Testing</a>
+              </li>
+              <li>
+                <a href="/page/samples" className="text-muted-foreground hover:text-primary transition-colors text-sm">Sample Orders</a>
+              </li>
             </ul>
           </div>
 
@@ -200,13 +205,13 @@ const Footer = () => {
             </div>
             
             <div className="flex gap-6 text-sm text-muted-foreground">
-              <a href="#privacy" className="hover:text-primary transition-colors">
+              <a href="/page/privacy" className="hover:text-primary transition-colors">
                 Privacy Policy
               </a>
-              <a href="#terms" className="hover:text-primary transition-colors">
+              <a href="/page/terms" className="hover:text-primary transition-colors">
                 Terms of Service
               </a>
-              <a href="#export-policy" className="hover:text-primary transition-colors">
+              <a href="/page/export-policy" className="hover:text-primary transition-colors">
                 Export Policy
               </a>
             </div>
