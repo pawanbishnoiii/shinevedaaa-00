@@ -17,6 +17,7 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import FAQ from "./pages/FAQ";
 import EnhancedPortfolio from "./pages/EnhancedPortfolio";
+import Agri from "./pages/Agri";
 import AdminLayout from "./layouts/AdminLayout";
 import Dashboard from "./pages/admin/Dashboard";
 import Overview from "./pages/admin/Overview";
@@ -59,6 +60,7 @@ const AppContent = () => {
                 <Route path="/contact" element={<><Navbar /><Contact /></>} />
                 <Route path="/faq" element={<><Navbar /><FAQ /></>} />
                 <Route path="/portfolio" element={<><Navbar /><EnhancedPortfolio /></>} />
+                <Route path="/agri" element={<><Navbar /><Agri /></>} />
                 <Route path="/enhanced-portfolio" element={<><Navbar /><EnhancedPortfolio /></>} />
                 <Route path="/page/:slug" element={<><Navbar /><DynamicPage /></>} />
                 <Route path="/auth" element={<Auth />} />
