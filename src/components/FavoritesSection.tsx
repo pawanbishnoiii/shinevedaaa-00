@@ -22,14 +22,16 @@ const FavoritesSection = () => {
         .select(`
           id,
           created_at,
-          products!product_id (
+          product_id,
+          products!product_favorites_product_id_fkey (
             id,
             name,
             slug,
             image_url,
             price_range,
             short_description,
-            categories!category_id (
+            category_id,
+            categories!products_category_id_fkey (
               name,
               slug
             )

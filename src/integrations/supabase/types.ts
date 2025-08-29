@@ -227,6 +227,75 @@ export type Database = {
         }
         Relationships: []
       }
+      crop_portfolio: {
+        Row: {
+          bg_color_class: string | null
+          color_class: string | null
+          created_at: string | null
+          description: string
+          export_grades: string[] | null
+          features: string[] | null
+          hindi_name: string | null
+          id: string
+          image_url: string | null
+          is_active: boolean | null
+          is_featured: boolean | null
+          moisture: string | null
+          name: string
+          packaging: string | null
+          purity: string | null
+          region: string
+          season: string
+          shelf_life: string | null
+          sort_order: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          bg_color_class?: string | null
+          color_class?: string | null
+          created_at?: string | null
+          description: string
+          export_grades?: string[] | null
+          features?: string[] | null
+          hindi_name?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          is_featured?: boolean | null
+          moisture?: string | null
+          name: string
+          packaging?: string | null
+          purity?: string | null
+          region: string
+          season: string
+          shelf_life?: string | null
+          sort_order?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          bg_color_class?: string | null
+          color_class?: string | null
+          created_at?: string | null
+          description?: string
+          export_grades?: string[] | null
+          features?: string[] | null
+          hindi_name?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          is_featured?: boolean | null
+          moisture?: string | null
+          name?: string
+          packaging?: string | null
+          purity?: string | null
+          region?: string
+          season?: string
+          shelf_life?: string | null
+          sort_order?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       downloadable_resources: {
         Row: {
           category: string | null
@@ -311,6 +380,147 @@ export type Database = {
         }
         Relationships: []
       }
+      farmer_network: {
+        Row: {
+          address: string
+          city: string
+          contact_email: string
+          contact_phone: string
+          contract_status: string | null
+          current_crops: string[] | null
+          farmer_name: string
+          farming_experience_years: number | null
+          farming_type: string | null
+          has_irrigation: boolean | null
+          has_storage: boolean | null
+          id: string
+          interested_crops: string[] | null
+          land_size_acres: number | null
+          notes: string | null
+          pincode: string
+          registered_at: string | null
+          state: string
+          verification_documents: Json | null
+          verification_status: string | null
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          address: string
+          city: string
+          contact_email: string
+          contact_phone: string
+          contract_status?: string | null
+          current_crops?: string[] | null
+          farmer_name: string
+          farming_experience_years?: number | null
+          farming_type?: string | null
+          has_irrigation?: boolean | null
+          has_storage?: boolean | null
+          id?: string
+          interested_crops?: string[] | null
+          land_size_acres?: number | null
+          notes?: string | null
+          pincode: string
+          registered_at?: string | null
+          state: string
+          verification_documents?: Json | null
+          verification_status?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          address?: string
+          city?: string
+          contact_email?: string
+          contact_phone?: string
+          contract_status?: string | null
+          current_crops?: string[] | null
+          farmer_name?: string
+          farming_experience_years?: number | null
+          farming_type?: string | null
+          has_irrigation?: boolean | null
+          has_storage?: boolean | null
+          id?: string
+          interested_crops?: string[] | null
+          land_size_acres?: number | null
+          notes?: string | null
+          pincode?: string
+          registered_at?: string | null
+          state?: string
+          verification_documents?: Json | null
+          verification_status?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: []
+      }
+      farmer_stories: {
+        Row: {
+          after_metric: string | null
+          after_value: string | null
+          before_metric: string | null
+          before_value: string | null
+          category: string
+          created_at: string | null
+          excerpt: string | null
+          full_story: string
+          id: string
+          image_url: string | null
+          improvement: string | null
+          is_active: boolean | null
+          is_featured: boolean | null
+          location: string
+          name: string
+          sort_order: number | null
+          state: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          after_metric?: string | null
+          after_value?: string | null
+          before_metric?: string | null
+          before_value?: string | null
+          category?: string
+          created_at?: string | null
+          excerpt?: string | null
+          full_story: string
+          id?: string
+          image_url?: string | null
+          improvement?: string | null
+          is_active?: boolean | null
+          is_featured?: boolean | null
+          location: string
+          name: string
+          sort_order?: number | null
+          state: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          after_metric?: string | null
+          after_value?: string | null
+          before_metric?: string | null
+          before_value?: string | null
+          category?: string
+          created_at?: string | null
+          excerpt?: string | null
+          full_story?: string
+          id?: string
+          image_url?: string | null
+          improvement?: string | null
+          is_active?: boolean | null
+          is_featured?: boolean | null
+          location?: string
+          name?: string
+          sort_order?: number | null
+          state?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       footer_pages: {
         Row: {
           content: string | null
@@ -347,6 +557,60 @@ export type Database = {
           sort_order?: number
           title?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      gallery_images: {
+        Row: {
+          alt_text: string
+          category: string
+          created_at: string | null
+          description: string | null
+          id: string
+          is_active: boolean | null
+          is_featured: boolean | null
+          license_type: string | null
+          license_url: string | null
+          metadata: Json | null
+          photographer: string | null
+          sort_order: number | null
+          src: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          alt_text: string
+          category: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_featured?: boolean | null
+          license_type?: string | null
+          license_url?: string | null
+          metadata?: Json | null
+          photographer?: string | null
+          sort_order?: number | null
+          src: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          alt_text?: string
+          category?: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_featured?: boolean | null
+          license_type?: string | null
+          license_url?: string | null
+          metadata?: Json | null
+          photographer?: string | null
+          sort_order?: number | null
+          src?: string
+          title?: string
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -1149,6 +1413,66 @@ export type Database = {
           setting_key?: string
           setting_value?: string | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      story_submissions: {
+        Row: {
+          admin_notes: string | null
+          contact_email: string
+          contact_phone: string | null
+          crop_types: string[] | null
+          farmer_name: string
+          farming_experience: string | null
+          id: string
+          images: Json | null
+          location: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          state: string
+          status: string | null
+          story_content: string
+          story_title: string
+          submitted_at: string | null
+          success_metrics: Json | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          contact_email: string
+          contact_phone?: string | null
+          crop_types?: string[] | null
+          farmer_name: string
+          farming_experience?: string | null
+          id?: string
+          images?: Json | null
+          location: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          state: string
+          status?: string | null
+          story_content: string
+          story_title: string
+          submitted_at?: string | null
+          success_metrics?: Json | null
+        }
+        Update: {
+          admin_notes?: string | null
+          contact_email?: string
+          contact_phone?: string | null
+          crop_types?: string[] | null
+          farmer_name?: string
+          farming_experience?: string | null
+          id?: string
+          images?: Json | null
+          location?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          state?: string
+          status?: string | null
+          story_content?: string
+          story_title?: string
+          submitted_at?: string | null
+          success_metrics?: Json | null
         }
         Relationships: []
       }
