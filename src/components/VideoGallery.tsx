@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import ReactPlayer from 'react-player';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Play, Eye, Calendar } from 'lucide-react';
+import { Play, Eye, Calendar, X } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -67,6 +66,12 @@ const VideoGallery: React.FC<VideoGalleryProps> = ({
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString();
+  };
+
+  const extractYouTubeId = (url: string): string => {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : '';
   };
 
   if (isLoading) {
@@ -179,12 +184,12 @@ const VideoGallery: React.FC<VideoGalleryProps> = ({
         <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
           <div className="bg-background rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden">
             <div className="aspect-video">
-              <ReactPlayer
-                url={selectedVideo.video_url}
-                width="100%"
-                height="100%"
-                controls
-                playing
+              <iframe
+                src={`https://www.youtube.com/embed/${extractYouTubeId(selectedVideo.video_url)}?autoplay=1`}
+                className="w-full h-full"
+                frameBorder="0"
+                allow="autoplay; encrypted-media"
+                allowFullScreen
               />
             </div>
             <div className="p-6">
@@ -199,7 +204,7 @@ const VideoGallery: React.FC<VideoGalleryProps> = ({
                   variant="outline"
                   onClick={() => setSelectedVideo(null)}
                 >
-                  Close
+                  <X className="w-4 h-4" />
                 </Button>
               </div>
               <p className="text-muted-foreground">{selectedVideo.description}</p>

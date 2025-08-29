@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import ReactPlayer from 'react-player';
 import { Button } from '@/components/ui/button';
 import { ArrowDown, Play, Pause } from 'lucide-react';
 
@@ -29,7 +28,6 @@ const EnhancedHeroSection: React.FC<EnhancedHeroSectionProps> = ({
 }) => {
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
-  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   const { ref, inView } = useInView({ threshold: 0.3 });
 
   const currentVideo = videos[currentVideoIndex];
@@ -52,27 +50,13 @@ const EnhancedHeroSection: React.FC<EnhancedHeroSectionProps> = ({
       {/* Video Background */}
       <div className="absolute inset-0 w-full h-full">
         {currentVideo ? (
-          <ReactPlayer
-            url={currentVideo.video_url}
-            playing={isPlaying}
-            loop
-            muted
-            width="100%"
-            height="100%"
-            className="object-cover"
-            onReady={() => setIsVideoLoaded(true)}
-            config={{
-              youtube: {
-                playerVars: {
-                  autoplay: 1,
-                  controls: 0,
-                  rel: 0,
-                  showinfo: 0,
-                  mute: 1,
-                  loop: 1
-                }
-              }
-            }}
+          <iframe
+            src={`https://www.youtube.com/embed/${extractYouTubeId(currentVideo.video_url)}?autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&playlist=${extractYouTubeId(currentVideo.video_url)}`}
+            className="w-full h-full object-cover"
+            style={{ transform: 'scale(1.1)' }}
+            frameBorder="0"
+            allow="autoplay; encrypted-media"
+            allowFullScreen
           />
         ) : (
           <div 
@@ -174,6 +158,13 @@ const EnhancedHeroSection: React.FC<EnhancedHeroSectionProps> = ({
       )}
     </section>
   );
+};
+
+// Helper function to extract YouTube video ID
+const extractYouTubeId = (url: string): string => {
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+  const match = url.match(regExp);
+  return (match && match[2].length === 11) ? match[2] : '';
 };
 
 export default EnhancedHeroSection;

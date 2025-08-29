@@ -1200,6 +1200,10 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: string
       }
+      increment_download_count: {
+        Args: { resource_id: string }
+        Returns: undefined
+      }
       is_admin: {
         Args: { user_email?: string }
         Returns: boolean

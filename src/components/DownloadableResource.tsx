@@ -91,10 +91,17 @@ const DownloadableResource: React.FC<DownloadableResourceProps> = ({
           session_id: crypto.randomUUID()
         });
 
-      // Increment download count
-      const { error } = await supabase.rpc('increment_download_count', {
-        resource_id: resourceId
-      });
+      // Simple increment without using rpc
+      const { data: current } = await supabase
+        .from('downloadable_resources')
+        .select('download_count')
+        .eq('id', resourceId)
+        .single();
+      
+      const { error } = await supabase
+        .from('downloadable_resources')
+        .update({ download_count: (current?.download_count || 0) + 1 })
+        .eq('id', resourceId);
 
       if (error) throw error;
     },

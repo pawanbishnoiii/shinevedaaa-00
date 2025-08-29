@@ -16,7 +16,7 @@ import Profile from "./pages/Profile";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import FAQ from "./pages/FAQ";
-import Portfolio from "./pages/Portfolio";
+import EnhancedPortfolio from "./pages/EnhancedPortfolio";
 import AdminLayout from "./layouts/AdminLayout";
 import Dashboard from "./pages/admin/Dashboard";
 import Overview from "./pages/admin/Overview";
@@ -38,6 +38,7 @@ import EnhancedNotFound from "./pages/EnhancedNotFound";
 import DynamicPage from "./pages/DynamicPage";
 import EnhancedMedia from "./pages/admin/EnhancedMedia";
 import FooterPages from "./pages/admin/FooterPages";
+import PortfolioVideosAdmin from "./pages/admin/PortfolioVideos";
 import RajasthanCrops from "./pages/admin/RajasthanCrops";
 import RajasthanStories from "./pages/admin/IndianFarmers";
 
@@ -57,7 +58,8 @@ const AppContent = () => {
                 <Route path="/about" element={<><Navbar /><About /></>} />
                 <Route path="/contact" element={<><Navbar /><Contact /></>} />
                 <Route path="/faq" element={<><Navbar /><FAQ /></>} />
-                <Route path="/portfolio" element={<><Navbar /><Portfolio /></>} />
+                <Route path="/portfolio" element={<><Navbar /><EnhancedPortfolio /></>} />
+                <Route path="/enhanced-portfolio" element={<><Navbar /><EnhancedPortfolio /></>} />
                 <Route path="/page/:slug" element={<><Navbar /><DynamicPage /></>} />
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/admin" element={
@@ -81,6 +83,7 @@ const AppContent = () => {
                   <Route path="footer-pages" element={<FooterPages />} />
                   <Route path="rajasthan-crops" element={<RajasthanCrops />} />
                   <Route path="indian-farmers" element={<RajasthanStories />} />
+                  <Route path="portfolio-videos" element={<PortfolioVideosAdmin />} />
                   <Route path="seo" element={<SEOManager />} />
                   <Route path="analytics" element={<Analytics />} />
                   <Route path="settings" element={<Settings />} />
