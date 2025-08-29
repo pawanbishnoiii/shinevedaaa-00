@@ -18,7 +18,8 @@ import {
   ChevronRight,
   Search,
   Bell,
-  LogOut
+  LogOut,
+  BookOpen
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -119,6 +120,7 @@ const navigation = [
         subItems: [
           { title: "Crop Portfolio", url: "/admin/crop-portfolio" },
           { title: "Farmer Stories", url: "/admin/farmer-stories" },
+          { title: "Agri Blog", url: "/admin/agri-blog" },
           { title: "Gallery Management", url: "/admin/gallery-management" },
         ],
       },

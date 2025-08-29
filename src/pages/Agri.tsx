@@ -7,7 +7,7 @@ import DynamicCropExcellence from '@/components/DynamicCropExcellence';
 import FarmerSupport from '@/components/FarmerSupport';
 import ImpactCounters from '@/components/ImpactCounters';
 import DynamicAgriImageGallery from '@/components/DynamicAgriImageGallery';
-import AgriBlog from '@/components/AgriBlog';
+import DynamicAgriBlog from '@/components/DynamicAgriBlog';
 import AgriFAQ from '@/components/AgriFAQ';
 import AgriCTA from '@/components/AgriCTA';
 import SubmitStoryForm from '@/components/SubmitStoryForm';
@@ -96,17 +96,12 @@ const Agri: React.FC = () => {
           </div>
         </section>
 
-        {/* Image Gallery */}
-        <section className="py-16">
-          <div className="container mx-auto px-4">
-            <DynamicAgriImageGallery />
-          </div>
-        </section>
+        {/* Removed: Agricultural Excellence in Pictures section */}
 
         {/* Blog Section */}
         <section className="py-16 bg-muted/50">
           <div className="container mx-auto px-4">
-            <AgriBlog />
+            <DynamicAgriBlog />
           </div>
         </section>
 
