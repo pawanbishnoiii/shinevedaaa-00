@@ -38,6 +38,45 @@ export type Database = {
         }
         Relationships: []
       }
+      admin_activity_logs: {
+        Row: {
+          action_type: string
+          admin_id: string | null
+          created_at: string | null
+          id: string
+          ip_address: unknown | null
+          new_data: Json | null
+          old_data: Json | null
+          resource_id: string | null
+          resource_type: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          action_type: string
+          admin_id?: string | null
+          created_at?: string | null
+          id?: string
+          ip_address?: unknown | null
+          new_data?: Json | null
+          old_data?: Json | null
+          resource_id?: string | null
+          resource_type?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          action_type?: string
+          admin_id?: string | null
+          created_at?: string | null
+          id?: string
+          ip_address?: unknown | null
+          new_data?: Json | null
+          old_data?: Json | null
+          resource_id?: string | null
+          resource_type?: string | null
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       agri_blog_posts: {
         Row: {
           author: string
@@ -344,6 +383,39 @@ export type Database = {
         }
         Relationships: []
       }
+      email_subscribers: {
+        Row: {
+          created_at: string | null
+          email: string
+          id: string
+          name: string | null
+          source: string | null
+          status: string | null
+          subscribed_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          id?: string
+          name?: string | null
+          source?: string | null
+          status?: string | null
+          subscribed_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          id?: string
+          name?: string | null
+          source?: string | null
+          status?: string | null
+          subscribed_at?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       email_templates: {
         Row: {
           body_html: string
@@ -375,6 +447,48 @@ export type Database = {
           is_active?: boolean | null
           subject?: string
           template_key?: string
+          updated_at?: string | null
+          variables?: Json | null
+        }
+        Relationships: []
+      }
+      email_templates_enhanced: {
+        Row: {
+          body_html: string
+          body_text: string
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          subject: string
+          template_key: string
+          template_name: string
+          template_type: string | null
+          updated_at: string | null
+          variables: Json | null
+        }
+        Insert: {
+          body_html: string
+          body_text: string
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          subject: string
+          template_key: string
+          template_name: string
+          template_type?: string | null
+          updated_at?: string | null
+          variables?: Json | null
+        }
+        Update: {
+          body_html?: string
+          body_text?: string
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          subject?: string
+          template_key?: string
+          template_name?: string
+          template_type?: string | null
           updated_at?: string | null
           variables?: Json | null
         }
@@ -828,6 +942,27 @@ export type Database = {
           },
         ]
       }
+      orders: {
+        Row: {
+          created_at: string
+          id: number
+          total: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          total: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          total?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       page_analytics: {
         Row: {
           bounce_rate: number | null
@@ -873,6 +1008,42 @@ export type Database = {
           time_on_page?: number | null
           user_agent?: string | null
           visitor_id?: string | null
+        }
+        Relationships: []
+      }
+      performance_metrics: {
+        Row: {
+          created_at: string | null
+          device_type: string | null
+          id: string
+          metric_name: string
+          metric_type: string
+          metric_unit: string | null
+          metric_value: number | null
+          page_url: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          device_type?: string | null
+          id?: string
+          metric_name: string
+          metric_type: string
+          metric_unit?: string | null
+          metric_value?: number | null
+          page_url?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          device_type?: string | null
+          id?: string
+          metric_name?: string
+          metric_type?: string
+          metric_unit?: string | null
+          metric_value?: number | null
+          page_url?: string | null
+          user_agent?: string | null
         }
         Relationships: []
       }
@@ -1213,6 +1384,7 @@ export type Database = {
           country: string | null
           created_at: string | null
           email: string
+          full_name: string | null
           id: string
           is_verified: boolean | null
           name: string | null
@@ -1226,6 +1398,7 @@ export type Database = {
           country?: string | null
           created_at?: string | null
           email: string
+          full_name?: string | null
           id: string
           is_verified?: boolean | null
           name?: string | null
@@ -1239,6 +1412,7 @@ export type Database = {
           country?: string | null
           created_at?: string | null
           email?: string
+          full_name?: string | null
           id?: string
           is_verified?: boolean | null
           name?: string | null
@@ -1377,6 +1551,42 @@ export type Database = {
         }
         Relationships: []
       }
+      search_analytics: {
+        Row: {
+          clicked_result: Json | null
+          created_at: string | null
+          id: string
+          results_count: number | null
+          search_filters: Json | null
+          search_term: string
+          search_type: string | null
+          session_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          clicked_result?: Json | null
+          created_at?: string | null
+          id?: string
+          results_count?: number | null
+          search_filters?: Json | null
+          search_term: string
+          search_type?: string | null
+          session_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          clicked_result?: Json | null
+          created_at?: string | null
+          id?: string
+          results_count?: number | null
+          search_filters?: Json | null
+          search_term?: string
+          search_type?: string | null
+          session_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       seo_metrics: {
         Row: {
           id: string
@@ -1398,6 +1608,75 @@ export type Database = {
         }
         Relationships: []
       }
+      seo_pages: {
+        Row: {
+          canonical_url: string | null
+          change_frequency: string | null
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          last_modified: string | null
+          meta_description: string | null
+          meta_keywords: string | null
+          og_description: string | null
+          og_image: string | null
+          og_title: string | null
+          page_path: string
+          page_title: string | null
+          priority: number | null
+          robots_meta: string | null
+          structured_data: Json | null
+          twitter_description: string | null
+          twitter_image: string | null
+          twitter_title: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          canonical_url?: string | null
+          change_frequency?: string | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_modified?: string | null
+          meta_description?: string | null
+          meta_keywords?: string | null
+          og_description?: string | null
+          og_image?: string | null
+          og_title?: string | null
+          page_path: string
+          page_title?: string | null
+          priority?: number | null
+          robots_meta?: string | null
+          structured_data?: Json | null
+          twitter_description?: string | null
+          twitter_image?: string | null
+          twitter_title?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          canonical_url?: string | null
+          change_frequency?: string | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_modified?: string | null
+          meta_description?: string | null
+          meta_keywords?: string | null
+          og_description?: string | null
+          og_image?: string | null
+          og_title?: string | null
+          page_path?: string
+          page_title?: string | null
+          priority?: number | null
+          robots_meta?: string | null
+          structured_data?: Json | null
+          twitter_description?: string | null
+          twitter_image?: string | null
+          twitter_title?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       site_settings: {
         Row: {
           setting_key: string
@@ -1413,6 +1692,36 @@ export type Database = {
           setting_key?: string
           setting_value?: string | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      smtp_settings: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          is_encrypted: boolean | null
+          setting_name: string
+          setting_value: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_encrypted?: boolean | null
+          setting_name: string
+          setting_value?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_encrypted?: boolean | null
+          setting_name?: string
+          setting_value?: string | null
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -1473,6 +1782,104 @@ export type Database = {
           story_title?: string
           submitted_at?: string | null
           success_metrics?: Json | null
+        }
+        Relationships: []
+      }
+      system_notifications: {
+        Row: {
+          created_at: string | null
+          expires_at: string | null
+          id: string
+          is_read: boolean | null
+          message: string
+          metadata: Json | null
+          notification_type: string
+          priority: string | null
+          recipient_id: string | null
+          recipient_type: string | null
+          title: string
+        }
+        Insert: {
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          is_read?: boolean | null
+          message: string
+          metadata?: Json | null
+          notification_type: string
+          priority?: string | null
+          recipient_id?: string | null
+          recipient_type?: string | null
+          title: string
+        }
+        Update: {
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          is_read?: boolean | null
+          message?: string
+          metadata?: Json | null
+          notification_type?: string
+          priority?: string | null
+          recipient_id?: string | null
+          recipient_type?: string | null
+          title?: string
+        }
+        Relationships: []
+      }
+      team_members: {
+        Row: {
+          added_at: string
+          joined_at: string
+          role: string
+          team_id: string
+          user_id: string
+        }
+        Insert: {
+          added_at?: string
+          joined_at?: string
+          role?: string
+          team_id: string
+          user_id: string
+        }
+        Update: {
+          added_at?: string
+          joined_at?: string
+          role?: string
+          team_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_members_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      teams: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -1579,6 +1986,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      user_sessions: {
+        Row: {
+          device_info: Json | null
+          ended_at: string | null
+          id: string
+          ip_address: unknown | null
+          is_active: boolean | null
+          last_activity: string | null
+          location_info: Json | null
+          page_views: number | null
+          session_id: string
+          started_at: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          device_info?: Json | null
+          ended_at?: string | null
+          id?: string
+          ip_address?: unknown | null
+          is_active?: boolean | null
+          last_activity?: string | null
+          location_info?: Json | null
+          page_views?: number | null
+          session_id: string
+          started_at?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          device_info?: Json | null
+          ended_at?: string | null
+          id?: string
+          ip_address?: unknown | null
+          is_active?: boolean | null
+          last_activity?: string | null
+          location_info?: Json | null
+          page_views?: number | null
+          session_id?: string
+          started_at?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
       }
     }
     Views: {
