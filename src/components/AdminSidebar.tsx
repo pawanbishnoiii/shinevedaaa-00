@@ -19,7 +19,9 @@ import {
   Search,
   Bell,
   LogOut,
-  BookOpen
+  BookOpen,
+  Mail,
+  Send
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -123,6 +125,29 @@ const navigation = [
           { title: "Agri Blog", url: "/admin/agri-blog" },
           { title: "Gallery Management", url: "/admin/gallery-management" },
         ],
+      },
+    ],
+  },
+  {
+    title: "Email Marketing",
+    items: [
+      {
+        title: "Email Subscribers",
+        icon: Users,
+        url: "/admin/email-subscribers",
+        badge: "New",
+      },
+      {
+        title: "Email Campaigns",
+        icon: Send,
+        url: "/admin/email-campaigns",
+        badge: "New",
+      },
+      {
+        title: "Email Templates",
+        icon: Mail,
+        url: "/admin/email-templates",
+        badge: "New",
       },
     ],
   },

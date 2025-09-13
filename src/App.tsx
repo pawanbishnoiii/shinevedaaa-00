@@ -60,6 +60,8 @@ import BlogPost from "./components/BlogPost";
 import CropPortfolio from "./pages/admin/CropPortfolio";
 import FarmerStories from "./pages/admin/FarmerStories";
 import GalleryManagement from "./pages/admin/GalleryManagement";
+import EmailSubscribers from "./pages/admin/EmailSubscribers";
+import EmailCampaigns from "./pages/admin/EmailCampaigns";
 
 const queryClient = new QueryClient();
 
@@ -126,6 +128,8 @@ const AppContent = () => {
                   <Route path="gallery-management" element={<GalleryManagement />} />
                   <Route path="seo" element={<SEOManager />} />
                   <Route path="analytics" element={<Analytics />} />
+                  <Route path="email-subscribers" element={<EmailSubscribers />} />
+                  <Route path="email-campaigns" element={<EmailCampaigns />} />
                   <Route path="settings" element={<Settings />} />
                 </Route>
                 <Route path="*" element={<EnhancedNotFound />} />
