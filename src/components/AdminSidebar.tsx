@@ -128,29 +128,40 @@ const navigation = [
       },
     ],
   },
-  {
-    title: "Email Marketing",
-    items: [
-      {
-        title: "Email Subscribers",
-        icon: Users,
-        url: "/admin/email-subscribers",
-        badge: "New",
-      },
-      {
-        title: "Email Campaigns",
-        icon: Send,
-        url: "/admin/email-campaigns",
-        badge: "New",
-      },
-      {
-        title: "Email Templates",
-        icon: Mail,
-        url: "/admin/email-templates",
-        badge: "New",
-      },
-    ],
-  },
+    {
+      title: "Email Marketing",
+      items: [
+        {
+          title: "Email Subscribers",
+          icon: Users,
+          url: "/admin/email-subscribers",
+          badge: "New",
+        },
+        {
+          title: "Email Campaigns",
+          icon: Send,
+          url: "/admin/email-campaigns",
+          badge: "New",
+        },
+        {
+          title: "Email Templates",
+          icon: Mail,
+          url: "/admin/email-templates",
+          badge: "New",
+        },
+      ],
+    },
+    {
+      title: "Team & Content",
+      items: [
+        {
+          title: "Team Management",
+          icon: Users,
+          url: "/admin/team-management",
+          badge: "New",
+        },
+      ],
+    },
   {
     title: "Customer Relations",
     items: [
@@ -172,22 +183,28 @@ const navigation = [
       },
     ],
   },
-  {
-    title: "Settings & Tools",
-    items: [
-      {
-        title: "Settings",
-        icon: Settings,
-        url: "/admin/settings",
-      },
-      {
-        title: "SEO Tools",
-        icon: Search,
-        url: "/admin/seo",
-        badge: "Enhanced",
-      },
-    ],
-  },
+    {
+      title: "Settings & Tools",
+      items: [
+        {
+          title: "Settings",
+          icon: Settings,
+          url: "/admin/settings",
+        },
+        {
+          title: "System Settings",
+          icon: Settings,
+          url: "/admin/system-settings",
+          badge: "New",
+        },
+        {
+          title: "SEO Tools",
+          icon: Search,
+          url: "/admin/seo",
+          badge: "Enhanced",
+        },
+      ],
+    },
 ]
 
 export function AdminSidebar() {

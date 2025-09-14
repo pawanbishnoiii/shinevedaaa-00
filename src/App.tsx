@@ -62,6 +62,10 @@ import FarmerStories from "./pages/admin/FarmerStories";
 import GalleryManagement from "./pages/admin/GalleryManagement";
 import EmailSubscribers from "./pages/admin/EmailSubscribers";
 import EmailCampaigns from "./pages/admin/EmailCampaigns";
+import EmailTemplateBuilder from "./pages/admin/EmailTemplateBuilder";
+import TeamManagement from "./pages/admin/TeamManagement";
+import SystemSettings from "./pages/admin/SystemSettings";
+import DynamicSettings from "./pages/admin/DynamicSettings";
 
 const queryClient = new QueryClient();
 
@@ -130,6 +134,10 @@ const AppContent = () => {
                   <Route path="analytics" element={<Analytics />} />
                   <Route path="email-subscribers" element={<EmailSubscribers />} />
                   <Route path="email-campaigns" element={<EmailCampaigns />} />
+                  <Route path="email-templates" element={<EmailTemplateBuilder />} />
+                  <Route path="team-management" element={<TeamManagement />} />
+                  <Route path="system-settings" element={<SystemSettings />} />
+                  <Route path="dynamic-settings" element={<DynamicSettings />} />
                   <Route path="settings" element={<Settings />} />
                 </Route>
                 <Route path="*" element={<EnhancedNotFound />} />
