@@ -303,7 +303,7 @@ const Settings = () => {
                 <Textarea
                   id="business_address"
                   rows={3}
-                  defaultValue={settings?.business_address || 'Sriganganagar, Rajasthan, India\nAgricultural Hub of North Rajasthan'}
+                  defaultValue={settings?.business_address || 'Sri Ganganagar, Rajasthan, India\nAgricultural Hub of North Rajasthan'}
                   onBlur={(e) => handleSave('business_address', e.target.value, 'Complete business address')}
                 />
               </div>

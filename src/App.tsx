@@ -42,7 +42,8 @@ import FooterPages from "./pages/admin/FooterPages";
 import PortfolioVideosAdmin from "./pages/admin/PortfolioVideos";
 import RajasthanCrops from "./pages/admin/RajasthanCrops";
 import RajasthanStories from "./pages/admin/IndianFarmers";
-import AgriBlog from "./pages/admin/AgriBlog";
+import EnhancedAgriBlog from "./pages/admin/EnhancedAgriBlog";
+import Users from "./pages/admin/Users";
 import Quality from "./pages/page/Quality";
 import Bulk from "./pages/page/Bulk";
 import Packaging from "./pages/page/Packaging";
@@ -126,7 +127,8 @@ const AppContent = () => {
                   <Route path="rajasthan-crops" element={<RajasthanCrops />} />
                   <Route path="indian-farmers" element={<RajasthanStories />} />
                   <Route path="portfolio-videos" element={<PortfolioVideosAdmin />} />
-                  <Route path="agri-blog" element={<AgriBlog />} />
+                  <Route path="agri-blog" element={<EnhancedAgriBlog />} />
+                  <Route path="users" element={<Users />} />
                   <Route path="crop-portfolio" element={<CropPortfolio />} />
                   <Route path="farmer-stories" element={<FarmerStories />} />
                   <Route path="gallery-management" element={<GalleryManagement />} />

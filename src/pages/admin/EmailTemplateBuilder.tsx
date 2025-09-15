@@ -599,7 +599,7 @@ export default function EmailTemplateBuilder() {
                   <TableRow key={template.id}>
                     <TableCell>
                       <div>
-                        <div className="font-medium">{template.name}</div>
+                        <div className="font-medium">{template.template_key}</div>
                         <div className="text-sm text-muted-foreground">
                           Key: {template.template_key}
                         </div>
@@ -633,7 +633,7 @@ export default function EmailTemplateBuilder() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => handleDelete(template.id, template.name)}
+                          onClick={() => handleDelete(template.id, template.template_key)}
                           className="text-destructive hover:text-destructive"
                         >
                           <Trash2 className="w-4 h-4 mr-1" />

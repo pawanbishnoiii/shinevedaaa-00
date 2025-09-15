@@ -21,7 +21,8 @@ import {
   LogOut,
   BookOpen,
   Mail,
-  Send
+  Send,
+  UserCheck
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -158,6 +159,12 @@ const navigation = [
           title: "Team Management",
           icon: Users,
           url: "/admin/team-management",
+          badge: "New",
+        },
+        {
+          title: "User Management",
+          icon: UserCheck,
+          url: "/admin/users",
           badge: "New",
         },
       ],

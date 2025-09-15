@@ -1347,6 +1347,72 @@ export type Database = {
         }
         Relationships: []
       }
+      org_team_members: {
+        Row: {
+          bio: string | null
+          created_at: string | null
+          department: string | null
+          education: string | null
+          email: string | null
+          id: string
+          image_url: string | null
+          is_active: boolean | null
+          is_featured: boolean | null
+          linkedin_url: string | null
+          location: string | null
+          name: string
+          phone: string | null
+          position: string
+          sort_order: number | null
+          specializations: string[] | null
+          twitter_url: string | null
+          updated_at: string | null
+          years_experience: number | null
+        }
+        Insert: {
+          bio?: string | null
+          created_at?: string | null
+          department?: string | null
+          education?: string | null
+          email?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          is_featured?: boolean | null
+          linkedin_url?: string | null
+          location?: string | null
+          name: string
+          phone?: string | null
+          position: string
+          sort_order?: number | null
+          specializations?: string[] | null
+          twitter_url?: string | null
+          updated_at?: string | null
+          years_experience?: number | null
+        }
+        Update: {
+          bio?: string | null
+          created_at?: string | null
+          department?: string | null
+          education?: string | null
+          email?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          is_featured?: boolean | null
+          linkedin_url?: string | null
+          location?: string | null
+          name?: string
+          phone?: string | null
+          position?: string
+          sort_order?: number | null
+          specializations?: string[] | null
+          twitter_url?: string | null
+          updated_at?: string | null
+          years_experience?: number | null
+        }
+        Relationships: []
+      }
       page_analytics: {
         Row: {
           bounce_rate: number | null

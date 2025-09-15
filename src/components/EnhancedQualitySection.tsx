@@ -7,7 +7,7 @@ const qualitySteps = [
   {
     id: 1,
     title: "Farm Selection",
-    description: "Handpicked from premium farms in Sriganganagar with ideal soil conditions and sustainable farming practices",
+    description: "Handpicked from premium farms in Sri Ganganagar with ideal soil conditions and sustainable farming practices",
     icon: CheckCircle,
     details: ["Soil quality assessment", "Farmer partnerships", "Organic certification", "Sustainable practices"],
     color: "from-green-500 to-emerald-600",

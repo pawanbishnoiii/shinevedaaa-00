@@ -54,7 +54,7 @@ const Contact = () => {
     {
       icon: MapPin,
       title: 'Location',
-      details: 'Sriganganagar, Rajasthan, India',
+      details: 'Sri Ganganagar, Rajasthan, India',
       action: '#',
       description: 'Visit our processing facility'
     },

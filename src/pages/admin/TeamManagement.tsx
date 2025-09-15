@@ -72,10 +72,10 @@ export default function TeamManagement() {
 
   // Fetch team members
   const { data: teamMembers = [], isLoading } = useQuery({
-    queryKey: ['team-members', searchTerm],
+    queryKey: ['org-team-members', searchTerm],
     queryFn: async () => {
       let query = supabase
-        .from('team_members')
+        .from('org_team_members')
         .select('*')
         .order('sort_order', { ascending: true });
 
@@ -94,19 +94,19 @@ export default function TeamManagement() {
     mutationFn: async (data: any) => {
       if (editingMember) {
         const { error } = await supabase
-        .from('profiles')
+          .from('org_team_members')
           .update(data)
           .eq('id', editingMember.id);
         if (error) throw error;
       } else {
         const { error } = await supabase
-          .from('team_members')
+          .from('org_team_members')
           .insert(data);
         if (error) throw error;
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['team-members'] });
+      queryClient.invalidateQueries({ queryKey: ['org-team-members'] });
       toast({
         title: editingMember ? "Member Updated" : "Member Created",
         description: "Team member has been saved successfully.",
@@ -126,13 +126,13 @@ export default function TeamManagement() {
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
       const { error } = await supabase
-        .from('team_members')
+        .from('org_team_members')
         .delete()
         .eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['team-members'] });
+      queryClient.invalidateQueries({ queryKey: ['org-team-members'] });
       toast({
         title: "Member Deleted",
         description: "Team member has been removed successfully.",
@@ -346,7 +346,7 @@ export default function TeamManagement() {
                     id="location"
                     value={memberData.location}
                     onChange={(e) => setMemberData({...memberData, location: e.target.value})}
-                    placeholder="Sriganganagar, Rajasthan"
+                    placeholder="Sri Ganganagar, Rajasthan"
                   />
                 </div>
               </div>
@@ -464,8 +464,8 @@ export default function TeamManagement() {
                     </TableCell>
                     <TableCell>
                       <div className="flex gap-1">
-                        <Badge variant={member.is_active ? "default" : "secondary"}>
-                          {member.is_active ? 'Active' : 'Inactive'}
+                        <Badge variant="default">
+                          Active
                         </Badge>
                         {member.is_featured && (
                           <Badge variant="outline">

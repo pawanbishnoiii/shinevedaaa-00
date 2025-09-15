@@ -18,10 +18,10 @@ import {
 
 export const DynamicAboutTeam: React.FC = () => {
   const { data: teamMembers = [], isLoading } = useQuery({
-    queryKey: ['team-members-public'],
+    queryKey: ['org-team-members-public'],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('profiles')
+        .from('org_team_members')
         .select('*')
         .eq('is_active', true)
         .order('sort_order', { ascending: true });

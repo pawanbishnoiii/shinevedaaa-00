@@ -149,7 +149,7 @@ const ContactSection = () => {
                   <div>
                     <div className="font-semibold text-foreground mb-1">Headquarters</div>
                     <div className="text-muted-foreground">
-                      Sriganganagar, Rajasthan, India
+                      Sri Ganganagar, Rajasthan, India
                       <br />
                       Agricultural Hub of North Rajasthan
                     </div>
