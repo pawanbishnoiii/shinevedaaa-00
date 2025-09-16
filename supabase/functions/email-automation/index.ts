@@ -74,10 +74,6 @@ const handler = async (req: Request): Promise<Response> => {
           continue;
         }
 
-        // Calculate scheduled time (current time + delay)
-        const scheduledFor = new Date();
-        scheduledFor.setMinutes(scheduledFor.getMinutes() + (rule.delay_minutes || 0));
-
         // Prepare template variables
         const templateVariables = {
           ...trigger_data,
@@ -87,32 +83,69 @@ const handler = async (req: Request): Promise<Response> => {
           support_email: 'help@shineveda.in'
         };
 
-        // Add to email queue
-        const { data: queueItem, error: queueError } = await supabase
-          .from('email_queue')
-          .insert({
-            recipient_email: recipientEmail,
-            subject: template.subject,
-            content_html: template.body_html,
-            content_text: template.body_text,
-            template_variables: templateVariables,
-            scheduled_for: scheduledFor.toISOString(),
-            automation_rule_id: rule.id,
-            priority: getPriority(trigger_type)
-          })
-          .select()
-          .single();
+        // Replace template variables in HTML and text
+        let finalHtml = template.body_html;
+        let finalText = template.body_text;
+        let finalSubject = template.subject;
 
-        if (queueError) {
-          console.error('Error adding to email queue:', queueError);
-          results.push({ rule: rule.name, status: 'failed', error: queueError.message });
+        for (const [key, value] of Object.entries(templateVariables)) {
+          const placeholder = `{{${key}}}`;
+          finalHtml = finalHtml.replace(new RegExp(placeholder, 'g'), String(value));
+          finalText = finalText.replace(new RegExp(placeholder, 'g'), String(value));
+          finalSubject = finalSubject.replace(new RegExp(placeholder, 'g'), String(value));
+        }
+
+        // If no delay, send immediately via send-email function
+        if ((rule.delay_minutes || 0) === 0) {
+          try {
+            const { error: sendError } = await supabase.functions.invoke('send-email', {
+              body: {
+                to: recipientEmail,
+                subject: finalSubject,
+                html: finalHtml,
+                text: finalText,
+                automation_rule_id: rule.id
+              }
+            });
+
+            if (sendError) {
+              console.error('Error sending email immediately:', sendError);
+              results.push({ rule: rule.name, status: 'failed', error: sendError.message });
+            } else {
+              console.log('Email sent immediately:', { rule: rule.name, recipient: recipientEmail });
+              results.push({ rule: rule.name, status: 'sent', recipient: recipientEmail });
+            }
+          } catch (sendError) {
+            console.error('Error invoking send-email function:', sendError);
+            results.push({ rule: rule.name, status: 'failed', error: sendError.message });
+          }
         } else {
-          console.log('Email queued successfully:', { rule: rule.name, recipient: recipientEmail, scheduled_for: scheduledFor });
-          results.push({ rule: rule.name, status: 'queued', queue_id: queueItem.id });
+          // Calculate scheduled time (current time + delay)
+          const scheduledFor = new Date();
+          scheduledFor.setMinutes(scheduledFor.getMinutes() + rule.delay_minutes);
 
-          // If no delay, send immediately
-          if ((rule.delay_minutes || 0) === 0) {
-            await sendQueuedEmail(supabase, queueItem.id);
+          // Add to email queue for delayed sending
+          const { data: queueItem, error: queueError } = await supabase
+            .from('email_queue')
+            .insert({
+              recipient_email: recipientEmail,
+              subject: finalSubject,
+              content_html: finalHtml,
+              content_text: finalText,
+              template_variables: templateVariables,
+              scheduled_for: scheduledFor.toISOString(),
+              automation_rule_id: rule.id,
+              priority: getPriority(trigger_type)
+            })
+            .select()
+            .single();
+
+          if (queueError) {
+            console.error('Error adding to email queue:', queueError);
+            results.push({ rule: rule.name, status: 'failed', error: queueError.message });
+          } else {
+            console.log('Email queued successfully:', { rule: rule.name, recipient: recipientEmail, scheduled_for: scheduledFor });
+            results.push({ rule: rule.name, status: 'queued', queue_id: queueItem.id });
           }
         }
 
@@ -189,21 +222,6 @@ function getPriority(triggerType: string): number {
       return 2; // High-medium priority
     default:
       return 5; // Normal priority
-  }
-}
-
-async function sendQueuedEmail(supabase: any, queueId: string) {
-  try {
-    // Call the send-email function
-    const { error } = await supabase.functions.invoke('send-email', {
-      body: { queue_id: queueId }
-    });
-
-    if (error) {
-      console.error('Error sending queued email:', error);
-    }
-  } catch (error) {
-    console.error('Error invoking send-email function:', error);
   }
 }
 

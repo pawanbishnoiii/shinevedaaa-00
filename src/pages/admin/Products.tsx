@@ -160,7 +160,7 @@ const Products = () => {
                   <TableHead>Product</TableHead>
                   <TableHead>Category</TableHead>
                   <TableHead>Status</TableHead>
-                  <TableHead>Price Range</TableHead>
+                  <TableHead>Price & Stock</TableHead>
                   <TableHead>Created</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
@@ -199,7 +199,27 @@ const Products = () => {
                       )}
                     </TableCell>
                     <TableCell>
-                      {product.price_range || 'N/A'}
+                      <div className="space-y-1">
+                        <div className="text-sm">{product.price_range || 'N/A'}</div>
+                        <div className="flex gap-1">
+                          {product.currency && (
+                            <Badge variant="outline" className="text-xs">{product.currency}</Badge>
+                          )}
+                          {product.stock_status && (
+                            <Badge 
+                              variant={
+                                product.stock_status === 'in_stock' ? 'default' : 
+                                product.stock_status === 'limited' ? 'secondary' : 
+                                'destructive'
+                              }
+                              className="text-xs"
+                            >
+                              {product.stock_status === 'in_stock' ? 'In Stock' :
+                               product.stock_status === 'limited' ? 'Limited' : 'Out of Stock'}
+                            </Badge>
+                          )}
+                        </div>
+                      </div>
                     </TableCell>
                     <TableCell>
                       {new Date(product.created_at).toLocaleDateString()}

@@ -43,7 +43,7 @@ export const EmailSubscription: React.FC<EmailSubscriptionProps> = ({
         .from('newsletter_subscriptions')
         .select('id, status')
         .eq('email', email)
-        .single();
+        .maybeSingle();
 
       if (existing) {
         if (existing.status === 'active') {
@@ -57,10 +57,10 @@ export const EmailSubscription: React.FC<EmailSubscriptionProps> = ({
         }
       }
 
-      // Subscribe to newsletter
+      // Subscribe to newsletter (insert only, no upsert)
       const { error } = await supabase
         .from('newsletter_subscriptions')
-        .upsert({
+        .insert({
           email,
           status: 'active',
           subscription_source: 'website',

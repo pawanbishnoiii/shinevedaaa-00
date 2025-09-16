@@ -26,7 +26,10 @@ const productSchema = z.object({
   short_description: z.string().optional(),
   description: z.string().optional(),
   category_id: z.string().uuid().optional(),
-  price_range: z.string().optional(),
+  price_range: z.string().regex(/^(\$|₹|€|£)?\d+(\.\d{2})?(\s*-\s*(\$|₹|€|£)?\d+(\.\d{2})?)?\s*\/\s*(kg|ton|quintal|piece|box)$/i, 'Price format: "$500-800/ton" or "₹40-60/kg"').optional(),
+  currency: z.enum(['USD', 'INR', 'EUR', 'AED', 'GBP']).default('USD'),
+  export_grade: z.enum(['A', 'AA', 'AAA', 'Premium']).optional(),
+  stock_status: z.enum(['in_stock', 'limited', 'out_of_stock']).default('in_stock'),
   minimum_order_quantity: z.string().optional(),
   origin: z.string().optional(),
   shelf_life: z.string().optional(),
@@ -62,6 +65,9 @@ const ProductForm = () => {
       short_description: '',
       description: '',
       price_range: '',
+      currency: 'USD',
+      export_grade: undefined,
+      stock_status: 'in_stock',
       minimum_order_quantity: '',
       origin: 'Sri Ganganagar, Rajasthan',
       shelf_life: '',
@@ -114,6 +120,9 @@ const ProductForm = () => {
         description: product.description || '',
         category_id: product.category_id || '',
         price_range: product.price_range || '',
+        currency: (product.currency as 'USD' | 'INR' | 'EUR' | 'AED' | 'GBP') || 'USD',
+        export_grade: (product.export_grade as 'A' | 'AA' | 'AAA' | 'Premium') || undefined,
+        stock_status: (product.stock_status as 'in_stock' | 'limited' | 'out_of_stock') || 'in_stock',
         minimum_order_quantity: product.minimum_order_quantity || '',
         origin: product.origin || 'Sri Ganganagar, Rajasthan',
         shelf_life: product.shelf_life || '',
@@ -345,7 +354,7 @@ const ProductForm = () => {
                     )}
                   />
 
-                  <div className="grid grid-cols-3 gap-4">
+                  <div className="grid grid-cols-2 gap-4">
                     <FormField
                       control={form.control}
                       name="category_id"
@@ -378,8 +387,57 @@ const ProductForm = () => {
                         <FormItem>
                           <FormLabel>Price Range</FormLabel>
                           <FormControl>
-                            <Input placeholder="$500-800/ton" {...field} />
+                            <Input placeholder="$500-800/ton or ₹40-60/kg" {...field} />
                           </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="currency"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Currency</FormLabel>
+                          <Select onValueChange={field.onChange} value={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="USD">USD ($)</SelectItem>
+                              <SelectItem value="INR">INR (₹)</SelectItem>
+                              <SelectItem value="EUR">EUR (€)</SelectItem>
+                              <SelectItem value="AED">AED (د.إ)</SelectItem>
+                              <SelectItem value="GBP">GBP (£)</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="export_grade"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Export Grade</FormLabel>
+                          <Select onValueChange={field.onChange} value={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select grade" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="A">Grade A</SelectItem>
+                              <SelectItem value="AA">Grade AA</SelectItem>
+                              <SelectItem value="AAA">Grade AAA</SelectItem>
+                              <SelectItem value="Premium">Premium</SelectItem>
+                            </SelectContent>
+                          </Select>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -400,7 +458,30 @@ const ProductForm = () => {
                     />
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-3 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="stock_status"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Stock Status</FormLabel>
+                          <Select onValueChange={field.onChange} value={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="in_stock">In Stock</SelectItem>
+                              <SelectItem value="limited">Limited Stock</SelectItem>
+                              <SelectItem value="out_of_stock">Out of Stock</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
                     <FormField
                       control={form.control}
                       name="origin"

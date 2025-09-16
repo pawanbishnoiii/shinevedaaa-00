@@ -57,21 +57,37 @@ const Index = () => {
       {/* Why Choose ShineVeda */}
       <WhyShineVedaSection />
       
-      {/* Email Subscription */}
+      {/* B2B Call-to-Action Section */}
       <section className="py-20 bg-gradient-to-br from-primary/10 via-secondary/5 to-background">
         <div className="container mx-auto px-4 text-center">
-          <div className="max-w-2xl mx-auto">
+          <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Stay Updated with <span className="text-primary">ShineVeda</span>
+              Partner with <span className="text-primary">ShineVeda</span> for Premium Agricultural Exports
             </h2>
             <p className="text-lg text-muted-foreground mb-8">
-              Get the latest updates on our products, farming insights, and export opportunities delivered to your inbox.
+              Join global buyers who trust us for consistent quality, competitive pricing, and reliable international shipping from India's agricultural heartland.
             </p>
-            <EmailSubscription 
-              className="max-w-md mx-auto"
-              placeholder="Enter your email for updates"
-              buttonText="Subscribe Now"
-            />
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+              <Button asChild size="lg" className="bg-primary hover:bg-primary/90">
+                <Link to="/products">Browse Our Catalog</Link>
+              </Button>
+              <Button asChild variant="outline" size="lg">
+                <Link to="/contact">Request Bulk Quote</Link>
+              </Button>
+            </div>
+            
+            {/* Newsletter Signup */}
+            <div className="max-w-2xl mx-auto border-t border-border pt-8">
+              <h3 className="text-xl font-semibold mb-4">Stay Updated on Market Trends</h3>
+              <p className="text-muted-foreground mb-6">
+                Get insights on pricing, harvest forecasts, and export opportunities.
+              </p>
+              <EmailSubscription 
+                className="max-w-md mx-auto"
+                placeholder="Enter your business email"
+                buttonText="Subscribe"
+              />
+            </div>
           </div>
         </div>
       </section>

@@ -1,5 +1,6 @@
 import { Mail, Phone, MapPin, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { EmailSubscription } from "@/components/EmailSubscription";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -45,7 +46,7 @@ const Footer = () => {
     <footer className="bg-gradient-to-b from-background to-primary/10 border-t border-border">
       {/* Main Footer Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-6 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-7 gap-8">
           {/* Company Info */}
           <div className="lg:col-span-2">
             <div className="mb-6">
@@ -178,6 +179,20 @@ const Footer = () => {
                 <a href="/contact#docs" className="text-muted-foreground hover:text-primary transition-colors text-sm">Export Documentation</a>
               </li>
             </ul>
+          </div>
+
+          {/* Newsletter Subscription */}
+          <div>
+            <h4 className="font-semibold text-foreground mb-4">Stay Updated</h4>
+            <p className="text-sm text-muted-foreground mb-4">
+              Get the latest updates on our products and farming insights.
+            </p>
+            <EmailSubscription 
+              className=""
+              placeholder="Your email"
+              buttonText="Subscribe"
+              showIcon={false}
+            />
           </div>
         </div>
 

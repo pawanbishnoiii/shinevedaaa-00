@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import MediaUploadSection from '@/components/MediaUploadSection';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
@@ -380,15 +381,42 @@ export default function EnhancedAgriBlog() {
                   </div>
                 </div>
 
-                <div>
-                  <Label htmlFor="image_url">Featured Image URL</Label>
+              <div>
+                <Label htmlFor="image_url">Featured Image</Label>
+                <div className="space-y-2">
                   <Input
                     id="image_url"
                     value={blogData.image_url}
                     onChange={(e) => setBlogData({...blogData, image_url: e.target.value})}
-                    placeholder="https://example.com/image.jpg"
+                    placeholder="https://example.com/image.jpg or select from media library"
                   />
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button variant="outline" size="sm">
+                        <ImageIcon className="w-4 h-4 mr-2" />
+                        Select from Media Library
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-4xl">
+                      <MediaUploadSection 
+                        imageUrl={blogData.image_url}
+                        setImageUrl={(url) => setBlogData({...blogData, image_url: url})}
+                        galleryImages={[]}
+                        setGalleryImages={() => {}}
+                      />
+                    </DialogContent>
+                  </Dialog>
+                  {blogData.image_url && (
+                    <div className="mt-2">
+                      <img 
+                        src={blogData.image_url} 
+                        alt="Preview" 
+                        className="h-20 w-32 object-cover rounded border"
+                      />
+                    </div>
+                  )}
                 </div>
+              </div>
 
                 <div>
                   <Label>Tags</Label>

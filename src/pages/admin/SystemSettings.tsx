@@ -29,6 +29,219 @@ import {
 } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
+// SMTP Settings Component
+const SMTPSettings = () => {
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+  
+  const [smtpData, setSmtpData] = useState({
+    host: '',
+    port: 587,
+    username: '',
+    password_encrypted: '',
+    from_email: '',
+    from_name: 'ShineVeda',
+    encryption_type: 'tls',
+    is_default: true,
+    is_active: true
+  });
+
+  // Fetch SMTP configurations
+  const { data: smtpConfigs = [], isLoading } = useQuery({
+    queryKey: ['smtp-configurations'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('smtp_configurations')
+        .select('*')
+        .order('created_at', { ascending: false });
+      
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  // Save SMTP configuration mutation
+  const smtpMutation = useMutation({
+    mutationFn: async (data: any) => {
+      const { error } = await supabase
+        .from('smtp_configurations')
+        .insert([data]);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['smtp-configurations'] });
+      toast({
+        title: "SMTP Configuration Saved",
+        description: "SMTP settings have been saved successfully.",
+      });
+      setSmtpData({
+        host: '',
+        port: 587,
+        username: '',
+        password_encrypted: '',
+        from_email: '',
+        from_name: 'ShineVeda',
+        encryption_type: 'tls',
+        is_default: true,
+        is_active: true
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    smtpMutation.mutate(smtpData);
+  };
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Mail className="w-5 h-5" />
+          SMTP Configuration
+        </CardTitle>
+        <CardDescription>
+          Configure SMTP settings for sending emails from the application.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="host">SMTP Host</Label>
+              <Input
+                id="host"
+                value={smtpData.host}
+                onChange={(e) => setSmtpData({...smtpData, host: e.target.value})}
+                placeholder="smtp.hostinger.com"
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor="port">Port</Label>
+              <Input
+                id="port"
+                type="number"
+                value={smtpData.port}
+                onChange={(e) => setSmtpData({...smtpData, port: parseInt(e.target.value)})}
+                placeholder="587"
+                required
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="username">Username</Label>
+              <Input
+                id="username"
+                value={smtpData.username}
+                onChange={(e) => setSmtpData({...smtpData, username: e.target.value})}
+                placeholder="your-email@domain.com"
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                value={smtpData.password_encrypted}
+                onChange={(e) => setSmtpData({...smtpData, password_encrypted: e.target.value})}
+                placeholder="••••••••"
+                required
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="from_email">From Email</Label>
+              <Input
+                id="from_email"
+                type="email"
+                value={smtpData.from_email}
+                onChange={(e) => setSmtpData({...smtpData, from_email: e.target.value})}
+                placeholder="noreply@shineveda.in"
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor="from_name">From Name</Label>
+              <Input
+                id="from_name"
+                value={smtpData.from_name}
+                onChange={(e) => setSmtpData({...smtpData, from_name: e.target.value})}
+                placeholder="ShineVeda"
+                required
+              />
+            </div>
+          </div>
+
+          <div>
+            <Label htmlFor="encryption">Encryption Type</Label>
+            <Select 
+              value={smtpData.encryption_type} 
+              onValueChange={(value) => setSmtpData({...smtpData, encryption_type: value})}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="tls">TLS</SelectItem>
+                <SelectItem value="ssl">SSL</SelectItem>
+                <SelectItem value="none">None</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <Switch
+              id="is_default"
+              checked={smtpData.is_default}
+              onCheckedChange={(checked) => setSmtpData({...smtpData, is_default: checked})}
+            />
+            <Label htmlFor="is_default">Set as default SMTP configuration</Label>
+          </div>
+
+          <Button type="submit" disabled={smtpMutation.isPending}>
+            <Save className="w-4 h-4 mr-2" />
+            {smtpMutation.isPending ? "Saving..." : "Save SMTP Configuration"}
+          </Button>
+        </form>
+
+        {/* Existing Configurations */}
+        {smtpConfigs.length > 0 && (
+          <div className="mt-8">
+            <h4 className="font-medium mb-4">Existing SMTP Configurations</h4>
+            <div className="space-y-2">
+              {smtpConfigs.map((config) => (
+                <div key={config.id} className="flex items-center justify-between p-3 border rounded-lg">
+                  <div>
+                    <div className="font-medium">{config.host}:{config.port}</div>
+                    <div className="text-sm text-muted-foreground">{config.from_email}</div>
+                  </div>
+                  <div className="flex gap-2">
+                    {config.is_default && <Badge variant="default">Default</Badge>}
+                    {config.is_active && <Badge variant="outline">Active</Badge>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+};
+
 export default function SystemSettings() {
   const [activeCategory, setActiveCategory] = useState('system');
   const { toast } = useToast();
@@ -155,6 +368,7 @@ export default function SystemSettings() {
   const categories = [
     { id: 'system', label: 'System', icon: Clock },
     { id: 'email', label: 'Email', icon: Mail },
+    { id: 'smtp', label: 'SMTP', icon: Settings },
     { id: 'analytics', label: 'Analytics', icon: Monitor },
     { id: 'media', label: 'Media', icon: Shield },
   ];
@@ -238,7 +452,7 @@ export default function SystemSettings() {
 
       {/* Settings by Category */}
       <Tabs value={activeCategory} onValueChange={setActiveCategory}>
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           {categories.map((category) => {
             const Icon = category.icon;
             return (
@@ -252,48 +466,52 @@ export default function SystemSettings() {
 
         {categories.map((category) => (
           <TabsContent key={category.id} value={category.id}>
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <category.icon className="w-5 h-5" />
-                  {category.label} Settings
-                </CardTitle>
-                <CardDescription>
-                  Configure {category.label.toLowerCase()} related settings for your application.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-6">
-                  {getSettingsByCategory(category.id).map((setting) => (
-                    <div key={setting.id} className="flex items-center justify-between py-3 border-b border-border/40 last:border-0">
-                      <div className="flex-1">
-                        <Label className="text-sm font-medium">
-                          {setting.setting_key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
-                        </Label>
-                        {setting.description && (
-                          <p className="text-sm text-muted-foreground mt-1">
-                            {setting.description}
-                          </p>
-                        )}
+            {category.id === 'smtp' ? (
+              <SMTPSettings />
+            ) : (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <category.icon className="w-5 h-5" />
+                    {category.label} Settings
+                  </CardTitle>
+                  <CardDescription>
+                    Configure {category.label.toLowerCase()} related settings for your application.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-6">
+                    {getSettingsByCategory(category.id).map((setting) => (
+                      <div key={setting.id} className="flex items-center justify-between py-3 border-b border-border/40 last:border-0">
+                        <div className="flex-1">
+                          <Label className="text-sm font-medium">
+                            {setting.setting_key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                          </Label>
+                          {setting.description && (
+                            <p className="text-sm text-muted-foreground mt-1">
+                              {setting.description}
+                            </p>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-2">
+                          {renderSettingInput(setting)}
+                          {setting.is_public && (
+                            <Badge variant="outline" className="text-xs">
+                              Public
+                            </Badge>
+                          )}
+                        </div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        {renderSettingInput(setting)}
-                        {setting.is_public && (
-                          <Badge variant="outline" className="text-xs">
-                            Public
-                          </Badge>
-                        )}
+                    ))}
+                    {getSettingsByCategory(category.id).length === 0 && (
+                      <div className="text-center py-8 text-muted-foreground">
+                        No settings found for this category.
                       </div>
-                    </div>
-                  ))}
-                  {getSettingsByCategory(category.id).length === 0 && (
-                    <div className="text-center py-8 text-muted-foreground">
-                      No settings found for this category.
-                    </div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
           </TabsContent>
         ))}
       </Tabs>

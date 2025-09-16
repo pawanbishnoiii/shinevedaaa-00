@@ -324,9 +324,10 @@ const BlogPost: React.FC = () => {
 
               {/* Content */}
               <div className="prose prose-lg max-w-none dark:prose-invert">
-                <div className="whitespace-pre-wrap leading-relaxed">
-                  {post.content}
-                </div>
+                <div 
+                  className="leading-relaxed"
+                  dangerouslySetInnerHTML={{ __html: post.content }}
+                />
               </div>
 
               {/* Tags */}

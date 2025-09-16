@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
@@ -42,6 +42,7 @@ import { Label } from '@/components/ui/label';
 
 export default function Users() {
   const [searchTerm, setSearchTerm] = useState('');
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<any>(null);
   const [userData, setUserData] = useState({
@@ -52,21 +53,29 @@ export default function Users() {
     company_name: '',
     role: 'user'
   });
+
+  // Debounce search term
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
   
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
   // Fetch users
   const { data: users = [], isLoading } = useQuery({
-    queryKey: ['profiles', searchTerm],
+    queryKey: ['profiles', debouncedSearchTerm],
     queryFn: async () => {
       let query = supabase
         .from('profiles')
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (searchTerm) {
-        query = query.or(`name.ilike.%${searchTerm}%,email.ilike.%${searchTerm}%,company_name.ilike.%${searchTerm}%`);
+      if (debouncedSearchTerm) {
+        query = query.or(`name.ilike.%${debouncedSearchTerm}%,email.ilike.%${debouncedSearchTerm}%,company_name.ilike.%${debouncedSearchTerm}%`);
       }
 
       const { data, error } = await query;
@@ -135,6 +144,14 @@ export default function Users() {
         variant: "destructive",
       });
       return;
+    }
+
+    // Show confirmation dialog for role change to admin
+    if (userData.role === 'admin' && editingUser?.role !== 'admin') {
+      const confirmed = window.confirm(
+        `Are you sure you want to give admin privileges to ${userData.name || userData.email}? This will grant them full administrative access.`
+      );
+      if (!confirmed) return;
     }
 
     userMutation.mutate(userData);

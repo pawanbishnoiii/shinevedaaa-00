@@ -68,7 +68,14 @@ import TeamManagement from "./pages/admin/TeamManagement";
 import SystemSettings from "./pages/admin/SystemSettings";
 import DynamicSettings from "./pages/admin/DynamicSettings";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 60_000, // 1 minute
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 const AppContent = () => {
   usePageTracking(); // Auto-track page views
