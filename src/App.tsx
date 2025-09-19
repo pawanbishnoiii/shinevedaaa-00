@@ -64,6 +64,7 @@ import GalleryManagement from "./pages/admin/GalleryManagement";
 import EmailSubscribers from "./pages/admin/EmailSubscribers";
 import EmailCampaigns from "./pages/admin/EmailCampaigns";
 import EmailTemplateBuilder from "./pages/admin/EmailTemplateBuilder";
+import EmailManagement from "./pages/admin/EmailManagement";
 import TeamManagement from "./pages/admin/TeamManagement";
 import SystemSettings from "./pages/admin/SystemSettings";
 import DynamicSettings from "./pages/admin/DynamicSettings";
@@ -71,8 +72,13 @@ import DynamicSettings from "./pages/admin/DynamicSettings";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 60_000, // 1 minute
-      refetchOnWindowFocus: false,
+      staleTime: 60_000, // 1 minute for better performance
+      gcTime: 5 * 60_000, // 5 minutes garbage collection
+      refetchOnWindowFocus: false, // Prevent unnecessary refetches
+      retry: (failureCount, error) => {
+        if (failureCount < 2) return true;
+        return false;
+      },
     },
   },
 });
@@ -143,7 +149,8 @@ const AppContent = () => {
                   <Route path="analytics" element={<Analytics />} />
                   <Route path="email-subscribers" element={<EmailSubscribers />} />
                   <Route path="email-campaigns" element={<EmailCampaigns />} />
-                  <Route path="email-templates" element={<EmailTemplateBuilder />} />
+                    <Route path="email-templates" element={<EmailTemplateBuilder />} />
+                    <Route path="email-management" element={<EmailManagement />} />
                   <Route path="team-management" element={<TeamManagement />} />
                   <Route path="system-settings" element={<SystemSettings />} />
                   <Route path="dynamic-settings" element={<DynamicSettings />} />

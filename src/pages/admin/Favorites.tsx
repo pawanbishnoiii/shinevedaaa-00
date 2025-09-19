@@ -38,6 +38,8 @@ const Favorites = () => {
             slug,
             image_url,
             price_range,
+            currency,
+            stock_status,
             categories!category_id (
               name,
               slug
@@ -63,6 +65,13 @@ const Favorites = () => {
         filtered = filtered.filter(item => 
           item.products?.categories?.slug === categoryFilter
         );
+      }
+
+      // Sort data
+      if (sortBy === 'user_name') {
+        filtered.sort((a, b) => (a.user_id || '').localeCompare(b.user_id || ''));
+      } else if (sortBy === 'product_name') {
+        filtered.sort((a, b) => (a.products?.name || '').localeCompare(b.products?.name || ''));
       }
 
       return filtered;
@@ -205,8 +214,9 @@ const Favorites = () => {
               <TableHeader>
                 <TableRow>
                   <TableHead>Product</TableHead>
-                  <TableHead>User</TableHead>
+                  <TableHead>User Details</TableHead>
                   <TableHead>Category</TableHead>
+                  <TableHead>Stock & Price</TableHead>
                   <TableHead>Date Added</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
@@ -235,7 +245,7 @@ const Favorites = () => {
                     </TableCell>
                     <TableCell>
                       <div>
-                        <div className="font-medium">User</div>
+                        <div className="font-medium">User ID</div>
                         <div className="text-sm text-muted-foreground">
                           {favorite.user_id}
                         </div>
@@ -247,8 +257,26 @@ const Favorites = () => {
                           {favorite.products.categories.name}
                         </Badge>
                       )}
-                    </TableCell>
                     <TableCell>
+                      <div>
+                        <div className="font-medium">
+                          {favorite.products?.price_range || 'Contact for pricing'}
+                        </div>
+                        {favorite.products?.currency && (
+                          <div className="text-sm text-muted-foreground">
+                            Currency: {favorite.products.currency}
+                          </div>
+                        )}
+                        {favorite.products?.stock_status && (
+                          <Badge variant={
+                            favorite.products.stock_status === 'in_stock' ? 'default' :
+                            favorite.products.stock_status === 'limited' ? 'secondary' : 'destructive'
+                          }>
+                            {favorite.products.stock_status.replace('_', ' ')}
+                          </Badge>
+                        )}
+                      </div>
+                    </TableCell>
                       <div className="flex items-center space-x-1">
                         <Calendar className="h-4 w-4 text-muted-foreground" />
                         <span className="text-sm">
@@ -267,7 +295,7 @@ const Favorites = () => {
                 ))}
                 {(!favoritesData || favoritesData.length === 0) && (
                   <TableRow>
-                    <TableCell colSpan={5} className="text-center py-8">
+                    <TableCell colSpan={6} className="text-center py-8">
                       <Heart className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
                       <p className="text-lg font-medium mb-2">No favorites found</p>
                       <p className="text-muted-foreground">

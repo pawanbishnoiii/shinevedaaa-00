@@ -133,22 +133,25 @@ const navigation = [
       title: "Email Marketing",
       items: [
         {
+          title: "Email Management",
+          icon: Mail,
+          url: "/admin/email-management",
+          badge: "New",
+        },
+        {
           title: "Email Subscribers",
           icon: Users,
           url: "/admin/email-subscribers",
-          badge: "New",
         },
         {
           title: "Email Campaigns",
           icon: Send,
           url: "/admin/email-campaigns",
-          badge: "New",
         },
         {
           title: "Email Templates",
           icon: Mail,
           url: "/admin/email-templates",
-          badge: "New",
         },
       ],
     },

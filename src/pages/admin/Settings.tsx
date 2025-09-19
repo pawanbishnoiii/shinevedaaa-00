@@ -94,11 +94,12 @@ const Settings = () => {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5">
+        <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="general">General</TabsTrigger>
           <TabsTrigger value="company">Company</TabsTrigger>
           <TabsTrigger value="contact">Contact</TabsTrigger>
           <TabsTrigger value="social">Social Media</TabsTrigger>
+          <TabsTrigger value="email">Email</TabsTrigger>
           <TabsTrigger value="advanced">Advanced</TabsTrigger>
         </TabsList>
 
@@ -380,6 +381,126 @@ const Settings = () => {
                     defaultValue={settings?.whatsapp_number || '+91 89551 58794'}
                     onBlur={(e) => handleSave('whatsapp_number', e.target.value, 'WhatsApp business number')}
                   />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="email" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Mail className="h-5 w-5" />
+                Email Settings
+              </CardTitle>
+              <CardDescription>
+                Configure email automation and notification settings
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="grid grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <Label htmlFor="default_from_email">Default From Email</Label>
+                  <Input
+                    id="default_from_email"
+                    type="email"
+                    defaultValue={settings?.default_from_email || 'noreply@shineveda.in'}
+                    onBlur={(e) => handleSave('default_from_email', e.target.value, 'Default email address for outgoing emails')}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="default_from_name">Default From Name</Label>
+                  <Input
+                    id="default_from_name"
+                    defaultValue={settings?.default_from_name || 'ShineVeda Team'}
+                    onBlur={(e) => handleSave('default_from_name', e.target.value, 'Default sender name for outgoing emails')}
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="email_signature">Email Signature</Label>
+                <Textarea
+                  id="email_signature"
+                  rows={4}
+                  defaultValue={settings?.email_signature || 'Best regards,\nShineVeda Team\n\nPremium Agricultural Exports\nRajasthan, India\nPhone: +91 89551 58794\nWebsite: https://shineveda.in'}
+                  onBlur={(e) => handleSave('email_signature', e.target.value, 'Default email signature')}
+                />
+              </div>
+
+              <Separator />
+
+              <div className="space-y-4">
+                <h4 className="text-lg font-semibold">Email Notifications</h4>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="notify_new_inquiry">New Inquiry Notifications</Label>
+                    <Switch
+                      id="notify_new_inquiry"
+                      checked={settings?.notify_new_inquiry !== false}
+                      onCheckedChange={(checked) => handleSave('notify_new_inquiry', checked, 'Send email when new inquiry is received')}
+                    />
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="notify_new_subscriber">New Subscriber Notifications</Label>
+                    <Switch
+                      id="notify_new_subscriber"
+                      checked={settings?.notify_new_subscriber !== false}
+                      onCheckedChange={(checked) => handleSave('notify_new_subscriber', checked, 'Send email when someone subscribes to newsletter')}
+                    />
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="auto_welcome_email">Auto Welcome Email</Label>
+                    <Switch
+                      id="auto_welcome_email"
+                      checked={settings?.auto_welcome_email !== false}
+                      onCheckedChange={(checked) => handleSave('auto_welcome_email', checked, 'Send welcome email to new subscribers')}
+                    />
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="inquiry_auto_response">Inquiry Auto Response</Label>
+                    <Switch
+                      id="inquiry_auto_response"
+                      checked={settings?.inquiry_auto_response !== false}
+                      onCheckedChange={(checked) => handleSave('inquiry_auto_response', checked, 'Send auto response to new inquiries')}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <Separator />
+
+              <div className="space-y-4">
+                <h4 className="text-lg font-semibold">Email Frequency Limits</h4>
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="daily_email_limit">Daily Email Limit</Label>
+                    <Input
+                      id="daily_email_limit"
+                      type="number"
+                      defaultValue={settings?.daily_email_limit || '1000'}
+                      onBlur={(e) => handleSave('daily_email_limit', e.target.value, 'Maximum emails per day')}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="hourly_email_limit">Hourly Email Limit</Label>
+                    <Input
+                      id="hourly_email_limit"
+                      type="number"
+                      defaultValue={settings?.hourly_email_limit || '100'}
+                      onBlur={(e) => handleSave('hourly_email_limit', e.target.value, 'Maximum emails per hour')}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="email_delay_seconds">Email Delay (seconds)</Label>
+                    <Input
+                      id="email_delay_seconds"
+                      type="number"
+                      defaultValue={settings?.email_delay_seconds || '1'}
+                      onBlur={(e) => handleSave('email_delay_seconds', e.target.value, 'Delay between emails in seconds')}
+                    />
+                  </div>
                 </div>
               </div>
             </CardContent>
