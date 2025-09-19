@@ -103,7 +103,7 @@ MOQ: ${product.minimum_order_quantity || 'Please advise'}
 
 Message: ${formData.message}
 
-Address: Sri Ganganagar, Rajasthan
+Address: Rajasthan, India
 
 Please provide detailed quote and availability.`;
 
@@ -306,7 +306,7 @@ ${formData.name}`;
             </div>
 
             <div className="text-xs text-muted-foreground bg-muted p-2 rounded">
-              📍 <strong>Our Address:</strong> Sri Ganganagar, Rajasthan, India
+              📍 <strong>Our Address:</strong> Rajasthan, India
               <br />
               📞 <strong>Phone:</strong> +91 89551 58794 | ✉️ <strong>Email:</strong> help@shineveda.in
             </div>

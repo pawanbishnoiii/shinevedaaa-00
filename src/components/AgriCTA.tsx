@@ -190,7 +190,7 @@ const AgriCTA: React.FC = () => {
               </div>
               <div>
                 <div className="font-semibold">Visit Us</div>
-                <div className="text-sm">Sri Ganganagar, Rajasthan</div>
+                <div className="text-sm">Rajasthan, India</div>
               </div>
             </div>
           </div>

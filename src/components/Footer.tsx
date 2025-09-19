@@ -54,7 +54,7 @@ const Footer = () => {
                 ShineVeda Exports
               </h3>
               <p className="text-muted-foreground leading-relaxed">
-                Premium agricultural commodities from the fertile lands of Sri Ganganagar, Rajasthan. 
+                Premium agricultural commodities from the fertile lands of India. 
                 Trusted by global partners for quality, consistency, and reliable international shipping.
               </p>
             </div>
@@ -84,7 +84,7 @@ const Footer = () => {
                   <MapPin className="h-4 w-4 text-primary" />
                 </div>
                 <div className="text-foreground">
-                  Sri Ganganagar, Rajasthan, India
+                  Rajasthan, India
                 </div>
               </div>
             </div>
@@ -181,11 +181,11 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Newsletter Subscription */}
+            {/* Newsletter Subscription */}
           <div>
-            <h4 className="font-semibold text-foreground mb-4">Stay Updated</h4>
+            <h4 className="font-semibold text-foreground mb-4">Newsletter</h4>
             <p className="text-sm text-muted-foreground mb-4">
-              Get the latest updates on our products and farming insights.
+              Get market insights and product updates.
             </p>
             <EmailSubscription 
               className=""

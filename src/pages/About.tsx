@@ -119,7 +119,7 @@ const About = () => {
                   <br />Growing with <span className="text-primary">Innovation</span>
                 </h2>
                 <p className="text-muted-foreground mb-6 leading-relaxed">
-                  Founded in the agricultural heartland of Sri Ganganagar, Rajasthan, ShineVeda began 
+                  Founded in the agricultural heartland of Rajasthan, India, ShineVeda began 
                   with a simple mission: to share the finest quality agricultural products from India 
                   with the world. What started as a local farming initiative has grown into a trusted 
                   international export company.
@@ -268,6 +268,9 @@ const About = () => {
             </div>
           </div>
         </section>
+
+        {/* Dynamic Team Section */}
+        <DynamicAboutTeam />
 
         {/* Call to Action */}
         <section className="py-20 bg-gradient-to-r from-primary/10 to-secondary/10">

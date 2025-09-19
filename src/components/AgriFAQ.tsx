@@ -237,7 +237,7 @@ const AgriFAQ: React.FC = () => {
             📧 info@shineveda.in
           </Badge>
           <Badge variant="outline" className="py-2 px-4">
-            📍 Sri Ganganagar, Rajasthan
+            📍 Rajasthan, India
           </Badge>
         </div>
       </motion.div>

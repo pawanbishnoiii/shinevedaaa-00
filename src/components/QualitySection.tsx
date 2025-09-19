@@ -6,7 +6,7 @@ const qualitySteps = [
   {
     id: 1,
     title: "Farm Selection",
-    description: "Handpicked from premium farms in Sri Ganganagar with ideal soil conditions",
+    description: "Handpicked from premium farms in Rajasthan with ideal soil conditions",
     icon: CheckCircle,
     details: ["Soil quality assessment", "Farmer partnerships", "Organic certification"]
   },

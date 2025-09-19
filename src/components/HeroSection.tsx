@@ -29,7 +29,7 @@ const HeroSection = () => {
 
   // Default content if database content is not available
   const defaultContent = {
-    title: "From Sri Ganganagar Farms to Your Doorstep",
+    title: "From Indian Farms to Your Doorstep",
     content: "Premium agri-commodities from the heart of Rajasthan. Onions, Jeera, Peanuts, Carrots, Chickpeas, Mustard & Guar Gum - packaged and graded to the highest international standards.",
     data: {
       subtitle: "Premium agri-commodities from the heart of Rajasthan.",
@@ -90,7 +90,7 @@ const HeroSection = () => {
           <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 leading-tight">
             {content.title?.split(' ').slice(0, 1).join(' ')}{" "}
             <span className="text-gradient bg-gradient-to-r from-brand-saffron to-primary bg-clip-text text-transparent">
-              {content.title?.split(' ').slice(1, 2).join(' ') || 'Sri Ganganagar'}
+              {content.title?.split(' ').slice(1, 2).join(' ') || 'Indian'}
             </span>
             <br />
             {content.title?.split(' ').slice(2).join(' ') || 'Farms to Your Doorstep'}

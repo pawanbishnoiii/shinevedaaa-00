@@ -14,7 +14,7 @@ const FAQ = () => {
   const faqData = [
     {
       question: "What agricultural commodities do you export?",
-      answer: "We specialize in exporting premium quality Onions, Jeera (Cumin), Peanuts, Carrots, Chickpeas, Mustard seeds, and Guar Gum from Sri Ganganagar, Rajasthan. All our products meet international quality standards."
+      answer: "We specialize in exporting premium quality Onions, Jeera (Cumin), Peanuts, Carrots, Chickpeas, Mustard seeds, and Guar Gum from Rajasthan, India. All our products meet international quality standards."
     },
     {
       question: "Which countries do you export to?",

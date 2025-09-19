@@ -95,7 +95,7 @@ const ProductsSection = () => {
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             From farm to international markets, discover our premium agricultural 
-            commodities directly sourced from Sri Ganganagar, Rajasthan's fertile lands.
+            commodities directly sourced from Rajasthan's fertile lands, India.
           </p>
         </div>
 
